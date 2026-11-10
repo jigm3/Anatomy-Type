@@ -13,9 +13,7 @@ The full list, by figure and by dataset, is in the app under **Sources**.
 - **BodyParts3D**, © The Database Center for Life Science, licensed under CC Attribution-Share Alike 2.1 Japan.
   Mitsuhashi N et al. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37:D782–5.
 - **Z-Anatomy** (Gauthier Kervyn, Marcin Zielinski), CC BY-SA 4.0.
-- **Human Reference Atlas** (HuBMAP CCF 3D Reference Object Library), CC BY 4.0.
-- **fsaverage** (FreeSurfer) with the Desikan–Killiany atlas, via the abagen package.
-- **CIT168** subcortical atlas (Pauli, Nili & Tyszka, Sci Data 2018).
+- **Human Reference Atlas** (HuBMAP CCF 3D Reference Object Library), CC BY 4.0, including the Allen Human Brain Atlas reference brain (Ding et al. 2016).
 - **PAM50** spinal cord template (De Leener et al., NeuroImage 2018; Spinal Cord Toolbox).
 - Some parts were drawn for this app to fill gaps; they're listed in the app.
 

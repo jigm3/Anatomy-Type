@@ -377,8 +377,8 @@ button{font:inherit;color:inherit}
 .cheer{margin:0 0 -8px;font-family:var(--f-display);font-size:24px;line-height:1.2;color:var(--accent)}
 
 /* light mode: tokens (the rest is generated from the dark rules below) */
-html.light{--hl:#1b232d;--bgtop:#fbfcfd;--bg:#e9edf1;--bg2:#ffffff;--line:#d6dce3;--line2:#c2cad3;
-  --ink:#141a21;--soft:#2a323c;--mute:#5f6975;--ghost:#b9c1ca;--keyf:#dbe0e6;--keyt:#55606c;
+html.light{--hl:#1b232d;--bgtop:#dce1e7;--bg:#c5ccd4;--bg2:#ffffff;--line:#b9c2cc;--line2:#a9b3be;
+  --ink:#121820;--soft:#262e38;--mute:#4f5965;--ghost:#939dab;--keyf:#dfe3e8;--keyt:#4c5764;
   --accent:#a8690a;--ok:#1d8048;--bad:#d23a2b;color-scheme:light}
 html.light .srcwrap{background:rgba(26,33,43,.35)}
 html.light .wh i{border-color:#fff}
@@ -387,6 +387,47 @@ html.light .tspot.none{box-shadow:0 0 0 200vmax rgba(24,31,40,.5)}
 html.light #lookBtn{border-color:rgba(20,28,38,.25)}
 html.light .k.down{color:#fff}
 html.light .wel-name{background:rgba(255,255,255,.7);border-color:rgba(20,28,38,.22)}
+/* v3: tools pinned right, streak chip, one-row phone bar, keyboard fit, weak spots, sync */
+.stats{display:none!important}
+.top>.tools{grid-column:3;grid-row:1;justify-self:end}
+.streak{display:inline-flex;align-items:center;gap:5px;height:28px;box-sizing:border-box;border:1px solid var(--line2);border-radius:999px;padding:0 11px;font-family:var(--f-mono);font-size:12px;color:var(--soft);background:rgba(20,27,36,.7);white-space:nowrap;font-variant-numeric:tabular-nums}
+.streak b{font-weight:600;color:var(--ink)}
+.streak.zero{opacity:.5}
+.lkphone{display:none;flex-direction:column;gap:8px}
+.lkfoot{row-gap:6px}
+.hweak{border:1px solid var(--line2);background:#141b24;color:var(--soft);border-radius:999px;padding:6px 14px;font-family:var(--f-mono);font-size:12px;cursor:pointer}
+.hweak:hover,.hweak:focus-visible{border-color:#fff;color:#fff}
+.wlist{display:grid;gap:8px;margin-top:14px}
+.wrow{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.015)}
+.wmain{display:grid;gap:2px;flex:1 1 auto;min-width:0}
+.wmain b{color:var(--ink);font-weight:600}
+.wmain small{font-family:var(--f-mono);font-size:11px;color:var(--mute);letter-spacing:.03em}
+.wwhy{font-size:12.5px;color:var(--accent)}
+.wact{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.wempty{color:var(--mute)}
+.sywrap{max-width:520px}
+.sycode{font-family:var(--f-mono);font-size:clamp(24px,7vw,34px);letter-spacing:.14em;color:var(--ink);margin:14px 0 4px;user-select:all}
+.systat{font-size:12.5px;color:var(--mute);margin-top:10px}
+body.kbopen .app{height:calc(var(--vvh,100vh) - env(safe-area-inset-top,0px));will-change:transform}
+@media (max-width:720px){
+  body.typing .panel,body.kbopen .panel{min-height:0;gap:2px;padding-block:2px 6px}
+  body.typing .fb,body.kbopen .fb{min-height:0}
+  body.typing .fb:empty,body.typing .actions:empty,body.kbopen .fb:empty,body.kbopen .actions:empty{display:none}
+  body.typing .taptype,body.kbopen .taptype{display:none!important}
+  body.typing .top,body.kbopen .top{padding-block:6px 0}
+}
+@media (max-width:560px){
+  .top{grid-template-columns:minmax(0,1fr) auto;padding-block:10px 2px;gap:8px}
+  .top>.tools{grid-column:2}
+  .pills{gap:5px;flex-wrap:nowrap}
+  .pills .seg button{padding:5px 8px;font-size:10.5px;letter-spacing:.02em}
+  .lvmini{padding:3px 9px}
+  #soundBtn{display:none!important}
+  .app:not(.home) #streak{display:none}
+  .streak{height:30px;padding:0 9px}
+  .lkphone{display:flex}
+}
+@media (max-width:360px){ .pills .seg button{padding:5px 6px;font-size:10px} }
 </style>
 
 <style id="lightcss">/* generated: light mode versions of the hard-coded dark colors */
@@ -457,10 +498,14 @@ html.light .wel-t{color:var(--ink)}
 html.light .wel-go{border:1px solid rgba(20,28,38,0.245);background:rgba(20,28,38,0.056);color:var(--ink)}
 html.light .wel-go:hover,html.light .wel-go:focus-visible{background:var(--ink);color:#ffffff;border-color:var(--ink)}
 html.light .wel-name{background:rgba(20,28,38,0.07);border:1px solid rgba(20,28,38,0.196)}
+html.light .streak{background:rgba(255,255,255,0.82)}
+html.light .hweak{background:#ffffff}
+html.light .hweak:hover,html.light .hweak:focus-visible{border-color:var(--ink);color:var(--ink)}
+html.light .wrow{background:rgba(20,28,38,0.021)}
 html.light .srcwrap{background:rgba(255,255,255,0.82)}
 html.light .src{background:rgba(255,255,255,0.98);box-shadow:0 24px 70px rgba(40,52,68,0.21)}
 html.light .src .d{background:rgba(20,28,38,0.021)}
-html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0 0 0 200vmax rgba(24,31,40,.5),0 0 0 1.5px var(--hl),0 0 26px 2px var(--hlglow)}html.light .tspot.none{box-shadow:0 0 0 200vmax rgba(24,31,40,.5)}html.light .k.down{color:#fff}
+html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0 0 0 200vmax rgba(24,31,40,.5),0 0 0 1.5px var(--hl),0 0 26px 2px var(--hlglow)}html.light .tspot.none{box-shadow:0 0 0 200vmax rgba(24,31,40,.5)}html.light .k.down{color:#fff}html.light .word span.ph{color:#a2abb6}html.light .streak,html.light .hweak{background:rgba(255,255,255,.7)}
 </style>
 <div id="welcome" class="wel" role="dialog" aria-modal="true" aria-labelledby="welT">
   <div class="wel-in">
@@ -483,7 +528,7 @@ html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0
       <div class="stat"><strong id="sAcc">100</strong><small>%</small></div>
       <div class="stat"><strong id="sLit">0</strong><small id="sLitOf">/8</small></div>
     </div>
-    <div class="tools"><button class="pill" id="lookBtn" aria-expanded="false">LOOK</button><button class="pill" id="srcBtn" aria-haspopup="dialog">SOURCES</button><button class="pill" id="soundBtn" aria-pressed="true">SOUND ON</button></div>
+    <div class="tools"><span class="streak" id="streak" role="img" title="Day streak">🔥<b>0</b></span><button class="pill" id="lookBtn" aria-expanded="false">LOOK</button><button class="pill" id="srcBtn" aria-haspopup="dialog">SOURCES</button><button class="pill" id="soundBtn" aria-pressed="true">SOUND ON</button></div>
     <div class="look" id="look" hidden>
       <div class="seg lkseg" role="group" aria-label="Theme"><button id="lkDark" aria-pressed="true">Dark</button><button id="lkLight" aria-pressed="false">Light</button></div>
       <div><h5>Highlight <span id="lkName">White</span></h5></div>
@@ -493,6 +538,7 @@ html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0
         <input type="range" id="lkLt" min="30" max="80" step="1" aria-label="Custom color brightness">
         <div class="row2"><span>deeper</span><span>brighter</span></div>
       </div>
+      <div class="seg lkseg" role="group" aria-label="Colors"><button id="lkPlain" aria-pressed="true">Plain colors</button><button id="lkAtlas" aria-pressed="false">Atlas colors</button></div>
       <div><h5>Background <span id="lkBgV"></span></h5></div>
       <input type="range" id="lkBg" min="0" max="100" step="1" aria-label="Background darkness">
       <div class="row2"><span>as reel</span><span>darker</span></div>
@@ -502,7 +548,8 @@ html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0
       <div><h5>Your name</h5></div>
       <input class="lkin" id="lkMe" maxlength="24" placeholder="optional" autocomplete="given-name" autocapitalize="words" spellcheck="false" aria-label="Your name">
       <div class="row2"><span>kept in this browser only</span></div>
-      <div class="lkfoot"><button class="reset" id="lkReset">Reset colors</button><button class="reset" id="lkTour">Replay the tour</button></div>
+      <div class="lkphone"><h5>Sound</h5><div class="seg lkseg" role="group" aria-label="Sound"><button id="lkSndOn" aria-pressed="true">On</button><button id="lkSndOff" aria-pressed="false">Off</button></div></div>
+      <div class="lkfoot"><button class="reset" id="lkReset">Reset colors</button><button class="reset" id="lkSync">Sync devices</button><button class="reset" id="lkTour">Replay the tour</button></div>
     </div>
   </header>
 
@@ -539,7 +586,7 @@ html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0
         <h3>By figure</h3>
         <div class="tw"><table>
           <tr><td>Bones</td><td>BodyParts3D skeleton. Knee ligaments, menisci and bursae from Z-Anatomy; patellar ligament drawn; knee tendons cropped from the BodyParts3D muscles.</td></tr>
-          <tr><td>Nerves &amp; brain</td><td>Cortex from fsaverage with Desikan–Killiany labels; deep nuclei from BodyParts3D; substantia nigra, red nucleus and subthalamic nucleus from CIT168; spinal cord tracts from PAM50. Cranial and peripheral nerves, nerve roots, the meninges and some brain and ear context drawn.</td></tr>
+          <tr><td>Nerves &amp; brain</td><td>The brain (lobes, deep nuclei, ventricles, brainstem and cerebellum) from the Allen Human Brain Atlas via the Human Reference Atlas; pituitary and choroid plexus from BodyParts3D; spinal cord tracts from PAM50. Cranial and peripheral nerves, nerve roots, the meninges and some brain and ear context drawn.</td></tr>
           <tr><td>Organs</td><td>Heart, lungs, gut, kidneys and male pelvic organs from BodyParts3D; female pelvic organs from the Human Reference Atlas; the eye from Z-Anatomy. Aortic valve, vagina and ciliary body drawn.</td></tr>
           <tr><td>Muscles</td><td>BodyParts3D muscles. Achilles tendon, plantar fascia, IT band and linea alba drawn.</td></tr>
           <tr><td>Vessels</td><td>Aorta, venae cavae, and gut and kidney vessels from BodyParts3D; head, neck and limb vessels and the circle of Willis from Z-Anatomy.</td></tr>
@@ -554,14 +601,8 @@ html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0
             <p class="use">Open 3D anatomy atlas by Gauthier Kervyn and Marcin Zielinski, built on BodyParts3D. Its vessels are drawn centerlines, rebuilt here as tubes and aligned to this body through the shared bones.</p>
             <p class="cite"><a href="https://github.com/Z-Anatomy/Models-of-human-anatomy" target="_blank" rel="noopener">github.com/Z-Anatomy</a></p></div>
           <div class="d"><b>Human Reference Atlas</b> (HuBMAP CCF 3D Reference Object Library)<span class="lic">CC BY 4.0</span>
-            <p class="use">Female pelvic organs from the Visible Human female.</p>
+            <p class="use">The brain: the Allen Human Brain Atlas reference brain (Ding et al., J Comp Neurol 2016), with its lobes, deep nuclei and ventricles. Female pelvic organs from the Visible Human female.</p>
             <p class="cite">Browne K, Schlehlein H, Herr BW II, Quardokus E, Bueckle A, Börner K. HuBMAP CCF 3D Reference Object Library. 2022. · <a href="https://hubmapconsortium.github.io/ccf/pages/ccf-3d-reference-library.html" target="_blank" rel="noopener">source</a></p></div>
-          <div class="d"><b>fsaverage</b> (FreeSurfer) with the <b>Desikan–Killiany atlas</b><span class="lic">FreeSurfer license</span>
-            <p class="use">The cortex surface and its lobes. fsaverage5 surfaces taken from the abagen package (BSD-3-Clause).</p>
-            <p class="cite">Fischl B. FreeSurfer. NeuroImage 2012;62:774–81. · Desikan RS et al. NeuroImage 2006;31:968–80. · <a href="https://surfer.nmr.mgh.harvard.edu/" target="_blank" rel="noopener">FreeSurfer</a></p></div>
-          <div class="d"><b>CIT168 subcortical atlas</b><span class="lic">see source</span>
-            <p class="use">Substantia nigra, red nucleus and subthalamic nucleus, from NeuroVault collection 3145.</p>
-            <p class="cite">Pauli WM, Nili AN, Tyszka JM. A high-resolution probabilistic in vivo atlas of human subcortical brain nuclei. Sci Data 2018;5:180063. · <a href="https://osf.io/r2hvk/" target="_blank" rel="noopener">source</a></p></div>
           <div class="d"><b>PAM50 spinal cord template</b><span class="lic">see source</span>
             <p class="use">Spinal cord white and gray matter tracts, from the Spinal Cord Toolbox.</p>
             <p class="cite">De Leener B et al. PAM50: Unbiased multimodal template of the brainstem and spinal cord aligned with the ICBM152 space. NeuroImage 2018;165:170–9. · <a href="https://spinalcordtoolbox.com/" target="_blank" rel="noopener">Spinal Cord Toolbox</a></p></div>
@@ -1894,7 +1935,7 @@ const BRAIN_ATLAS = atlasOf(BRAIN_CAT, [
   ["pons", "stem", "Brainstem", "brainstem · middle", `A bridge of fibers to the cerebellum. A stroke in its front can cause <b>locked-in syndrome</b>: awake and aware, able to move only the eyes up and down.`],
   ["medulla", "stem", "Brainstem", "brainstem · bottom", `The vital centers for breathing, heart rate and blood pressure. If swelling pushes the brain down through the foramen magnum, the medulla is squeezed and <b>breathing stops</b>.`],
 ]);
-const BRAIN_L1 = {
+const BRAIN_L1 = { solidRest:true,
   title:"The lobes and what's under them", short:"lobes",
   items:["frontal","parietal","temporal","occipital","cerebellum","brainstem"],
   order3:["temporal","cerebellum","frontal","occipital","brainstem","parietal"],
@@ -1957,7 +1998,7 @@ const BRAIN_L2 = {
            no:`That's the trap. <span class="why">The midbrain runs eye movements and pupil reflexes. The vital centers are lower, in the <b>medulla oblongata</b>.</span>`},
   },
 };
-const BRAIN_L3 = {
+const BRAIN_L3 = { solidRest:true,
   title:"Cortex hot spots", short:"cortex areas",
   views:[{label:"Brain · left side", rx:.22, ry:-1.25}, {label:"Brain · from behind, left", rx:.22, ry:-2.45}],
   items:["precentral","postcentral","broca","wernicke","visual"],
@@ -1992,7 +2033,7 @@ const BRAIN_L3 = {
 /* ---------- the deep brain: real BodyParts3D scans, shown cut open, spread apart or faded ---------- */
 const DEEP_CAT = [
   mk("corpus_callosum", "corpus callosum", "corpus callosum", "", "the thick bridge of fibers joining the two hemispheres", "the bridge between halves", "the arch on the midline, under the cingulate gyrus", ["corpus_callosum"], ["callosum"]),
-  mk("fornix", "fornix", "fornix", "", "the memory pathway arching from the hippocampus to the mammillary bodies", "the arch", "under the corpus callosum, curving down and forward", ["fornix_l", "fornix_r", "fornix_c"], ["fornices"]),
+  mk("fornix", "fornix", "fornix", "", "the memory pathway arching from the hippocampus to the mammillary bodies", "the arch", "under the corpus callosum, curving down and forward", ["fornix_l", "fornix_r"], ["fornices"]),
   mk("thalamus", "thalamus", "thalamus", "", "the relay station: nearly every sense passes through it to the cortex", "the relay", "the egg-shaped pair in the center of the brain", ["thalamus_l", "thalamus_r"], ["thalami"]),
   mk("hypothalamus", "hypothalamus", "hypothalamus", "", "the control center for temperature, hunger, thirst and hormones", "the thermostat", "just below the thalamus, above the pituitary", ["hypothalamus"]),
   mk("mammillary", "mammillary body", "corpus mammillare", "", "a small pair of bumps on the memory circuit", "the two bumps", "the underside of the hypothalamus, behind the pituitary stalk", ["mammillary"], ["mammillary bodies", "mamillary body", "mamillary bodies"]),
@@ -6246,8 +6287,8 @@ const ACC = () => { const a = ACC0(); if (!LIGHT()) return Object.assign({text:a
   if (a.id === "white") return {id:"white", name:"Ink", hex:"#1b232d", text:"#1b232d", bone:0x39424e, glow:"transparent", dust:0x39424e, em:[.02,.02,.03]};
   const l = lumHex(a.hex);
   return Object.assign({}, a, {text:mixHex(a.hex, "#000000", l > .55 ? .45 : l > .35 ? .28 : .12), glow:a.glow.replace(/,\s*[\d.]+\)$/, ",.3)"), em:a.em.map(x => x * .55)}); };
-const GH = () => LIGHT() ? 0x7d8794 : GHOST, DIMC = () => LIGHT() ? 0x9ea7b2 : 0x4a525d;
-const stateColor = s => s === "locked" ? GH() : s === "dim" ? DIMC() : s === "lit" ? (LIGHT() ? 0xcdbd9c : IVORY) : (LIGHT() ? 0xebe4d6 : WHITE);
+const GH = () => LIGHT() ? 0x5f6976 : GHOST, DIMC = () => LIGHT() ? 0x7f8995 : 0x4a525d;
+const stateColor = s => s === "locked" ? GH() : s === "dim" ? DIMC() : s === "lit" ? (LIGHT() ? 0xe4d9c4 : IVORY) : (LIGHT() ? 0xf4efe6 : WHITE);
 const GHOST_OP = () => .16 + LOOK.ghost / 100 * .36;          // .16 (the reel) … .52
 const mixHex = (a, b, t) => { const p = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16)), A = p(a), B = p(b);
   return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join(""); };
@@ -6255,21 +6296,22 @@ function applyLook(){
   const a = ACC(), html = document.documentElement, r = html.style, t = LOOK.bg / 100, L = LIGHT();
   html.classList.toggle("light", L);
   r.setProperty("--hl", a.text); r.setProperty("--hlglow", a.glow);
-  const bg = L ? mixHex("#e9edf1", "#c4ccd5", t) : mixHex("#0f141b", "#05070a", t);
-  r.setProperty("--bg", bg); r.setProperty("--bgtop", L ? mixHex("#fbfcfd", "#dfe4ea", t) : mixHex("#18212c", "#0b1017", t));
+  const bg = L ? mixHex("#c5ccd4", "#a6afba", t) : mixHex("#0f141b", "#05070a", t);
+  r.setProperty("--bg", bg); r.setProperty("--bgtop", L ? mixHex("#dce1e7", "#bec6cf", t) : mixHex("#18212c", "#0b1017", t));
   document.body.style.background = bg;
   const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute("content", bg);
   try { if (home) Object.values(home.fig).forEach(F => { const c = L ? 0x3a4552 : 0xffffff; F.ringMat.color.setHex(c); F.glowMat.color.setHex(c);
-    F.inner.traverse(o => { const m = o.material; if (m && m.userState && m.userState !== "target") m.color.copy(sRGB(stateColor(m.userState))); }); }); } catch(_){}
+    F.inner.traverse(o => { const m = o.material; if (m && m.userState && m.userState !== "target") m.color.copy(sRGB(colorOf(m, m.userState))); }); }); } catch(_){}
   store.look = LOOK; save();
   repaintAll();
 }
 function paint(m, state){
   m.userState = state;
-  if (state === "locked"){ m.color.copy(sRGB(GH())); m.transparent = true; m.opacity = GHOST_OP(); m.depthWrite = false; m.emissive.setHex(0); }
-  else if (state === "dim"){ m.color.copy(sRGB(DIMC())); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0); }
+  if (state === "locked" && SOLID()){ m.color.copy(sRGB(colorOf(m, state))); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0); }
+  else if (state === "locked"){ m.color.copy(sRGB(colorOf(m, state))); m.transparent = true; m.opacity = GHOST_OP(); m.depthWrite = false; m.emissive.setHex(0); }
+  else if (state === "dim"){ m.color.copy(sRGB(colorOf(m, state))); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0); }
   else if (state === "target"){ const a = ACC(); m.color.copy(sRGB(a.bone)); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setRGB(a.em[0], a.em[1], a.em[2]); }
-  else { m.color.copy(sRGB(stateColor(state))); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0x0d0c0a); }
+  else { m.color.copy(sRGB(colorOf(m, state))); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0x0d0c0a); }
   m.needsUpdate = true;
 }
 
@@ -6315,9 +6357,9 @@ function useLevel(i, quiet){
   VIEWS = LV.views || R.views; FRAME = LV.frame || R.frame;
   boxOf(LV.clusterIds || R.clusterIds || LV.items).getCenter(CLUSTER_C);
   $("#lvlPill").textContent = `${R.name} · L${i+1}`;
-  { let m = $("#lvMini"); if (!m){ const s = document.querySelector(".stats"); if (s){ m = document.createElement("button"); m.id = "lvMini"; m.className = "lvmini";
+  { let m = $("#lvMini"); if (!m){ const s = document.querySelector(".pills"); if (s){ m = document.createElement("button"); m.id = "lvMini"; m.className = "lvmini";
       m.addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); showPicker(); }); s.appendChild(m); } }
-    if (m) m.textContent = `L${i+1} · levels`; }
+    if (m){ m.textContent = `L${i+1} ▾`; m.setAttribute("aria-label", `Level ${i+1}. All levels`); } }
   if (!quiet){ save(); resize(); }
 }
 const inLv = id => INLV.has(id);
@@ -6337,7 +6379,7 @@ function updateCut(inner, plane){   // keep the right half (x < 0): the cut foll
 function makeSlot(targetId){
   const g = new THREE.Group(), inner = new THREE.Group(); g.add(inner);
   const ghost = makeMat(), faint = makeMat(), dimm = makeMat(), mats = {}, V = levelVis(); faint.opacity = .05; paint(dimm, "dim");
-  R.catalog.forEach(b => mats[b.id] = {mat:makeMat(), meshes:[]});
+  R.catalog.forEach(b => mats[b.id] = {mat:atlasMat(b.en + " " + b.meshes.join(" "), R.mode), meshes:[]});
   let jaw = null;
   if (JAW_PIVOT){ jaw = new THREE.Group(); jaw.position.copy(JAW_PIVOT); inner.add(jaw); }
   for (const k of CLUSTER){
@@ -6353,6 +6395,7 @@ function makeSlot(targetId){
   let plane = null;
   if (V.clip){ plane = new THREE.Plane(); [ghost, faint, dimm, ...Object.values(mats).map(o => o.mat)].forEach(mt => mt.clippingPlanes = [plane]); }
   const c = (targetId && (LV.centerOn || R.centerOn) === "target") ? itemPos(targetId) : CLUSTER_C; inner.position.set(-c.x, -c.y, -c.z);
+  if (SOLID()) Object.values(mats).forEach(o => { if (o.meshes.length) paint(o.mat, "locked"); });
   if (targetId){ if (mode === "round" && round === 4) BONES.forEach(b => { if (mats[b.id]) paint(mats[b.id].mat, "lit"); }); else paint(mats[targetId].mat, "target"); }
   scene.add(g);
   return {g, inner, mats, ghost, faint, dimm, plane, target:targetId, phase:Math.random()*6, gone:false, jaw, jawT:0};
@@ -6750,6 +6793,7 @@ function wrong(why){
 }
 
 function endRound(){
+  markDay();
   if (round === 1 || round === 2 || round === 3){ const n = round + 1; kbHint(null);
     word.className = "word"; word.innerHTML = ""; $("#sub").textContent = "";
     $("#pEye").innerHTML = `${roundName(round).split(" · ")[0]} done · <em>${queue.length}</em> / ${queue.length}`;
@@ -6767,13 +6811,13 @@ function endRound(){
 
 /* ---------------- spacing engine + results ---------------- */
 function schedule(id, ok, t){
-  const it = st.items[id];
+  const it = st.items[id]; if (!ok) it.miss = (it.miss || 0) + 1;
   if (ok){ it.box = Math.min(it.box + 1, INTERVALS.length - 1); it.due = addDays(t, INTERVALS[it.box]); if(!it.days.includes(t)) it.days.push(t); }
   else { it.box = Math.max(0, it.box - 1); it.due = addDays(t, 1); }
   it.last = t;
 }
 function finishLevel(){
-  const t = today(), clean = wrongIn[3].size === 0;
+  const t = today(), clean = wrongIn[3].size === 0; wrongIn[2].forEach(id => { const it = st.items[id]; if (it) it.slip = (it.slip || 0) + 1; });
   BONES.forEach(b => schedule(b.id, !wrongIn[3].has(b.id) && !wrongIn[4].has(b.id), t));
   if (!LS.clearedOn) LS.clearedOn = t;
   LS.stars[0] = true; if (clean) LS.stars[1] = true; save();
@@ -6818,8 +6862,7 @@ function showWin(r){
     <div class="eyebrow">${esc(R.name)} · ${r.warm ? "warm-up done" : `level ${LVI+1} cleared`} · ${t}</div>
     ${cheer(r)}<h2>${r.title}</h2>
     <div class="big">
-      <div><small>wpm</small><strong>${wpm}</strong></div>
-      <div><small>key accuracy</small><strong>${acc}%</strong></div>
+      <div><small>day streak</small><strong>🔥 ${dayStreak()}</strong></div>
       <div><small>first-try recall</small><strong>${r.firstTry}%</strong></div>
     </div>
     ${S ? `<div class="stars">
@@ -6887,7 +6930,7 @@ function buildExplore(){
   if (R.ex){ ex = R.ex; return; }
   const g = new THREE.Group(), inner = new THREE.Group(); g.add(inner); const mats = {}, ghost = makeMat(), faint = makeMat(), list = [];
   const dimm = makeMat(); paint(dimm, "dim"); ghost.opacity *= (R.sceneryOp || 1); faint.opacity = .05;
-  ATLAS.forEach(a => mats[a.id] = {mat:makeMat(), meshes:[]});
+  ATLAS.forEach(a => { const c = R.catalog.find(x => x.id === a.id) || a; mats[a.id] = {mat:atlasMat((c.en || a.id) + " " + (c.meshes || []).join(" "), R.mode), meshes:[]}; });
   for (const k of CLUSTER){ const owner = AOWNER[k]; const m = new THREE.Mesh(base[k].geo, owner ? mats[owner].mat : ghost); m.position.copy(base[k].pos);
     m.userData.bone = owner || "other"; m.userData.k = k; m.userData.mat0 = m.material; m.userData.p0 = base[k].pos.clone();
     inner.add(m); list.push(m); if (owner) mats[owner].meshes.push(m); }
@@ -7015,7 +7058,7 @@ function buildMap(){
   }
   const src = MODE === "bones" ? DATA.body : DATA[MAPSRC[MODE]];
   if (src.figure){ const d = makeGeo(src.figure, .01, false), m = new THREE.Mesh(d.geo, makeMat()); m.material.opacity = .14; m.raycast = () => {}; inner.add(m); bb.union(d.box); }
-  for (const b of BODY){ const d = makeGeo(src[b.id], .01, false); const mat = makeMat();
+  for (const b of BODY){ const d = makeGeo(src[b.id], .01, false); const mat = makeMat(); mat.userData.atlas = atlasColor(b.id + " " + (b.name || ""), MODE);
     const m = new THREE.Mesh(d.geo, mat); m.userData.region = b.id; inner.add(m); parts[b.id] = {mesh:m, mat}; bb.union(d.box); }
   const c = new THREE.Vector3(); bb.getCenter(c); inner.position.copy(c).multiplyScalar(-1);
   const s = new THREE.Vector3(); bb.getSize(s);
@@ -7204,10 +7247,10 @@ function buildHome(){
   if (home) return;
   const g = new THREE.Group(), fig = {};
   const make = (m) => { const f = new THREE.Group(), inner = new THREE.Group(); f.add(inner); const lit = [], bb = new THREE.Box3(), mats = [];
-    for (const k of Object.keys(DATA.body)){ const d = makeGeo(DATA.body[k], .01, false), mat = makeMat();
+    for (const k of Object.keys(DATA.body)){ const d = makeGeo(DATA.body[k], .01, false), mat = makeMat(); if (m === "bones") mat.userData.atlas = atlasColor(k, "bones");
       paint(mat, m === "bones" ? "lit" : "locked"); if (m !== "bones") mat.opacity = .1;
       inner.add(new THREE.Mesh(d.geo, mat)); bb.union(d.box); if (m === "bones") lit.push(mat); }
-    if (m !== "bones"){ const SD = DATA[MAPSRC[m]]; for (const k of Object.keys(SD)){ const d = makeGeo(SD[k], .01, false), mat = makeMat(); paint(mat, "lit"); inner.add(new THREE.Mesh(d.geo, mat)); lit.push(mat); } }
+    if (m !== "bones"){ const SD = DATA[MAPSRC[m]]; for (const k of Object.keys(SD)){ const d = makeGeo(SD[k], .01, false), mat = makeMat(); mat.userData.atlas = atlasColor(k, m); paint(mat, "lit"); inner.add(new THREE.Mesh(d.geo, mat)); lit.push(mat); } }
     const c = new THREE.Vector3(); bb.getCenter(c); inner.position.copy(c).multiplyScalar(-1);
     const s = new THREE.Vector3(); bb.getSize(s);
     inner.traverse(o => { if (o.material){ o.material.transparent = true; o.material.needsUpdate = true; mats.push([o.material, o.material.opacity]); } });
@@ -7228,7 +7271,7 @@ function homeStats(m){
     if (s && s.levels) stars += s.levels.reduce((n, l) => n + (l ? l.stars.filter(Boolean).length : 0), 0); });
   return `${regs.length} regions · ${stars}/${total} ★` + (due ? ` · <em>${due} due</em>` : "");
 }
-function drawHome(){ setTimeout(drawReview, 0); $("#hEye").textContent = NAME() ? "Hi " + NAME() + " · choose a set" : "Anatomy Type · choose a set";
+function drawHome(){ setTimeout(() => { drawReview(); drawWeakBtn(); drawStreak(); }, 0); $("#hEye").textContent = NAME() ? "Hi " + NAME() + " · choose a set" : "Anatomy Type · choose a set";
   $("#hBonesS").innerHTML = homeStats("bones"); $("#hNervesS").innerHTML = homeStats("nerves"); $("#hOrgansS").innerHTML = homeStats("organs"); $("#hMusclesS").innerHTML = homeStats("muscles"); $("#hVesselsS").innerHTML = homeStats("vessels");
   [["bones", "#hBonesC"], ["nerves", "#hNervesC"], ["organs", "#hOrgansC"], ["muscles", "#hMusclesC"], ["vessels", "#hVesselsC"]].forEach(([m, sel]) => { const id = (store.last || {})[m], r = REGIONS[id], el = $(sel);
     const lv = r && store.regions[id] ? (store.regions[id].level || 0) + 1 : 1;
@@ -7580,7 +7623,7 @@ function locateGiveUp(){
 }
 
 /* ---------- mixed review ---------- */
-let MIXR = [], mixMiss = new Set(), mixFig = null;
+let MIXR = [], mixMiss = new Set(), mixFig = null, mixLabel = null;
 const levelOfItem = (reg, id) => Math.max(0, reg.levels.findIndex(l => l.items.includes(id)));
 function dueAcross(fig){
   const t = today(), out = [];
@@ -7600,10 +7643,10 @@ function interleave(pairs){
   }
   return out;
 }
-async function startMixed(fig){
-  let pairs = dueAcross(fig);
+async function startMixed(fig, given, label){
+  let pairs = given || dueAcross(fig);
   if (!pairs.length){ toast("Nothing is due right now. Cleared parts come back on later days."); return; }
-  pairs = interleave(shuffle(pairs).slice(0, 24));
+  pairs = interleave(given ? shuffle(pairs.slice()) : shuffle(pairs).slice(0, 24));
   const need = [...new Set(pairs.flatMap(p => regFiles(REGIONS[p[0]])))].filter(f => !DATA[f]);
   if (need.length){
     banner("Loading your reviews…");
@@ -7616,7 +7659,7 @@ async function startMixed(fig){
   if (first.mode !== MODE) setMode(first.mode);
   useRegion(first.id); useLevel(levelOfItem(first, pairs[0][1]), true);
   resetStats(); resume = null; $("#win").hidden = true;
-  MIXR = pairs.map(p => p[0]); mixMiss = new Set(); mixFig = fig;
+  MIXR = pairs.map(p => p[0]); mixMiss = new Set(); mixFig = fig; mixLabel = label || null;
   startRound("m", pairs.map(p => p[1]));
   setNav(); resize();
 }
@@ -7641,9 +7684,9 @@ function finishMixed(){
   const right = rows.filter(r => !r.miss).length, wpm = $("#sWpm").textContent, acc = $("#sAcc").textContent;
   mode = "win"; banner(null); kbHint(null);
   $("#win").innerHTML = `<div class="win-in">
-    <div class="eyebrow">Mixed review · ${mixFig ? esc(FIG_NAME[mixFig]) : "all figures"} · ${t}</div>
+    <div class="eyebrow">${mixLabel ? esc(mixLabel) : "Mixed review"} · ${mixFig ? esc(FIG_NAME[mixFig]) : "all figures"} · ${t}</div>
     ${cheer({warm:true, firstTry:Math.round(100 * right / Math.max(1, rows.length))})}<h2>${right === rows.length ? "Everything due came back from memory." : "Most of it stuck. The misses come back tomorrow."}</h2>
-    <div class="big"><div><small>wpm</small><strong>${wpm}</strong></div><div><small>key accuracy</small><strong>${acc}%</strong></div><div><small>recalled</small><strong>${right}/${rows.length}</strong></div></div>
+    <div class="big"><div><small>day streak</small><strong>🔥 ${dayStreak()}</strong></div><div><small>recalled</small><strong>${right}/${rows.length}</strong></div></div>
     <div class="sec" style="display:grid;gap:10px"><h3>What you recalled</h3>
       <div class="solved">${rows.map(x => `<div class="sv"><b>${esc(x.b.en)}</b><small>${esc(x.reg.name)} · ${esc(x.b.mean)}</small>
         <span class="tag ${x.miss ? "r" : ""}">${x.miss ? "missed, due tomorrow" : x.gap ? `recalled after ${x.gap} day${x.gap > 1 ? "s" : ""}` : "recalled"}</span></div>`).join("")}</div></div>
@@ -8048,6 +8091,288 @@ function drSubmit(give){
       if (DR && DR.i >= DR.d.steps.length) $("#drNext").click(); else if (e.target && e.target.id === "drIn") drSubmit(false); }
   }, true);
 })();
+
+/* =====================================================================
+   v3 · daily streak · atlas colors · weak spots · sync codes · phone keyboard fit
+   ===================================================================== */
+
+/* ---------- daily streak: days in a row with a finished round or review ---------- */
+function dayStreak(){
+  if (!store.days){            // first run: seed from the days parts were recalled
+    const s = new Set(); Object.values(store.regions || {}).forEach(r => Object.values(r.items || {}).forEach(it => (it.days || []).forEach(d => s.add(d))));
+    store.days = [...s].sort().slice(-500);
+  }
+  const set = new Set(store.days.map(dnum)); let d = dnum(today()), n = 0;
+  if (!set.has(d)) d--;          // today not played yet: yesterday's streak still counts
+  while (set.has(d)){ n++; d--; }
+  return n;
+}
+function markDay(){
+  const t = today(); store.days = store.days || [];
+  dayStreak();
+  if (!store.days.includes(t)){ store.days.push(t); store.days = store.days.slice(-500); save(); }
+  drawStreak();
+}
+function drawStreak(){
+  const el = $("#streak"); if (!el) return; const n = dayStreak(), done = (store.days || []).includes(today());
+  el.querySelector("b").textContent = n; el.classList.toggle("zero", !n);
+  el.title = n ? `${n}-day streak${done ? "" : " · finish a round today to keep it"}` : "Finish a round or a review to start a streak";
+  el.setAttribute("aria-label", el.title);
+}
+
+/* ---------- atlas colors: the textbook color code, per part ---------- */
+function atlasColor(text, mode){
+  const t = String(text || "").toLowerCase().replace(/_/g, " ");
+  if (mode === "vessels"){
+    if (/pulmonary (trunk|arter)/.test(t)) return 0x4166b8;
+    if (/pulmonary vein/.test(t)) return 0xc6363f;
+    if (/portal|splenic vein|mesenteric vein/.test(t)) return 0x7451a8;
+    if (/\bvein|vena|venous|sinus|jugular|cava|azygos|saphenous|cephalic|basilic|vv\b/.test(t)) return 0x4166b8;
+    if (/heart|ventric|atri/.test(t)) return 0xa8434a;
+    return 0xc8353d;
+  }
+  if (mode === "muscles"){
+    if (/tendon|aponeuros|fascia|\bband|linea|retinacul|ligament|achilles/.test(t)) return 0xe5e1d5;
+    return 0xb24a42;
+  }
+  if (mode === "nerves"){
+    if (/ventric|aqueduct|central ?canal|cistern|centralcanal|latvent|thirdvent|fourthvent/.test(t)) return 0x8ec9e6;
+    if (/choroid/.test(t)) return 0xb8505a;
+    if (/\bsss\b|sagittal sinus|sinus/.test(t)) return 0x4a6bb5;
+    if (/dura|arachnoid|\bpia|falx|tentorium|menin/.test(t)) return 0xd8cbb8;
+    if (/callosum|fornix|commissure|capsule|white matter|peduncle/.test(t)) return 0xefe9de;
+    if (/cerebell/.test(t)) return 0xcf9f97;
+    if (/lobe|gyrus|cortex|insula|cingulate|broca|wernicke|visual|cerebrum|precentral|postcentral|frontal|parietal|temporal|occipital|brain\b/.test(t)) return 0xd9ada5;
+    if (/thalam|caudate|putamen|pallid|hippocamp|amygdal|nucleus|nigra|subthal|mammill|pineal|pituitar|hypothal/.test(t)) return 0xc49a90;
+    if (/midbrain|pons|medulla|brainstem|spinal cord|spinal_cord|\bcord|grey|gray|tract|column|horn/.test(t)) return 0xece2d2;
+    return 0xf0cf5e;                        // nerves
+  }
+  if (mode === "organs"){
+    const T = [
+      [/valve/, 0xe6d6c8], [/aort|arter/, 0xc8353d], [/vena|vein/, 0x4166b8], [/heart|ventric|atri|myocard|pericard/, 0xb0444b],
+      [/lung|lobe of (left|right) lung|pleura/, 0xe3a2a7], [/trache|bronch|laryn|carina/, 0xdcd6c8], [/esophag|oesophag/, 0xd88f84],
+      [/stomach|gastr|pylor|fundus/, 0xe0a08f], [/duoden|jejun|ileum|small intestine/, 0xe8ae96], [/colon|cecum|caecum|rect|append|large intestine|sigmoid/, 0xc98c74],
+      [/liver|hepat/, 0x8a3b30], [/gall|bile|cystic/, 0x5f8f3e], [/pancrea/, 0xe6c178], [/spleen/, 0x7b3244], [/adrenal|suprarenal/, 0xd9a34a],
+      [/kidney|renal/, 0x9a3d38], [/ureter|bladder|urethra/, 0xdfb097], [/uter|ovar|fallop|tube|vagin|cervix/, 0xd98d8e],
+      [/prostat|testi|semin|vas |deferens|epididym|penis/, 0xc98276], [/sclera/, 0xf2eee6], [/cornea/, 0xdbe9f0], [/iris/, 0x5a86b8], [/lens/, 0xe3eef2],
+      [/retina/, 0xd2574f], [/choroid/, 0x7a3b3a], [/vitreous/, 0xcfe3ec], [/ciliary/, 0x8a5a4a], [/optic|nerve/, 0xf0cf5e],
+      [/rectus|oblique|muscle|diaphragm/, 0xb24a42], [/thyroid/, 0xb5524f], [/thymus/, 0xe3b9a0]];
+    for (const [re, c] of T) if (re.test(t)) return c;
+    return 0xd99a8c;
+  }
+  if (/ligament|menisc|cartilage|bursa|\bdisc|labrum/.test(t)) return 0xc8d8de;
+  if (/tendon/.test(t)) return 0xe5e1d5;
+  return 0xe9dcc2;                          // bone
+}
+function atlasMat(text, mode){ const m = makeMat(); m.userData.atlas = atlasColor(text, mode); return m; }
+const mixInt = (a, b, t) => { const A = [a >> 16 & 255, a >> 8 & 255, a & 255], Bc = [b >> 16 & 255, b >> 8 & 255, b & 255];
+  return A.reduce((acc, v, i) => (acc << 8) | Math.round(v + (Bc[i] - v) * t), 0); };
+function SOLID(){ return !!(LV && LV.solidRest && R && R.levels.includes(LV)) && mode !== "explore" && mode !== "map" && mode !== "home"; }
+function colorOf(m, state){
+  const at = LOOK.atlas && m.userData && m.userData.atlas != null ? m.userData.atlas : null, L = LIGHT();
+  if (state === "locked") return SOLID() ? (at != null ? mixInt(at, L ? 0x9aa4af : 0x2b3139, .6) : (L ? 0x9aa4af : 0x4a4f57)) : (at != null ? at : GH());
+  if (state === "dim") return at != null ? mixInt(at, L ? 0x7f8995 : 0x1c2129, .5) : DIMC();
+  if (at != null) return state === "lit" ? at : mixInt(at, 0xffffff, .12);
+  return stateColor(state);
+}
+
+/* ---------- weak spots: the parts you miss most, across every figure ---------- */
+function weakList(){
+  const out = [];
+  Object.values(REGIONS).forEach(r => {
+    const s = store.regions[r.id]; if (!s) return; const inL = new Set(r.levels.flatMap(l => l.items));
+    Object.entries(s.items || {}).forEach(([id, it]) => {
+      if (!inL.has(id) || !it) return; const b = r.catalog.find(x => x.id === id); if (!b) return;
+      const lastMiss = !!(it.last && !(it.days || []).includes(it.last));
+      const w = (it.miss || 0) * 2 + (it.slip || 0) + (lastMiss ? 1.5 : 0);
+      if (w > 0) out.push({r, b, it, w, lastMiss});
+    });
+  });
+  return out.sort((a, b) => b.w - a.w || (b.it.last ? dnum(b.it.last) : 0) - (a.it.last ? dnum(a.it.last) : 0)).slice(0, 40);
+}
+function weakWhy(x){
+  const p = [], it = x.it;
+  if (it.miss) p.push(`missed ${it.miss}× from memory`);
+  if (it.slip) p.push(`slipped ${it.slip}× on the clue round`);
+  if (x.lastMiss && !it.miss) p.push("missed last time");
+  if (it.due){ const d = dnum(it.due) - dnum(today()); p.push(d <= 0 ? "due now" : d === 1 ? "due tomorrow" : `due in ${d} days`); }
+  return p.join(" · ");
+}
+function openWeak(){
+  $("#look").hidden = true; const w = $("#weak"), L = weakList();
+  const rows = L.map(x => `<div class="wrow"><div class="wmain"><b>${esc(x.b.en)}</b><small>${esc(FIG_NAME[x.r.mode] || x.r.mode)} · ${esc(x.r.name)}</small><span class="wwhy">${weakWhy(x)}</span></div>
+      <button class="dsee" data-ref="${x.r.id}:${x.b.id}">see it →</button></div>`).join("");
+  $("#wkBody").innerHTML = `<h2 id="wkTitle">Weak spots${NAME() ? `, ${esc(NAME())}` : ""}</h2>
+    <p class="lead">The parts you miss most, from every figure. Practicing them mixes them together, which is the fastest way to fix them.</p>
+    ${L.length ? `<div class="wact"><button class="btn primary" id="wkGo">Practice the top ${Math.min(L.length, 20)}<kbd>enter</kbd></button></div><div class="wlist">${rows}</div>`
+      : `<p class="wempty">No weak spots yet. Parts you miss from memory, or need the clue for, will show up here.</p>`}`;
+  w.hidden = false; w.scrollTop = 0;
+  const go = $("#wkGo"); if (go){ go.addEventListener("click", () => { audio(); closeWeak(true); startMixed(null, L.slice(0, 20).map(x => [x.r.id, x.b.id]), "Weak spots"); }); setTimeout(() => go.focus({preventScroll:true}), 0); }
+  w.querySelectorAll(".dsee").forEach(b => b.addEventListener("click", () => { audio(); closeWeak(true); jumpTo(b.dataset.ref); }));
+}
+function closeWeak(quiet){ const w = $("#weak"); if (!w || w.hidden) return; w.hidden = true; if (!quiet && mode !== "home" && mode !== "map" && mode !== "explore") focusTyper(); }
+(function initWeak(){
+  const w = document.createElement("div"); w.className = "srcwrap"; w.id = "weak"; w.hidden = true;
+  w.setAttribute("role", "dialog"); w.setAttribute("aria-modal", "true"); w.setAttribute("aria-labelledby", "wkTitle");
+  w.innerHTML = `<div class="src drill"><button class="x" id="wkX" aria-label="Close weak spots">×</button><div id="wkBody"></div></div>`;
+  const src = $("#src"); src.parentNode.insertBefore(w, src.nextSibling);
+  $("#wkX").addEventListener("click", () => { audio(); closeWeak(); });
+  w.addEventListener("click", e => { if (e.target === w) closeWeak(); });
+  document.addEventListener("keydown", e => { if (w.hidden) return; e.stopImmediatePropagation();
+    if (e.key === "Escape"){ e.preventDefault(); closeWeak(); } else if (e.key === "Enter" && !(e.target && e.target.tagName === "BUTTON")){ const g = $("#wkGo"); if (g){ e.preventDefault(); g.click(); } } }, true);
+})();
+function drawWeakBtn(){
+  let b = $("#hWeak");
+  if (!b){ b = document.createElement("button"); b.id = "hWeak"; b.className = "hweak";
+    b.addEventListener("click", e => { audio(); keySound("enter"); e.currentTarget.blur(); openWeak(); }); $(".hnote").before(b); }
+  const n = weakList().length; b.hidden = !n; if (n) b.textContent = `Weak spots · ${n}`;
+}
+
+/* ---------- sync codes: the same progress on every device, no account ---------- */
+const FB = {projectId:"", apiKey:""};                 // the Firebase project (Firestore) that holds synced progress
+const SYNC_KEY = "anatomytype.sync";
+const onClaude = () => /claude/.test(location.hostname) || !/^https?:$/.test(location.protocol);
+const syncReady = () => !!(FB.projectId && FB.apiKey) && !onClaude();
+const sync = { code:(() => { try { return localStorage.getItem(SYNC_KEY) || ""; } catch(e){ return ""; } })(), busy:false, at:0, err:"", t:0, pulledAt:0 };
+const plainCode = c => c.replace(/-/g, "");
+const prettyCode = c => plainCode(c).replace(/(.{4})(?=.)/g, "$1-");
+function newCode(){ const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", r = crypto.getRandomValues(new Uint8Array(12)); return [...r].map(x => A[x % A.length]).join(""); }
+const docURL = c => `https://firestore.googleapis.com/v1/projects/${FB.projectId}/databases/(default)/documents/sync/${plainCode(c)}?key=${FB.apiKey}`;
+const syncable = s => ({regions:s.regions || {}, days:s.days || [], name:s.name || "", drills:s.drills || {}, last:s.last || {}});
+function mergeInto(L, Rm){
+  if (!Rm) return;
+  L.regions = L.regions || {};
+  for (const [rid, rr] of Object.entries(Rm.regions || {})){
+    const lr = L.regions[rid];
+    if (!lr){ L.regions[rid] = JSON.parse(JSON.stringify(rr)); continue; }
+    lr.items = lr.items || {};
+    for (const [id, ri] of Object.entries(rr.items || {})){
+      const li = lr.items[id];
+      if (!li){ lr.items[id] = JSON.parse(JSON.stringify(ri)); continue; }
+      const ln = li.last ? dnum(li.last) : -1, rn = ri.last ? dnum(ri.last) : -1;
+      const pick = rn > ln || (rn === ln && (ri.days || []).length > (li.days || []).length) ? ri : li;
+      const days = [...new Set([...(li.days || []), ...(ri.days || [])])].sort();
+      lr.items[id] = Object.assign({}, pick, {days, miss:Math.max(li.miss || 0, ri.miss || 0), slip:Math.max(li.slip || 0, ri.slip || 0)});
+    }
+    (rr.levels || []).forEach((rl, i) => { if (!rl) return; const ll = lr.levels[i];
+      if (!ll){ lr.levels[i] = JSON.parse(JSON.stringify(rl)); return; }
+      ll.clearedOn = [ll.clearedOn, rl.clearedOn].filter(Boolean).sort()[0] || null;
+      ll.stars = [0, 1, 2].map(k => !!((ll.stars || [])[k] || (rl.stars || [])[k])); });
+  }
+  L.days = [...new Set([...(L.days || []), ...(Rm.days || [])])].sort().slice(-500);
+  if (!L.name && Rm.name){ L.name = Rm.name; L.nameAsked = true; }
+  L.drills = Object.assign({}, Rm.drills || {}, L.drills || {});
+  L.last = Object.assign({}, Rm.last || {}, L.last || {});
+}
+async function syncPull(){
+  const r = await fetch(docURL(sync.code), {cache:"no-store"});
+  if (r.status === 404) return null; if (!r.ok) throw new Error("pull " + r.status);
+  const j = await r.json(); return JSON.parse(j.fields.data.stringValue);
+}
+async function syncPush(keep){
+  const body = JSON.stringify({fields:{data:{stringValue:JSON.stringify(syncable(store))}, t:{integerValue:String(Date.now())}}});
+  const r = await fetch(docURL(sync.code), {method:"PATCH", headers:{"Content-Type":"application/json"}, body, keepalive:!!keep && body.length < 60000});
+  if (!r.ok) throw new Error("push " + r.status);
+}
+async function syncNow(){
+  if (!syncReady() || !sync.code || sync.busy) return;
+  sync.busy = true; drawSync();
+  try {
+    const remote = await syncPull(); mergeInto(store, remote); sync.pulledAt = Date.now();
+    store.savedAt = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){}
+    await syncPush(); sync.at = Date.now(); sync.err = "";
+    if (R && store.regions[R.id]) st = regionStore(R.id, R.catalog, R.levels.length);
+    if (mode === "home") drawHome(); drawStreak();
+  } catch(e){ sync.err = navigator.onLine === false ? "You're offline. It'll sync when you're back online." : "Couldn't reach the sync server. Try again in a moment."; }
+  sync.busy = false; drawSync();
+}
+function syncSoon(){ if (!syncReady() || !sync.code) return; clearTimeout(sync.t); sync.t = setTimeout(async () => {
+  if (sync.busy) return syncSoon();
+  try { await syncPush(); sync.at = Date.now(); sync.err = ""; } catch(e){ sync.err = "Couldn't save to sync. It'll try again."; } drawSync(); }, 4000); }
+{ const c = window.__btCloud, q0 = c.queue; c.queue = s => { q0(s); syncSoon(); }; }
+document.addEventListener("visibilitychange", () => {
+  if (!syncReady() || !sync.code) return;
+  if (document.visibilityState === "hidden"){ clearTimeout(sync.t); syncPush(true).catch(() => {}); }
+  else if (Date.now() - sync.pulledAt > 30000) syncNow();
+});
+function setCode(c){ sync.code = c ? plainCode(c) : ""; try { c ? localStorage.setItem(SYNC_KEY, sync.code) : localStorage.removeItem(SYNC_KEY); } catch(e){} }
+function drawSync(){
+  const b = $("#syBody"); if (!b || $("#syncw").hidden) return;
+  const ago = t => { const s = Math.round((Date.now() - t) / 1000); return s < 60 ? "just now" : s < 3600 ? Math.round(s / 60) + " min ago" : Math.round(s / 3600) + " h ago"; };
+  let h = `<h2 id="syTitle">Sync devices</h2>`;
+  if (onClaude()){
+    h += `<p class="lead">Here in Claude, your progress already saves to your Claude account. Sync codes link the installed web app on your phone and laptop.</p>
+      <p>Open <b>jigm3.github.io/Anatomy-Type</b> on each device, then turn on sync there.</p>`;
+  } else if (!syncReady()){
+    h += `<p class="lead">Sync isn't switched on for this copy of the app yet. Your progress is saved in this browser.</p>`;
+  } else if (!sync.code){
+    h += `<p class="lead">One code links your devices. No account, no email. Anyone with the code can see and change this progress, so keep it to yourself.</p>
+      <div class="wact"><button class="btn primary" id="syNew">Turn on sync</button></div>
+      <h3>Already have a code?</h3>
+      <div class="din"><input id="syIn" maxlength="16" placeholder="XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Sync code"><button class="btn" id="syJoin">Link</button></div>`;
+  } else {
+    h += `<p class="lead">This device is synced. Type this code on your other devices to link them.</p>
+      <div class="sycode" id="syCode">${prettyCode(sync.code)}</div>
+      <div class="wact"><button class="btn" id="syCopy">Copy code</button><button class="btn" id="syNow">${sync.busy ? "Syncing…" : "Sync now"}</button><button class="btn" id="syOff">Unlink this device</button></div>
+      <p class="systat">${sync.err ? esc(sync.err) : sync.at ? "Last synced " + ago(sync.at) + "." : ""}</p>`;
+  }
+  b.innerHTML = h;
+  const on = (id, f) => { const el = $(id); if (el) el.addEventListener("click", e => { audio(); e.currentTarget.blur(); f(); }); };
+  on("#syNew", () => { setCode(newCode()); syncNow(); drawSync(); });
+  on("#syJoin", () => { const v = plainCode(($("#syIn").value || "").toUpperCase().replace(/[^A-Z0-9]/g, ""));
+    if (v.length !== 12){ toast("A sync code has 12 letters and numbers."); return; } setCode(v); syncNow(); drawSync(); });
+  on("#syNow", () => syncNow());
+  on("#syOff", () => { setCode(""); drawSync(); toast("This device is unlinked. Its progress stays here."); });
+  on("#syCopy", () => { const t = prettyCode(sync.code);
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("Code copied"), () => { const r = document.createRange(); r.selectNodeContents($("#syCode")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }); });
+  const inp = $("#syIn"); if (inp) inp.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); $("#syJoin").click(); } });
+}
+function openSync(){ $("#look").hidden = true; $("#syncw").hidden = false; drawSync(); }
+function closeSync(){ $("#syncw").hidden = true; }
+(function initSync(){
+  const w = document.createElement("div"); w.className = "srcwrap"; w.id = "syncw"; w.hidden = true;
+  w.setAttribute("role", "dialog"); w.setAttribute("aria-modal", "true"); w.setAttribute("aria-labelledby", "syTitle");
+  w.innerHTML = `<div class="src drill sywrap"><button class="x" id="syX" aria-label="Close sync">×</button><div id="syBody"></div></div>`;
+  const src = $("#src"); src.parentNode.insertBefore(w, src.nextSibling);
+  $("#syX").addEventListener("click", () => { audio(); closeSync(); });
+  w.addEventListener("click", e => { if (e.target === w) closeSync(); });
+  document.addEventListener("keydown", e => { if (w.hidden) return; e.stopImmediatePropagation(); if (e.key === "Escape"){ e.preventDefault(); closeSync(); } }, true);
+  $("#lkSync").addEventListener("click", e => { audio(); e.currentTarget.blur(); openSync(); });
+  if (syncReady() && sync.code) setTimeout(syncNow, 1500);
+})();
+
+/* ---------- Look panel extras: atlas colors, sound on phones ---------- */
+(function lookExtras(){
+  const sync2 = () => { $("#lkPlain").setAttribute("aria-pressed", !LOOK.atlas); $("#lkAtlas").setAttribute("aria-pressed", !!LOOK.atlas);
+    const on = $("#soundBtn").getAttribute("aria-pressed") !== "false"; $("#lkSndOn").setAttribute("aria-pressed", on); $("#lkSndOff").setAttribute("aria-pressed", !on); };
+  $("#lkPlain").addEventListener("click", () => { audio(); tick(); LOOK.atlas = false; sync2(); applyLook(); });
+  $("#lkAtlas").addEventListener("click", () => { audio(); tick(); LOOK.atlas = true; sync2(); applyLook(); });
+  $("#lkSndOn").addEventListener("click", () => { if ($("#soundBtn").getAttribute("aria-pressed") === "false") $("#soundBtn").click(); sync2(); });
+  $("#lkSndOff").addEventListener("click", () => { if ($("#soundBtn").getAttribute("aria-pressed") !== "false") $("#soundBtn").click(); sync2(); });
+  $("#lookBtn").addEventListener("click", sync2);
+  sync2();
+})();
+
+/* ---------- phones: fit the page above the on-screen keyboard ---------- */
+(function keyboardFit(){
+  const vv = window.visualViewport, typer = $("#typer"), touch = matchMedia("(pointer:coarse)");
+  const fit = () => {
+    if (!vv) return;
+    const h = Math.round(vv.height), open = touch.matches && innerHeight - h > 120;
+    document.documentElement.style.setProperty("--vvh", h + "px");
+    const was = document.body.classList.contains("kbopen");
+    document.body.classList.toggle("kbopen", open);
+    $("#app").style.transform = open && vv.offsetTop ? `translateY(${Math.round(vv.offsetTop)}px)` : "";
+    if (open !== was || open) requestAnimationFrame(() => resize());
+  };
+  if (vv){ vv.addEventListener("resize", fit); vv.addEventListener("scroll", fit); }
+  if (typer){
+    typer.addEventListener("focus", () => { if (touch.matches){ document.body.classList.add("typing"); requestAnimationFrame(() => resize()); } });
+    typer.addEventListener("blur", () => { document.body.classList.remove("typing"); setTimeout(() => { fit(); resize(); }, 60); });
+  }
+  fit();
+})();
+drawStreak();
 
 /* ---------------- input ---------------- */
 document.addEventListener("keydown", e => {
