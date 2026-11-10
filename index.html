@@ -76,9 +76,9 @@ button{font:inherit;color:inherit}
 .hint-enter{font-family:var(--f-mono);font-size:11px;color:var(--mute)}
 
 /* keyboard, like the reel */
-.kb{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding-block:4px 16px;user-select:none;width:min(780px,100%);margin:0 auto;box-sizing:border-box}
-.kr{display:flex;gap:6px;width:100%}
-.k{flex:1 1 0;min-width:0;height:38px;border-radius:6px;background:var(--keyf);border:1.5px solid transparent;display:grid;place-items:center;font-family:var(--f-mono);font-size:11px;color:var(--keyt);
+.kb{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;padding-block:2px 12px;user-select:none;width:min(624px,100%);margin:0 auto;box-sizing:border-box}
+.kr{display:flex;gap:5px;width:100%}
+.k{flex:1 1 0;min-width:0;height:30px;border-radius:5px;background:var(--keyf);border:1.5px solid transparent;display:grid;place-items:center;font-family:var(--f-mono);font-size:10px;color:var(--keyt);
   transition:background .14s,color .14s,border-color .14s,transform .08s}
 .k.w15{flex-grow:1.5}.k.w18{flex-grow:1.8}.k.w23{flex-grow:2.3}.k.w6{flex-grow:6}
 .k.hint{border-color:var(--hl);color:#fff;box-shadow:0 0 12px var(--hlglow)}
@@ -351,14 +351,123 @@ button{font:inherit;color:inherit}
 @keyframes welFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.wel-t .l,.wel-eye,.wel-sub,.wel-go{animation:none}.wel-t .o{transition:none}}
 @media (prefers-reduced-motion:reduce){.shake{animation:none}.word span.cur::before,.word .end{animation:none}}
+/* Look v2: theme switch, more swatches, the color wheel, name fields */
+.look{max-height:calc(100dvh - 64px - env(safe-area-inset-top,0px));overflow-y:auto;overscroll-behavior:contain}
+.lkseg{display:flex;width:100%;box-sizing:border-box}.lkseg button{flex:1}
+.sw{flex-wrap:wrap;gap:10px 10px}
+.sw button{width:30px;height:30px}
+.sw .cwb{background:radial-gradient(circle, var(--cc) 0 30%, transparent 33%),conic-gradient(hsl(0 90% 60%),hsl(60 90% 60%),hsl(120 90% 55%),hsl(180 90% 55%),hsl(240 90% 62%),hsl(300 90% 60%),hsl(360 90% 60%))}
+.wheel{display:grid;justify-items:center;gap:10px}
+.wheel input[type=range]{width:100%}
+.wheel .row2{width:100%}
+.wh{--wl:62%;position:relative;width:150px;height:150px;border-radius:50%;touch-action:none;cursor:crosshair;outline-offset:4px;
+  background:radial-gradient(closest-side, hsl(0 0% var(--wl)), hsl(0 0% var(--wl) / 0) 100%),conic-gradient(hsl(0 100% var(--wl)),hsl(60 100% var(--wl)),hsl(120 100% var(--wl)),hsl(180 100% var(--wl)),hsl(240 100% var(--wl)),hsl(300 100% var(--wl)),hsl(360 100% var(--wl)));
+  box-shadow:0 0 0 1px var(--line2)}
+.wh i{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.35);pointer-events:none}
+.lkin{width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:8px 11px;color:var(--ink);font-family:var(--f-body);font-size:16px;margin-top:-6px}
+.lkin:focus{outline:none;border-color:var(--hl)}
+.lkin::placeholder{color:var(--mute)}
+.lkfoot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.wel-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;margin-top:10px}
+.wel-row .wel-go{margin-top:0}
+.wel-name{width:min(250px,72vw);box-sizing:border-box;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:11px 18px;color:var(--ink);font-family:var(--f-body);font-size:16px;text-align:center;outline:none;animation:welFade 1s ease 1s both}
+.wel-name:focus{border-color:var(--hl);box-shadow:0 0 0 3px var(--hlglow)}
+.wel-name::placeholder{color:var(--mute)}
+.wel.leaving .wel-name{opacity:0;transition:opacity .3s}
+.cheer{margin:0 0 -8px;font-family:var(--f-display);font-size:24px;line-height:1.2;color:var(--accent)}
+
+/* light mode: tokens (the rest is generated from the dark rules below) */
+html.light{--hl:#1b232d;--bgtop:#fbfcfd;--bg:#e9edf1;--bg2:#ffffff;--line:#d6dce3;--line2:#c2cad3;
+  --ink:#141a21;--soft:#2a323c;--mute:#5f6975;--ghost:#b9c1ca;--keyf:#dbe0e6;--keyt:#55606c;
+  --accent:#a8690a;--ok:#1d8048;--bad:#d23a2b;color-scheme:light}
+html.light .srcwrap{background:rgba(26,33,43,.35)}
+html.light .wh i{border-color:#fff}
+html.light .tspot{box-shadow:0 0 0 200vmax rgba(24,31,40,.5),0 0 0 1.5px var(--hl),0 0 26px 2px var(--hlglow)}
+html.light .tspot.none{box-shadow:0 0 0 200vmax rgba(24,31,40,.5)}
+html.light #lookBtn{border-color:rgba(20,28,38,.25)}
+html.light .k.down{color:#fff}
+html.light .wel-name{background:rgba(255,255,255,.7);border-color:rgba(20,28,38,.22)}
 </style>
 
+<style id="lightcss">/* generated: light mode versions of the hard-coded dark colors */
+html.light body{background:var(--ink);color:#ffffff}
+html.light .pill{background:rgba(255,255,255,0.82)}
+html.light .pill:hover{border-color:#8e99a6}
+html.light .corner{color:#69727e}
+html.light .banner{background:rgba(255,255,255,0.85)}
+html.light .toast{background:rgba(255,255,255,0.9)}
+html.light .word span.ph{color:#b4bcc6}
+html.light .k.hint{color:var(--ink)}
+html.light .k.down{color:#ffffff}
+html.light .k.bad{color:#ffffff}
+html.light .btn{background:#ffffff}
+html.light .btn:hover{border-color:#8e99a6}
+html.light .btn.primary{background:var(--ink);color:#ffffff;border-color:var(--ink)}
+html.light .chip{background:#ffffff}
+html.light .chip.on{border-color:var(--ink);color:var(--ink)}
+html.light .win .big strong{color:var(--ink)}
+html.light .seg{background:rgba(255,255,255,0.82)}
+html.light .seg button[aria-pressed="true"]{background:var(--ink);color:#ffffff}
+html.light .tab{background:rgba(255,255,255,0.82)}
+html.light .tab[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+html.light .index h4{color:#69727e}
+html.light .index button small{color:#69727e}
+html.light .index button.on{color:var(--ink);border-left-color:var(--ink);background:linear-gradient(90deg,rgba(20,28,38,0.098),transparent)}
+html.light .tip{color:var(--ink);background:rgba(255,255,255,0.92)}
+html.light .exname{color:var(--ink)}
+html.light .exhint{color:#69727e}
+@media (max-width:820px){html.light .index{background:rgba(255,255,255,0.94)}}
+html.light .rchip{background:#ffffff}
+html.light .rchip.locked{color:#69727e}
+html.light .rchip.locked small{color:#69727e}
+html.light .rchip.on{border-color:var(--ink);color:var(--ink)}
+html.light .rchip .new,html.light .exwhere .new{color:#ffffff}
+html.light .lvcard{background:#ffffff}
+html.light .lvcard:hover{border-color:#8e99a6}
+html.light .lvcard.cur{border-color:var(--ink)}
+html.light .lvcard b{color:var(--ink)}
+html.light .tcard{background:rgba(255,255,255,0.98);box-shadow:0 24px 60px rgba(40,52,68,0.21)}
+html.light .tcard h3{color:var(--ink)}
+html.light .ttext .tl b{color:var(--ink)}
+html.light .tmini.done span{color:var(--ink)}
+html.light .look{background:rgba(255,255,255,0.97);box-shadow:0 18px 50px rgba(40,52,68,0.193)}
+html.light .look .row2{color:#69727e}
+html.light .harr{background:#ffffff;color:var(--ink)}
+html.light .harr:hover,html.light .harr:focus-visible{border-color:var(--ink)}
+html.light .hdots i.on{background:var(--ink)}
+html.light .hgo{background:#ffffff}
+html.light .hgo:hover,html.light .hgo:focus-visible,html.light .hcard.hot .hgo{border-color:var(--ink);background:#ffffff}
+html.light .hgo b{color:var(--ink)}
+html.light .hcont:hover{color:var(--ink)}
+html.light .hrev:hover{color:var(--ink)}
+html.light .lvmini{background:#ffffff}
+html.light .taptype{background:#ffffff}
+html.light .hrevall{background:#ffffff}
+html.light .hrevall:hover,html.light .hrevall:focus-visible{border-color:var(--ink);color:var(--ink)}
+html.light .lchip{background:#ffffff}
+html.light .lchip:hover,html.light .lchip:focus-visible{border-color:var(--ink);color:var(--ink)}
+html.light .tipcard{background:rgba(255,255,255,0.98);box-shadow:0 14px 40px rgba(40,52,68,0.175)}
+html.light .dli{background:rgba(20,28,38,0.021)}
+html.light .dback:hover{color:var(--ink)}
+html.light .din input{background:#ffffff}
+html.light .din input:focus{border-color:var(--ink)}
+html.light .pnode{background:#ffffff}
+html.light .wel{background:radial-gradient(120% 90% at 50% 40%,rgba(255,255,255,0.82),rgba(255,255,255,0.94) 70%)}
+html.light .wel-t{color:var(--ink)}
+html.light .wel-go{border:1px solid rgba(20,28,38,0.245);background:rgba(20,28,38,0.056);color:var(--ink)}
+html.light .wel-go:hover,html.light .wel-go:focus-visible{background:var(--ink);color:#ffffff;border-color:var(--ink)}
+html.light .wel-name{background:rgba(20,28,38,0.07);border:1px solid rgba(20,28,38,0.196)}
+html.light .srcwrap{background:rgba(255,255,255,0.82)}
+html.light .src{background:rgba(255,255,255,0.98);box-shadow:0 24px 70px rgba(40,52,68,0.21)}
+html.light .src .d{background:rgba(20,28,38,0.021)}
+html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0 0 0 200vmax rgba(24,31,40,.5),0 0 0 1.5px var(--hl),0 0 26px 2px var(--hlglow)}html.light .tspot.none{box-shadow:0 0 0 200vmax rgba(24,31,40,.5)}html.light .k.down{color:#fff}
+</style>
 <div id="welcome" class="wel" role="dialog" aria-modal="true" aria-labelledby="welT">
   <div class="wel-in">
     <div class="wel-eye">Anatomy Type</div>
     <h1 class="wel-t" id="welT" aria-label="Welcome"></h1>
     <p class="wel-sub">bones · nerves · organs · muscles · vessels</p>
-    <button class="wel-go" id="welGo">Start</button>
+    <div class="wel-row"><input class="wel-name" id="welName" maxlength="24" placeholder="Your name (optional)" autocomplete="given-name" autocapitalize="words" spellcheck="false" aria-label="Your name, optional" hidden><button class="wel-go" id="welGo">Start</button></div>
   </div>
 </div>
 <div class="app home" id="app">
@@ -376,15 +485,24 @@ button{font:inherit;color:inherit}
     </div>
     <div class="tools"><button class="pill" id="lookBtn" aria-expanded="false">LOOK</button><button class="pill" id="srcBtn" aria-haspopup="dialog">SOURCES</button><button class="pill" id="soundBtn" aria-pressed="true">SOUND ON</button></div>
     <div class="look" id="look" hidden>
+      <div class="seg lkseg" role="group" aria-label="Theme"><button id="lkDark" aria-pressed="true">Dark</button><button id="lkLight" aria-pressed="false">Light</button></div>
       <div><h5>Highlight <span id="lkName">White</span></h5></div>
       <div class="sw" id="lkSw"></div>
+      <div class="wheel" id="lkWheel" hidden>
+        <div class="wh" id="lkWh" role="slider" tabindex="0" aria-label="Custom color. Arrow keys change the hue and strength." aria-valuemin="0" aria-valuemax="360"><i id="lkKnob"></i></div>
+        <input type="range" id="lkLt" min="30" max="80" step="1" aria-label="Custom color brightness">
+        <div class="row2"><span>deeper</span><span>brighter</span></div>
+      </div>
       <div><h5>Background <span id="lkBgV"></span></h5></div>
       <input type="range" id="lkBg" min="0" max="100" step="1" aria-label="Background darkness">
       <div class="row2"><span>as reel</span><span>darker</span></div>
       <div><h5>Other parts <span id="lkGhV"></span></h5></div>
       <input type="range" id="lkGh" min="0" max="100" step="1" aria-label="How visible the other parts are">
       <div class="row2"><span>faint</span><span>clearer</span></div>
-      <div class="lkfoot"><button class="reset" id="lkReset">Reset to the reel's look</button><button class="reset" id="lkTour">Replay the tour</button></div>
+      <div><h5>Your name</h5></div>
+      <input class="lkin" id="lkMe" maxlength="24" placeholder="optional" autocomplete="given-name" autocapitalize="words" spellcheck="false" aria-label="Your name">
+      <div class="row2"><span>kept in this browser only</span></div>
+      <div class="lkfoot"><button class="reset" id="lkReset">Reset colors</button><button class="reset" id="lkTour">Replay the tour</button></div>
     </div>
   </header>
 
@@ -479,7 +597,7 @@ button{font:inherit;color:inherit}
       <div class="actions" id="pAct"></div>
     </div>
     <div id="homePanel" class="home-only">
-      <div class="eyebrow">Anatomy Type · choose a set</div>
+      <div class="eyebrow" id="hEye">Anatomy Type · choose a set</div>
       <div class="hsel">
       <button class="harr" id="hPrev" aria-label="Previous set">‹</button>
       <div class="hcards">
@@ -6096,34 +6214,62 @@ function buildBase(reg){
 }
 
 const WHITE = 0xffffff, IVORY = 0xebe4d6, GHOST = 0xc3cad4;
-function makeMat(){ return new THREE.MeshStandardMaterial({color:sRGB(GHOST), roughness:.55, metalness:0, transparent:true, opacity:.16, depthWrite:false, side:THREE.DoubleSide}); }
+function makeMat(){ return new THREE.MeshStandardMaterial({color:sRGB(GH()), roughness:.55, metalness:0, transparent:true, opacity:.16, depthWrite:false, side:THREE.DoubleSide}); }
 /* ---------- Look: accent colour for the target + typed letters, background darkness, other bones' visibility ---------- */
+function accFrom(id, name, hex){ const [r, g, b] = [1, 3, 5].map(k => parseInt(hex.slice(k, k + 2), 16)), n = parseInt(hex.slice(1), 16);
+  return {id, name, hex, bone:n, glow:`rgba(${r},${g},${b},.55)`, dust:n, em:[r / 255 * .36, g / 255 * .36, b / 255 * .36]}; }
 const ACCENTS = [
   {id:"white",   name:"White",    hex:"#ffffff", bone:0xffffff, glow:"transparent",            dust:0xffffff, em:[.16,.16,.16]},
-  {id:"rose",    name:"Rose",     hex:"#ff7eb6", bone:0xff8fc4, glow:"rgba(255,94,166,.55)",   dust:0xff8ec2, em:[.34,.05,.18]},
-  {id:"sapphire",name:"Sapphire", hex:"#2f7dff", bone:0x3d86ff, glow:"rgba(30,110,255,.6)",    dust:0x3f8cff, em:[.01,.07,.42]},
+  {id:"gold", name:"Gold", hex:"#f0b44c"},
+  {id:"orange", name:"Orange", hex:"#ff8a3d"},
   {id:"crimson", name:"Crimson",  hex:"#ff4d64", bone:0xff5266, glow:"rgba(255,48,82,.55)",    dust:0xff6275, em:[.40,.02,.04]},
-];
-const LOOK0 = {accent:"white", bg:0, ghost:0};
-let LOOK = Object.assign({}, LOOK0, store.look || {});
-const ACC = () => ACCENTS.find(a => a.id === LOOK.accent) || ACCENTS[0];
+  {id:"rose",    name:"Rose",     hex:"#ff7eb6", bone:0xff8fc4, glow:"rgba(255,94,166,.55)",   dust:0xff8ec2, em:[.34,.05,.18]},
+  {id:"violet", name:"Violet", hex:"#9b6bff"},
+  {id:"sapphire",name:"Sapphire", hex:"#2f7dff", bone:0x3d86ff, glow:"rgba(30,110,255,.6)",    dust:0x3f8cff, em:[.01,.07,.42]},
+  {id:"sky", name:"Sky", hex:"#4cc9ff"},
+  {id:"teal", name:"Teal", hex:"#22c3b5"},
+  {id:"mint", name:"Mint", hex:"#5fe0a0"},
+  {id:"lime", name:"Lime", hex:"#b6e34a"},
+].map(a => a.bone !== undefined ? a : accFrom(a.id, a.name, a.hex));
+const LOOK0 = {accent:"white", bg:0, ghost:0, theme:"dark", custom:"#8a5cff", cw:{h:262, s:.78, l:.62}};
+const lookFresh = () => JSON.parse(JSON.stringify(LOOK0));
+let LOOK = Object.assign(lookFresh(), store.look || {});
+if (!LOOK.cw || typeof LOOK.cw.h !== "number") LOOK.cw = lookFresh().cw;
+function NAME(){ return String(store.name || "").trim().split(/\s+/)[0].slice(0, 24); }
+function cheer(r){ const n = NAME(); if (!n) return "";
+  const good = r.firstTry >= 80, opts = r.warm ? (good ? ["Good recall, ", "That stuck, "] : ["Keep at it, ", "Nearly there, "]) : (good ? ["Nice work, ", "Well done, ", "That's a level, "] : ["Level done, ", "Good effort, "]);
+  return `<p class="cheer">${opts[Math.floor(Math.random() * opts.length)]}${esc(n)}.</p>`; }
+const LIGHT = () => LOOK.theme === "light";
+const lumHex = h => { const [r, g, b] = [1, 3, 5].map(k => parseInt(h.slice(k, k + 2), 16) / 255); return .2126 * r + .7152 * g + .0722 * b; };
+const ACC0 = () => LOOK.accent === "custom" ? accFrom("custom", "Custom", LOOK.custom) : (ACCENTS.find(a => a.id === LOOK.accent) || ACCENTS[0]);
+const ACC = () => { const a = ACC0(); if (!LIGHT()) return Object.assign({text:a.hex}, a);
+  if (a.id === "white") return {id:"white", name:"Ink", hex:"#1b232d", text:"#1b232d", bone:0x39424e, glow:"transparent", dust:0x39424e, em:[.02,.02,.03]};
+  const l = lumHex(a.hex);
+  return Object.assign({}, a, {text:mixHex(a.hex, "#000000", l > .55 ? .45 : l > .35 ? .28 : .12), glow:a.glow.replace(/,\s*[\d.]+\)$/, ",.3)"), em:a.em.map(x => x * .55)}); };
+const GH = () => LIGHT() ? 0x7d8794 : GHOST, DIMC = () => LIGHT() ? 0x9ea7b2 : 0x4a525d;
+const stateColor = s => s === "locked" ? GH() : s === "dim" ? DIMC() : s === "lit" ? (LIGHT() ? 0xcdbd9c : IVORY) : (LIGHT() ? 0xebe4d6 : WHITE);
 const GHOST_OP = () => .16 + LOOK.ghost / 100 * .36;          // .16 (the reel) … .52
 const mixHex = (a, b, t) => { const p = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16)), A = p(a), B = p(b);
   return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join(""); };
 function applyLook(){
-  const a = ACC(), r = document.documentElement.style, t = LOOK.bg / 100;
-  r.setProperty("--hl", a.hex); r.setProperty("--hlglow", a.glow);
-  r.setProperty("--bg", mixHex("#0f141b", "#05070a", t)); r.setProperty("--bgtop", mixHex("#18212c", "#0b1017", t));
-  document.body.style.background = mixHex("#0f141b", "#05070a", t);
+  const a = ACC(), html = document.documentElement, r = html.style, t = LOOK.bg / 100, L = LIGHT();
+  html.classList.toggle("light", L);
+  r.setProperty("--hl", a.text); r.setProperty("--hlglow", a.glow);
+  const bg = L ? mixHex("#e9edf1", "#c4ccd5", t) : mixHex("#0f141b", "#05070a", t);
+  r.setProperty("--bg", bg); r.setProperty("--bgtop", L ? mixHex("#fbfcfd", "#dfe4ea", t) : mixHex("#18212c", "#0b1017", t));
+  document.body.style.background = bg;
+  const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute("content", bg);
+  try { if (home) Object.values(home.fig).forEach(F => { const c = L ? 0x3a4552 : 0xffffff; F.ringMat.color.setHex(c); F.glowMat.color.setHex(c);
+    F.inner.traverse(o => { const m = o.material; if (m && m.userState && m.userState !== "target") m.color.copy(sRGB(stateColor(m.userState))); }); }); } catch(_){}
   store.look = LOOK; save();
   repaintAll();
 }
 function paint(m, state){
   m.userState = state;
-  if (state === "locked"){ m.color.copy(sRGB(GHOST)); m.transparent = true; m.opacity = GHOST_OP(); m.depthWrite = false; m.emissive.setHex(0); }
-  else if (state === "dim"){ m.color.copy(sRGB(0x4a525d)); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0); }
+  if (state === "locked"){ m.color.copy(sRGB(GH())); m.transparent = true; m.opacity = GHOST_OP(); m.depthWrite = false; m.emissive.setHex(0); }
+  else if (state === "dim"){ m.color.copy(sRGB(DIMC())); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0); }
   else if (state === "target"){ const a = ACC(); m.color.copy(sRGB(a.bone)); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setRGB(a.em[0], a.em[1], a.em[2]); }
-  else { m.color.copy(sRGB(state === "lit" ? IVORY : WHITE)); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0x0d0c0a); }
+  else { m.color.copy(sRGB(stateColor(state))); m.transparent = false; m.opacity = 1; m.depthWrite = true; m.emissive.setHex(0x0d0c0a); }
   m.needsUpdate = true;
 }
 
@@ -6259,7 +6405,7 @@ function burstFrom(mesh, n = 700, spread = 1){
     vel.push(dir.multiplyScalar(rnd(.4, 2.6) * spread)); }
   const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(p,3));
   const size = .085 * Math.sqrt(spread);
-  const mat = new THREE.PointsMaterial({size, map:dotTex, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, color:ACC().dust});
+  const mat = new THREE.PointsMaterial({size, map:dotTex, transparent:true, depthWrite:false, blending:LIGHT() ? THREE.NormalBlending : THREE.AdditiveBlending, color:ACC().dust});
   const pts = new THREE.Points(geo, mat); scene.add(pts); bursts.push({pts, vel, t:0, life:2.2, size});
 }
 function burst(id){ const s = curSlot(); if (s && s.mats[id]) s.mats[id].meshes.forEach(m => burstFrom(m, Math.round(700 / s.mats[id].meshes.length), R.burst || 1)); }
@@ -6607,7 +6753,7 @@ function endRound(){
   if (round === 1 || round === 2 || round === 3){ const n = round + 1; kbHint(null);
     word.className = "word"; word.innerHTML = ""; $("#sub").textContent = "";
     $("#pEye").innerHTML = `${roundName(round).split(" · ")[0]} done · <em>${queue.length}</em> / ${queue.length}`;
-    fb.className = "fb ok"; fb.innerHTML = `All ${N()} dissolved. <span class="why">${n===2 ? "Next, the names go away. You get a first letter and a clue." : n===3 ? LV.r3Intro : "Last round: the name is shown and you find it on the model. Tap it; drag to turn."}</span>`;
+    fb.className = "fb ok"; fb.innerHTML = `All ${N()} dissolved.${round === 3 && NAME() ? ` Nice, ${esc(NAME())}.` : ""} <span class="why">${n===2 ? "Next, the names go away. You get a first letter and a clue." : n===3 ? LV.r3Intro : "Last round: the name is shown and you find it on the model. Tap it; drag to turn."}</span>`;
     lessonEnter = () => startRound(n); mode = "lesson-wait";
     $("#pAct").innerHTML = `<button class="btn primary" id="nextRound">Start round ${n}<kbd>enter</kbd></button>`; $("#nextRound").addEventListener("click", e => { e.currentTarget.blur(); audio(); startRound(n); });
     { const r0 = round; $("#pAct").insertAdjacentHTML("beforeend", `<button class="btn" id="redoRound">Redo round ${r0}</button>`);
@@ -6670,7 +6816,7 @@ function showWin(r){
   const S = r.warm ? null : LS.stars;
   $("#win").innerHTML = `<div class="win-in">
     <div class="eyebrow">${esc(R.name)} · ${r.warm ? "warm-up done" : `level ${LVI+1} cleared`} · ${t}</div>
-    <h2>${r.title}</h2>
+    ${cheer(r)}<h2>${r.title}</h2>
     <div class="big">
       <div><small>wpm</small><strong>${wpm}</strong></div>
       <div><small>key accuracy</small><strong>${acc}%</strong></div>
@@ -7013,7 +7159,8 @@ function welcome(){
   const el = $("#welcome"), t = $("#welT");
   if (QS.has("region") || (navigator.webdriver && !QS.has("welcome"))){ el.remove(); return; }
   t.innerHTML = [..."Welcome"].map((c, i) => `<span class="o"><span class="l" style="--i:${i}" aria-hidden="true">${c}</span></span>`).join("");
-  const outs = [...t.querySelectorAll(".o")];
+  const outs = [...t.querySelectorAll(".o")], nm = $("#welName"), wsub = el.querySelector(".wel-sub");
+  if (!store.nameAsked) nm.hidden = false; else if (NAME()) wsub.textContent = "Good to see you, " + NAME();
   let px = null, py = null, raf = 0, gone = false;
   const push = () => { raf = 0; if (gone) return;            // letters lean away from the pointer
     outs.forEach(o => { const r = o.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
@@ -7024,6 +7171,8 @@ function welcome(){
   el.addEventListener("pointerleave", () => { px = null; if (!raf) raf = requestAnimationFrame(push); });
   const go = () => {
     if (gone) return; gone = true; audio(); keySound("enter");
+    if (!nm.hidden){ const v = nm.value.trim().replace(/\s+/g, " ").slice(0, 24); if (v) store.name = v; store.nameAsked = true; save(); nm.blur();
+      if (mode === "home") drawHome(); const me = $("#lkMe"); if (me) me.value = NAME(); }
     el.classList.add("leaving");
     outs.forEach((o, i) => { const a = (i / (outs.length - 1) - .5) * 2.2 + (Math.random() - .5) * .9, up = Math.random() < .5 ? -1 : 1;
       const dist = Math.max(innerWidth, innerHeight) * (.75 + Math.random() * .5);
@@ -7033,10 +7182,12 @@ function welcome(){
     el.classList.add("gone"); setTimeout(() => { el.remove(); maybeTour(); }, 1400);
     document.removeEventListener("keydown", key, true);
   };
-  const key = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); e.stopPropagation(); go(); } };
+  const key = e => { const inp = e.target === nm;
+    if (e.key === "Enter" || (e.key === " " && !inp)){ e.preventDefault(); e.stopPropagation(); go(); }
+    else if (inp) e.stopPropagation(); };
   $("#welGo").addEventListener("click", go);
   document.addEventListener("keydown", key, true);
-  setTimeout(() => { try { $("#welGo").focus({preventScroll:true}); } catch(_){} }, 1200);
+  setTimeout(() => { try { (!nm.hidden && !matchMedia("(pointer:coarse)").matches ? nm : $("#welGo")).focus({preventScroll:true}); } catch(_){} }, 1200);
 }
 
 /* ---------------- HOME: the two sets, each with its own figure ---------------- */
@@ -7077,7 +7228,7 @@ function homeStats(m){
     if (s && s.levels) stars += s.levels.reduce((n, l) => n + (l ? l.stars.filter(Boolean).length : 0), 0); });
   return `${regs.length} regions · ${stars}/${total} ★` + (due ? ` · <em>${due} due</em>` : "");
 }
-function drawHome(){ setTimeout(drawReview, 0);
+function drawHome(){ setTimeout(drawReview, 0); $("#hEye").textContent = NAME() ? "Hi " + NAME() + " · choose a set" : "Anatomy Type · choose a set";
   $("#hBonesS").innerHTML = homeStats("bones"); $("#hNervesS").innerHTML = homeStats("nerves"); $("#hOrgansS").innerHTML = homeStats("organs"); $("#hMusclesS").innerHTML = homeStats("muscles"); $("#hVesselsS").innerHTML = homeStats("vessels");
   [["bones", "#hBonesC"], ["nerves", "#hNervesC"], ["organs", "#hOrgansC"], ["muscles", "#hMusclesC"], ["vessels", "#hVesselsC"]].forEach(([m, sel]) => { const id = (store.last || {})[m], r = REGIONS[id], el = $(sel);
     const lv = r && store.regions[id] ? (store.regions[id].level || 0) + 1 : 1;
@@ -7171,25 +7322,55 @@ $("#lvlPill").addEventListener("click", e => { audio(); keySound(); e.currentTar
 
 function repaintAll(){
   const all = [...Object.values(slots), lessonSlot].filter(Boolean);
-  all.forEach(sl => { sl.ghost.opacity = GHOST_OP() * .7 * (R ? R.sceneryOp || 1 : 1); Object.values(sl.mats).forEach(o => { if (o.mat.userState) paint(o.mat, o.mat.userState); }); });
+  all.forEach(sl => { sl.ghost.opacity = GHOST_OP() * .7 * (R ? R.sceneryOp || 1 : 1); if (sl.ghost.color) sl.ghost.color.copy(sRGB(GH())); Object.values(sl.mats).forEach(o => { if (o.mat.userState) paint(o.mat, o.mat.userState); }); });
   if (typeof exPaint === "function" && ex) exPaint();
   if (map) mapPaint();
 }
 (function lookPanel(){
-  const panel = $("#look"), btn = $("#lookBtn");
-  $("#lkSw").innerHTML = ACCENTS.map(a => `<button style="background:radial-gradient(circle at 35% 30%, #fff 0%, ${a.hex} 45%, ${mixHex(a.hex, "#000000", .45)} 100%);--c:${a.glow === "transparent" ? "rgba(255,255,255,.4)" : a.glow}" data-a="${a.id}" aria-label="${a.name}" aria-pressed="${a.id === LOOK.accent}"></button>`).join("");
-  const sync = () => { $("#lkName").textContent = ACC().name; $("#lkBg").value = LOOK.bg; $("#lkGh").value = LOOK.ghost;
-    $("#lkBgV").textContent = LOOK.bg ? LOOK.bg + "%" : "reel"; $("#lkGhV").textContent = LOOK.ghost ? "+" + LOOK.ghost + "%" : "reel";
-    document.querySelectorAll("#lkSw button").forEach(b => b.setAttribute("aria-pressed", b.dataset.a === LOOK.accent)); };
-  document.querySelectorAll("#lkSw button").forEach(b => b.addEventListener("click", () => { audio(); tick(); LOOK.accent = b.dataset.a; sync(); applyLook(); }));
+  const panel = $("#look"), btn = $("#lookBtn"), wh = $("#lkWh");
+  const hsl2hex = (h, s, l) => { const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l), f = n => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
+    return "#" + [f(0), f(8), f(4)].map(x => Math.round(x * 255).toString(16).padStart(2, "0")).join(""); };
+  const swStyle = a => { const hex = LIGHT() && a.id === "white" ? "#1b232d" : a.hex, glow = a.glow === "transparent" ? (LIGHT() ? "rgba(20,28,38,.3)" : "rgba(255,255,255,.4)") : a.glow;
+    return `background:radial-gradient(circle at 35% 30%, ${mixHex(hex, "#ffffff", .55)} 0%, ${hex} 45%, ${mixHex(hex, "#000000", .45)} 100%);--c:${glow}`; };
+  const drawSw = () => { $("#lkSw").innerHTML = ACCENTS.map(a => `<button style="${swStyle(a)}" data-a="${a.id}" aria-label="${LIGHT() && a.id === "white" ? "Ink" : a.name}" aria-pressed="${a.id === LOOK.accent}"></button>`).join("") +
+      `<button class="cwb" style="--cc:${LOOK.custom};--c:${accFrom("c", "", LOOK.custom).glow}" data-a="custom" aria-label="Custom color wheel" aria-pressed="${LOOK.accent === "custom"}"></button>`;
+    document.querySelectorAll("#lkSw button").forEach(b => b.addEventListener("click", () => { audio(); tick(); LOOK.accent = b.dataset.a; sync(); applyLook(); })); };
+  const drawWheel = () => { const c = LOOK.cw, rad = c.h * Math.PI / 180, k = $("#lkKnob");
+    wh.style.setProperty("--wl", Math.round(c.l * 100) + "%");
+    k.style.left = (50 + Math.sin(rad) * c.s * 50) + "%"; k.style.top = (50 - Math.cos(rad) * c.s * 50) + "%"; k.style.background = LOOK.custom;
+    wh.setAttribute("aria-valuenow", Math.round(c.h)); wh.setAttribute("aria-valuetext", LOOK.custom);
+    $("#lkLt").value = Math.round(c.l * 100); };
+  const sync = () => { const cust = LOOK.accent === "custom";
+    $("#lkName").textContent = cust ? LOOK.custom.toUpperCase() : ACC().name; $("#lkBg").value = LOOK.bg; $("#lkGh").value = LOOK.ghost;
+    $("#lkBgV").textContent = LOOK.bg ? LOOK.bg + "%" : (LIGHT() ? "light" : "reel"); $("#lkGhV").textContent = LOOK.ghost ? "+" + LOOK.ghost + "%" : "reel";
+    $("#lkDark").setAttribute("aria-pressed", !LIGHT()); $("#lkLight").setAttribute("aria-pressed", LIGHT());
+    drawSw(); $("#lkWheel").hidden = !cust; if (cust) drawWheel(); };
+  let raf = 0; const soon = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; applyLook(); }); };
+  const setCustom = () => { LOOK.accent = "custom"; LOOK.custom = hsl2hex(LOOK.cw.h, LOOK.cw.s, LOOK.cw.l);
+    $("#lkName").textContent = LOOK.custom.toUpperCase(); drawWheel(); const cb = $("#lkSw .cwb"); if (cb) cb.style.setProperty("--cc", LOOK.custom); soon(); };
+  const pick = e => { const b = wh.getBoundingClientRect(), dx = e.clientX - (b.left + b.width / 2), dy = e.clientY - (b.top + b.height / 2);
+    LOOK.cw.h = (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360; LOOK.cw.s = Math.min(1, Math.hypot(dx, dy) / (b.width / 2)); setCustom(); };
+  let drag = false;
+  wh.addEventListener("pointerdown", e => { drag = true; try { wh.setPointerCapture(e.pointerId); } catch(_){} pick(e); e.preventDefault(); });
+  wh.addEventListener("pointermove", e => { if (drag) pick(e); });
+  const up = () => { if (drag){ drag = false; tick(); sync(); } };
+  wh.addEventListener("pointerup", up); wh.addEventListener("pointercancel", up);
+  wh.addEventListener("keydown", e => { const c = LOOK.cw, m = {ArrowLeft:[-6, 0], ArrowRight:[6, 0], ArrowUp:[0, .06], ArrowDown:[0, -.06]}[e.key]; if (!m) return;
+    e.preventDefault(); e.stopPropagation(); c.h = (c.h + m[0] + 360) % 360; c.s = Math.max(0, Math.min(1, c.s + m[1])); setCustom(); });
+  $("#lkLt").addEventListener("input", e => { LOOK.cw.l = +e.target.value / 100; setCustom(); });
+  $("#lkDark").addEventListener("click", () => { audio(); tick(); LOOK.theme = "dark"; sync(); applyLook(); });
+  $("#lkLight").addEventListener("click", () => { audio(); tick(); LOOK.theme = "light"; sync(); applyLook(); });
   $("#lkBg").addEventListener("input", e => { LOOK.bg = +e.target.value; sync(); applyLook(); });
   $("#lkGh").addEventListener("input", e => { LOOK.ghost = +e.target.value; sync(); applyLook(); });
-  $("#lkReset").addEventListener("click", () => { audio(); tick(); LOOK = Object.assign({}, LOOK0); sync(); applyLook(); });
+  $("#lkReset").addEventListener("click", () => { audio(); tick(); const th = LOOK.theme; LOOK = Object.assign(lookFresh(), {theme:th}); sync(); applyLook(); });
+  const me = $("#lkMe"); me.value = NAME();
+  me.addEventListener("input", () => { store.name = me.value.trim().replace(/\s+/g, " ").slice(0, 24); store.nameAsked = true; save(); if (mode === "home") drawHome(); });
+  me.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === "Escape"){ e.preventDefault(); me.blur(); } });
   const open = v => { panel.hidden = !v; btn.setAttribute("aria-expanded", v); };
   btn.addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); open(panel.hidden); });
   document.addEventListener("pointerdown", e => { if (!panel.hidden && !panel.contains(e.target) && e.target !== btn) open(false); });
   sync();
-  window.__look = { set(o){ Object.assign(LOOK, o); sync(); applyLook(); }, open: () => open(true), close: () => open(false) };
+  window.__look = { set(o){ Object.assign(LOOK, o); sync(); applyLook(); }, get: () => JSON.parse(JSON.stringify(LOOK)), open: () => open(true), close: () => open(false) };
 })();
 applyLook();
 
@@ -7244,7 +7425,7 @@ const tour = (function(){
   ].filter(p => rectOf(p.sel));
 
   const STEPS = [
-    { eye:"Anatomy Type", title:"Learn anatomy by typing the names of real 3D models",
+    { get eye(){ return NAME() ? "Hi, " + NAME() : "Anatomy Type"; }, title:"Learn anatomy by typing the names of real 3D models",
       text:() => `<p>Bones, nerves and brain, organs, muscles and blood vessels. You type the English name; the Latin sits underneath. Want a 30-second tour?</p>`,
       sel:() => null, enter(){ $("#tMini").hidden = false; typeMini(); }, leave(){ $("#tMini").hidden = true; } },
     { title:"Choose a figure",
@@ -7275,7 +7456,7 @@ const tour = (function(){
       sel:() => { const ps = PARTS3(); return ps.length ? ps[part % ps.length].sel : [".seg"]; },
       enter(){ part = 0; const cyc = () => { if (!tourOn || i !== 4) return; const n = PARTS3().length || 1; part = (part + 1) % n; $("#tText").innerHTML = STEPS[4].text(); later(cyc, 2200); }; later(cyc, 2200); } },
     { title:"Make it yours",
-      text:() => `<p>Pick a highlight color, darken the background, or make the other parts clearer. <b>Sources</b> lists where every model comes from.</p>`,
+      text:() => `<p>Light or dark mode, any highlight color from the wheel, a darker background, or clearer context parts. <b>Sources</b> lists where every model comes from.</p>`,
       sel:() => ["#lookBtn", "#look", "#srcBtn"],
       enter(){ window.__look.open(); keepAccent = LOOK.accent; const seq = ["rose", "sapphire", "crimson", keepAccent]; let n = 0;
         const cyc = () => { if (!tourOn || i !== 5 || n >= seq.length) return; window.__look.set({accent:seq[n++]}); later(cyc, 1000); }; later(cyc, 900); },
@@ -7461,7 +7642,7 @@ function finishMixed(){
   mode = "win"; banner(null); kbHint(null);
   $("#win").innerHTML = `<div class="win-in">
     <div class="eyebrow">Mixed review · ${mixFig ? esc(FIG_NAME[mixFig]) : "all figures"} · ${t}</div>
-    <h2>${right === rows.length ? "Everything due came back from memory." : "Most of it stuck. The misses come back tomorrow."}</h2>
+    ${cheer({warm:true, firstTry:Math.round(100 * right / Math.max(1, rows.length))})}<h2>${right === rows.length ? "Everything due came back from memory." : "Most of it stuck. The misses come back tomorrow."}</h2>
     <div class="big"><div><small>wpm</small><strong>${wpm}</strong></div><div><small>key accuracy</small><strong>${acc}%</strong></div><div><small>recalled</small><strong>${right}/${rows.length}</strong></div></div>
     <div class="sec" style="display:grid;gap:10px"><h3>What you recalled</h3>
       <div class="solved">${rows.map(x => `<div class="sv"><b>${esc(x.b.en)}</b><small>${esc(x.reg.name)} · ${esc(x.b.mean)}</small>
@@ -7872,6 +8053,7 @@ function drSubmit(give){
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.target && e.target.type === "range") return;
+  if (e.target && e.target.tagName === "INPUT" && e.target.id !== "typer") return;
   audio();
   const k = e.key;
   if (mode === "home"){
