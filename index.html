@@ -7233,7 +7233,7 @@ function welcome(){
   if (QS.has("region") || (navigator.webdriver && !QS.has("welcome"))){ el.remove(); return; }
   t.innerHTML = [..."Welcome"].map((c, i) => `<span class="o"><span class="l" style="--i:${i}" aria-hidden="true">${c}</span></span>`).join("");
   const outs = [...t.querySelectorAll(".o")], nm = $("#welName"), wsub = el.querySelector(".wel-sub");
-  if (!store.nameAsked) nm.hidden = false; else if (NAME()) wsub.textContent = "Good to see you, " + NAME();
+  if (!NAME()) nm.hidden = false; else wsub.textContent = "Good to see you, " + NAME();
   let px = null, py = null, raf = 0, gone = false;
   const push = () => { raf = 0; if (gone) return;            // letters lean away from the pointer
     outs.forEach(o => { const r = o.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
