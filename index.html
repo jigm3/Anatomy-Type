@@ -434,6 +434,12 @@ body.kbopen .app{height:calc(var(--vvh,100vh) - env(safe-area-inset-top,0px));wi
 .lkth button{padding:5px 4px;font-size:10.5px;letter-spacing:.02em}
 .hnote.maphint{margin-top:2px}
 
+.toast{white-space:normal;width:max-content;max-width:calc(100% - 32px);box-sizing:border-box;text-align:center;line-height:1.4}
+@media (max-width:560px){
+  .banner{white-space:normal;width:max-content;max-width:calc(100% - 32px);box-sizing:border-box;text-align:center;line-height:1.4;border-radius:14px}
+  .top .tabs{max-width:none;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent);padding-right:24px}
+  .panel{min-height:120px;padding-block:4px 0}
+}
 </style>
 
 <style id="lightcss">/* generated: light mode versions of the hard-coded dark colors */
@@ -6450,7 +6456,7 @@ function resize(){
   W = stage.clientWidth; H = stage.clientHeight; if (!W || !H) return;
   renderer.setSize(W, H, false); camera.aspect = W/H;
   const t = Math.tan(THREE.MathUtils.degToRad(15)), f = FRAME;
-  D = Math.max(f.hy / t, f.hx / (t * camera.aspect));
+  D = Math.max(f.hy / t, f.hx / (t * camera.aspect)) * (W < 560 ? 1.1 : 1);
   SP = Math.max(f.hx * 1.4, D * t * camera.aspect * .72);
   camera.position.set(0, f.hy * .1, D); camera.lookAt(0, 0, 0); camera.updateProjectionMatrix();
 }
