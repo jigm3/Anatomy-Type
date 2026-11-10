@@ -8229,7 +8229,7 @@ function drawWeakBtn(){
 }
 
 /* ---------- sync codes: the same progress on every device, no account ---------- */
-const FB = {projectId:"", apiKey:""};                 // the Firebase project (Firestore) that holds synced progress
+const FB = {projectId:"anatomy-type", apiKey:"AIzaSyDCdLNKI20lAdycaQjoZKu-Fewxpo62srA"};                 // the Firebase project (Firestore) that holds synced progress
 const SYNC_KEY = "anatomytype.sync";
 const onClaude = () => /claude/.test(location.hostname) || !/^https?:$/.test(location.protocol);
 const syncReady = () => !!(FB.projectId && FB.apiKey) && !onClaude();
