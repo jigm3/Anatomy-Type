@@ -439,7 +439,10 @@ body.kbopen .app{height:calc(var(--vvh,100vh) - env(safe-area-inset-top,0px));wi
   .banner{white-space:normal;width:max-content;max-width:calc(100% - 32px);box-sizing:border-box;text-align:center;line-height:1.4;border-radius:14px}
   .top .tabs{max-width:none;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent);padding-right:24px}
   .panel{min-height:120px;padding-block:4px 0}
+  .top{padding-top:22px}
+  body.typing .top,body.kbopen .top{padding-top:12px}
 }
+@media (max-width:560px) and (display-mode:standalone){ .top{padding-top:28px} }
 </style>
 
 <style id="lightcss">/* generated: light mode versions of the hard-coded dark colors */
