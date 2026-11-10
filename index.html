@@ -240,6 +240,8 @@ button{font:inherit;color:inherit}
   .top{grid-template-columns:1fr auto}
   .stats,.tabs{grid-column:1/-1;grid-row:2;justify-content:flex-start}
   #lvlPill{display:none!important}
+  #lessonBtn{display:none!important}
+  .lvmini{display:inline-flex!important}
   .pills{gap:6px}
   .stats{justify-content:center}
   .app.explore .play-only{display:none!important}
@@ -283,6 +285,9 @@ button{font:inherit;color:inherit}
 .hcont:hover{color:#fff}
 .hnote{margin:0;font-size:13px;color:var(--mute);text-align:center}
 .hrev{color:var(--accent);text-align:center}.hrev:hover{color:#fff}
+.lvmini{display:none;align-items:center;gap:4px;border:1px solid var(--line2);background:#141b24;color:var(--soft);border-radius:999px;padding:3px 10px;font-family:var(--f-mono);font-size:11.5px;cursor:pointer;margin-left:4px}
+.taptype{display:block;margin:10px auto 0;border:1px solid var(--line2);background:#141b24;color:var(--soft);border-radius:999px;padding:8px 16px;font-family:var(--f-mono);font-size:12.5px;cursor:pointer}
+.taptype[hidden]{display:none!important}
 .hrevall{border:1px solid var(--line2);background:#141b24;color:var(--accent);border-radius:999px;padding:6px 14px;font-family:var(--f-mono);font-size:12px;cursor:pointer}
 .hrevall:hover,.hrevall:focus-visible{border-color:#fff;color:#fff}
 .xlinks{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:8px auto 0;max-width:66ch}
@@ -531,7 +536,7 @@ button{font:inherit;color:inherit}
   </section>
 
   <section class="kb gut" id="kb" aria-hidden="true"></section>
-  <input id="typer" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Type the name">
+  <input id="typer" name="anat-answer" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-autocomplete="none" enterkeyhint="go" data-form-type="other" data-lpignore="true" aria-label="Answer">
   <section class="win" id="win" hidden></section>
   <div class="tour" id="tour" hidden>
     <div class="tspot none" id="tSpot"></div>
@@ -6164,6 +6169,9 @@ function useLevel(i, quiet){
   VIEWS = LV.views || R.views; FRAME = LV.frame || R.frame;
   boxOf(LV.clusterIds || R.clusterIds || LV.items).getCenter(CLUSTER_C);
   $("#lvlPill").textContent = `${R.name} · L${i+1}`;
+  { let m = $("#lvMini"); if (!m){ const s = document.querySelector(".stats"); if (s){ m = document.createElement("button"); m.id = "lvMini"; m.className = "lvmini";
+      m.addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); showPicker(); }); s.appendChild(m); } }
+    if (m) m.textContent = `L${i+1} · levels`; }
   if (!quiet){ save(); resize(); }
 }
 const inLv = id => INLV.has(id);
@@ -6351,7 +6359,21 @@ canvas.addEventListener("pointerup", e => {
 const lesson = $("#lesson"), play = $("#play"), word = $("#word"), fb = $("#fb");
 function toast(msg, ms=1800){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, ms); }
 function banner(msg, ms){ const b = $("#banner"); clearTimeout(banner.h); if (!msg){ b.hidden = true; return; } b.textContent = msg; b.hidden = false; if (ms) banner.h = setTimeout(() => b.hidden = true, ms); }
-function focusTyper(){ if (matchMedia("(pointer:coarse)").matches && (mode === "round" || mode === "lesson") && !(mode === "round" && round === 4) && !(document.querySelector("#drills") && !$("#drills").hidden)) $("#typer").focus({preventScroll:true}); }
+const typingNow = () => mode === "round" && round !== 4 && !(document.querySelector("#drills") && !$("#drills").hidden) && !(document.querySelector("#src") && !$("#src").hidden);
+function focusTyper(force){
+  if (!matchMedia("(pointer:coarse)").matches) return;
+  const t = $("#typer");
+  if (!typingNow()){ if (document.activeElement === t) t.blur(); updTapType(); return; }
+  if (force === true || document.activeElement === t) t.focus({preventScroll:true});
+  updTapType();
+}
+function updTapType(){
+  let b = $("#tapType");
+  if (!b){ const sub = $("#sub"); if (!sub) return;
+    b = document.createElement("button"); b.id = "tapType"; b.className = "taptype"; b.type = "button"; b.textContent = "⌨ Tap to type";
+    b.addEventListener("click", e => { e.stopPropagation(); focusTyper(true); }); sub.after(b); }
+  b.hidden = !(matchMedia("(pointer:coarse)").matches && typingNow() && document.activeElement !== $("#typer"));
+}
 function hoverTip(html, e){
   const tip = $("#tip");
   if (!html || !e){ tip.hidden = true; canvas.style.cursor = ""; return; }
@@ -6480,6 +6502,7 @@ function startRound(n, ids){
   queue = n === 1 ? ORDER_R1.slice() : n === 2 ? shuffle(ORDER_R1) : n === 3 ? ORDER_R3.slice() : n === 4 ? shuffle(ORDER_R1) : ids;
   mode = "round"; enterRoundScene(); setView(n === 3);
   lesson.hidden = true; play.hidden = false; $("#kb").hidden = n === 4; $("#win").hidden = true; drawStats();
+  if (n !== 4) focusTyper(true);
   if (n === 4){ try { $("#typer").blur(); } catch(_){} setTimeout(() => tipOnce("locate", `<b>New last round: find it.</b> The name is shown; tap that part on the model. Drag to turn it, and press Enter if you're stuck.`), 900); }
   banner(roundTip(n), 3600);
   nextItem();
@@ -6587,6 +6610,8 @@ function endRound(){
     fb.className = "fb ok"; fb.innerHTML = `All ${N()} dissolved. <span class="why">${n===2 ? "Next, the names go away. You get a first letter and a clue." : n===3 ? LV.r3Intro : "Last round: the name is shown and you find it on the model. Tap it; drag to turn."}</span>`;
     lessonEnter = () => startRound(n); mode = "lesson-wait";
     $("#pAct").innerHTML = `<button class="btn primary" id="nextRound">Start round ${n}<kbd>enter</kbd></button>`; $("#nextRound").addEventListener("click", e => { e.currentTarget.blur(); audio(); startRound(n); });
+    { const r0 = round; $("#pAct").insertAdjacentHTML("beforeend", `<button class="btn" id="redoRound">Redo round ${r0}</button>`);
+      $("#redoRound").addEventListener("click", e => { e.currentTarget.blur(); audio(); startRound(r0); }); }
     if (n === 4){ $("#pAct").insertAdjacentHTML("beforeend", `<button class="btn" id="skipR4">Skip to results</button>`); $("#skipR4").addEventListener("click", e => { e.currentTarget.blur(); audio(); finishLevel(); }); }
     return; }
   if (round === "w") return finishWarm();
@@ -6684,9 +6709,10 @@ function showPicker(){
     <h2>Pick a level. They're all open.</h2>
     <p class="lesson-sub" style="text-align:left;margin:0">Each level starts with a two-minute lesson, then four rounds: name shown, a clue, from memory, then find it on the model. Stars: clear it · round 3 with no mistakes · recall it on another day.</p>
     ${levelCards()}
-    <div class="actions" style="justify-content:flex-start"><button class="btn" id="pkClose">Back<kbd>esc</kbd></button><button class="btn" id="pkMap">Body map</button></div></div>`;
+    <div class="actions" style="justify-content:flex-start"><button class="btn" id="pkClose">Back<kbd>esc</kbd></button><button class="btn" id="pkLesson">Lesson for level ${LVI+1}</button><button class="btn" id="pkMap">Body map</button></div></div>`;
   $("#win").hidden = false; $("#win").scrollTop = 0; wireCards();
   $("#pkClose").addEventListener("click", closePicker); $("#pkMap").addEventListener("click", () => { closePicker(); enterMap(); });
+  $("#pkLesson").addEventListener("click", () => { audio(); redoLesson(); });
   lessonEnter = () => startLevel(LVI);
 }
 function closePicker(){
@@ -7879,7 +7905,8 @@ document.addEventListener("keydown", e => {
 });
 const typer = $("#typer");
 typer.addEventListener("input", () => { const v = typer.value; typer.value = ""; for (const c of v.toLowerCase()) if (/[a-z0-9 ]/.test(c)) onChar(c); });
-$("#panel").addEventListener("click", focusTyper);
+$("#panel").addEventListener("click", e => { if (e.target.closest("button, a, input, select, .lesson")) return; focusTyper(true); });
+typer.addEventListener("focus", updTapType); typer.addEventListener("blur", () => setTimeout(updTapType, 50));
 $("#lessonBtn").addEventListener("click", e => { audio(); e.currentTarget.blur(); resetStats(); goStep(0); });
 $("#soundBtn").addEventListener("click", e => { soundOn = !soundOn; store.sound = soundOn; save(); audio();
   e.currentTarget.textContent = soundOn ? "SOUND ON" : "SOUND OFF"; e.currentTarget.setAttribute("aria-pressed", soundOn); e.currentTarget.blur(); });
