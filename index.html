@@ -6915,6 +6915,9 @@ async function switchRegion(id, start = true){
 }
 function playFromMap(id){ if (!R || R.id !== id) return switchRegion(id); backToPlay(); }
 
+/* first visit: the tour starts once the welcome splash is gone and the home carousel is showing */
+function maybeTour(){ if (store.toured || navigator.webdriver || tourOn || mode !== "home" || $("#welcome")) return; setTimeout(() => { if (mode === "home" && !tourOn && !store.toured) tour.start(0); }, 500); }
+
 /* ---------------- WELCOME splash ---------------- */
 function welcome(){
   const el = $("#welcome"), t = $("#welT");
@@ -6937,7 +6940,7 @@ function welcome(){
       o.style.transitionDelay = `${Math.abs(i - (outs.length - 1) / 2) * 35}ms`;
       o.style.transform = `translate(${Math.sin(a) * dist}px, ${up * (.25 + Math.random() * .6) * dist}px) rotate(${(Math.random() - .5) * 720}deg) scale(${.4 + Math.random() * 2.2})`;
       o.style.opacity = "0"; o.style.filter = "blur(6px)"; });
-    el.classList.add("gone"); setTimeout(() => el.remove(), 1400);
+    el.classList.add("gone"); setTimeout(() => { el.remove(); maybeTour(); }, 1400);
     document.removeEventListener("keydown", key, true);
   };
   const key = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); e.stopPropagation(); go(); } };
@@ -7106,7 +7109,7 @@ applyLook();
 let tourOn = false;
 const tour = (function(){
   const ov = $("#tour"), spot = $("#tSpot"), card = $("#tCard");
-  let i = 0, timers = [], raf = 0, part = 0, keepAccent = null, keepMap = null;
+  let i = 0, timers = [], raf = 0, part = 0, keepAccent = null, keepMap = null, keepHome = null;
   const later = (f, ms) => timers.push(setTimeout(f, ms));
   const clear = () => { timers.forEach(clearTimeout); timers = []; };
   const vis = el => el && el.getClientRects().length && getComputedStyle(el).visibility !== "hidden" && el.getBoundingClientRect().width > 0;
@@ -7137,7 +7140,7 @@ const tour = (function(){
   function demoType(){                     // step 2: types the real target name over the ghost letters, with key flashes
     if (!(mode === "round" && round === 1 && cur && !wait)) return;
     const t = cur.en, k = keyOf(cur); let n = 0;
-    const tick1 = () => { if (!tourOn || i !== 2) return; n++;
+    const tick1 = () => { if (!tourOn || i !== 3) return; n++;
       word.innerHTML = [...t].map((c,j) => `<span class="${j<n?"t":""}${j===n?" cur":""}">${c}</span>`).join("");
       kbFlash(k[n-1]); keySound(); kbHint(k[n]);
       if (n < t.length) later(tick1, 140);
@@ -7151,30 +7154,41 @@ const tour = (function(){
   ].filter(p => rectOf(p.sel));
 
   const STEPS = [
-    { eye:"Anatomy Type", title:"Learn your bones, nerves and organs by typing their names",
-      text:() => `<p>Real 3D anatomy. You type the English name; the French or Latin name sits underneath. Want a 30-second tour?</p>`,
+    { eye:"Anatomy Type", title:"Learn anatomy by typing the names of real 3D models",
+      text:() => `<p>Bones, nerves and brain, organs, muscles and blood vessels. You type the English name; the Latin sits underneath. Want a 30-second tour?</p>`,
       sel:() => null, enter(){ $("#tMini").hidden = false; typeMini(); }, leave(){ $("#tMini").hidden = true; } },
+    { title:"Choose a figure",
+      text:() => `<p>Five figures: bones, nerves, organs, muscles and vessels. Swipe or use <b>← →</b> to turn the carousel, then tap the one in front. <b>Home</b> brings you back here.</p>`,
+      sel:() => [".hcards", "#hPrev", "#hNext"],
+      enter(){ if (mode !== "home") enterHome(); keepHome = homeIdx; let n = 0;
+        const cyc = () => { if (!tourOn || i !== 1 || n >= 4) return; n++; homeIdx++; drawHomeSel(); later(cyc, 1400); }; later(cyc, 1200); },
+      leave(){ if (keepHome !== null){ homeIdx = keepHome; drawHomeSel(); keepHome = null; } } },
     { title:"Pick a body part",
-      text:() => `<p>Tap a region on the body or a chip below. <b>Home</b> switches between bones, nerves, organs, muscles and vessels.</p>`,
+      text:() => `<p>Tap a region on the body or a chip below, then <b>Play</b> it or <b>Explore</b> it.</p>`,
       sel:() => ["#mName", "#mChips", "#mAct"],
-      enter(){ if (mode !== "map") enterMap(); keepMap = mapSel; const ids = BODY.filter(b => unlocked(b.id)).map(b => b.id); let n = Math.max(0, ids.indexOf(mapSel));
-        const cyc = () => { if (!tourOn || i !== 1) return; n = (n + 1) % ids.length; mapSelect(ids[n]); later(cyc, 1300); }; later(cyc, 1300); },
+      enter(){ if (mode !== "map"){ if (mode === "home") setMode(homeSel()); enterMap(); } keepMap = mapSel; const ids = BODY.filter(b => unlocked(b.id)).map(b => b.id); let n = Math.max(0, ids.indexOf(mapSel));
+        const cyc = () => { if (!tourOn || i !== 2) return; n = (n + 1) % ids.length; mapSelect(ids[n]); later(cyc, 1300); }; later(cyc, 1300); },
       leave(){ if (keepMap && mode === "map") mapSelect(keepMap); } },
-    { title:"Type the name of the highlighted part",
-      text:() => `<p>Each right letter lights up. Finish the word and the part dissolves into dust. Wrong letters shake.</p>` +
+    { title:"Learn it, then type it",
+      text:() => (mode === "lesson" ? `<p>Each level opens with a short lesson. Then you type the name of the highlighted part:</p>` : "") +
+        `<p>each right letter lights up, the finished part dissolves into dust, and wrong letters shake. Three rounds: name shown, a clue, then from memory.</p>` +
         (touch() ? `<p style="margin-top:6px;color:var(--mute)">On a phone, tap the name to open your keyboard.</p>` : ""),
       sel:() => boneRect() ? [boneRect, "#word", "#sub"] : ["#word", "#sub", "#kb"], side:true,
-      enter(){ if (mode === "map" || mode === "explore") backToPlay(false); demoType(); },
+      enter(){ (async () => {
+          if (!R || R.mode !== MODE){ const id = (BODY.find(b => b.id === mapSel) || BODY[0]).game; await switchRegion(id, false); }
+          if (!tourOn || i !== 3) return;
+          if (mode === "map" || mode === "explore") backToPlay(false);
+          demoType(); place(); })(); },
       leave(){ if (mode === "round" && cur && !wait){ word.classList.remove("right"); renderWord(); } } },
     { title:"Learn, play or explore",
       text:() => PARTS3().map((p,j) => `<span class="tl ${j === part ? "on" : ""}">${p.html}</span>`).join(""),
       sel:() => { const ps = PARTS3(); return ps.length ? ps[part % ps.length].sel : [".seg"]; },
-      enter(){ part = 0; const cyc = () => { if (!tourOn || i !== 3) return; const n = PARTS3().length || 1; part = (part + 1) % n; $("#tText").innerHTML = STEPS[3].text(); later(cyc, 2200); }; later(cyc, 2200); } },
+      enter(){ part = 0; const cyc = () => { if (!tourOn || i !== 4) return; const n = PARTS3().length || 1; part = (part + 1) % n; $("#tText").innerHTML = STEPS[4].text(); later(cyc, 2200); }; later(cyc, 2200); } },
     { title:"Make it yours",
-      text:() => `<p>Pick a highlight colour, darken the background, or make the other parts clearer so you can study the whole region.</p>`,
-      sel:() => ["#lookBtn", "#look"],
+      text:() => `<p>Pick a highlight color, darken the background, or make the other parts clearer. <b>Sources</b> lists where every model comes from.</p>`,
+      sel:() => ["#lookBtn", "#look", "#srcBtn"],
       enter(){ window.__look.open(); keepAccent = LOOK.accent; const seq = ["rose", "sapphire", "crimson", keepAccent]; let n = 0;
-        const cyc = () => { if (!tourOn || i !== 4 || n >= seq.length) return; window.__look.set({accent:seq[n++]}); later(cyc, 1000); }; later(cyc, 900); },
+        const cyc = () => { if (!tourOn || i !== 5 || n >= seq.length) return; window.__look.set({accent:seq[n++]}); later(cyc, 1000); }; later(cyc, 900); },
       leave(){ if (keepAccent) window.__look.set({accent:keepAccent}); keepAccent = null; window.__look.close(); } },
   ];
 
@@ -7229,7 +7243,7 @@ const tour = (function(){
     clear(); const st = STEPS[i]; if (st && st.leave) st.leave();
     tourOn = false; ov.hidden = true; cancelAnimationFrame(raf);
     store.toured = true; save();
-    if (mode === "map" && i > 1) backToPlay(false);
+    if (mode === "map" && i > 2 && R && R.mode === MODE) backToPlay(false);
     focusTyper();
   }
   document.addEventListener("keydown", e => {
@@ -7322,7 +7336,7 @@ addEventListener("bt-cloud-ready", () => { if (!window.__btCloud.pending) window
   banner(null);
   const q = QS.get("region");
   if (q && REGIONS[q]){ await switchRegion(q); if (QS.has("explore")) enterExplore(); return; }
-  enterHome();
+  enterHome(); setTimeout(maybeTour, 700);
 })();
 
 });
