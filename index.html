@@ -433,9 +433,7 @@ body.kbopen .app{height:calc(var(--vvh,100vh) - env(safe-area-inset-top,0px));wi
 #lesson{text-align:center}
 .lkth button{padding:5px 4px;font-size:10.5px;letter-spacing:.02em}
 .hnote.maphint{margin-top:2px}
-html[data-theme2="sage"] .app,html[data-theme2="blueprint"] .app{background:radial-gradient(ellipse 26% 62% at 50% 44%, var(--bgtop) 0%, var(--bgtop) 40%, var(--bg) 100%)}
-@media (max-width:900px){html[data-theme2="sage"] .app,html[data-theme2="blueprint"] .app{background:radial-gradient(ellipse 48% 62% at 50% 44%, var(--bgtop) 0%, var(--bgtop) 40%, var(--bg) 100%)}}
-@media (max-width:560px){html[data-theme2="sage"] .app,html[data-theme2="blueprint"] .app{background:radial-gradient(ellipse 70% 58% at 50% 42%, var(--bgtop) 0%, var(--bgtop) 40%, var(--bg) 100%)}}
+
 </style>
 
 <style id="lightcss">/* generated: light mode versions of the hard-coded dark colors */
@@ -6285,9 +6283,9 @@ const ACCENTS = [
 ].map(a => a.bone !== undefined ? a : accFrom(a.id, a.name, a.hex));
 const THEMES = {
   dark:{name:"Dark"},
-  paper:{name:"Paper", bg:"#efe9de", top:"#f8f5ef", gh:0x4c463e, dim:0xa59f95, lit:0x7c7368, wh:0x928a7e, ring:0x6b645b, tint:.45, vcl:0x9c958c},
-  sage:{name:"Sage", bg:"#dfe5dd", top:"#8f9e93", gh:0x37443b, dim:0x6c7a70, lit:0xf0e8d6, wh:0xfdfaf2, ring:0x3b473f},
-  blueprint:{name:"Blueprint", bg:"#dde5ee", top:"#7f93a9", gh:0x2e3c4c, dim:0x62738a, lit:0xf2ece0, wh:0xffffff, ring:0x34465c}};
+  paper:{name:"Paper", bg:"#efe9de", top:"#f8f5ef", gh:0x4c463e, dim:0xa59f95, lit:0x7c7368, wh:0x928a7e, ring:0x6b645b, tint:.45, ink:0x5e574e, vcl:0x9c958c},
+  sage:{name:"Sage", bg:"#dfe5dd", top:"#eef2ec", gh:0x3e4a42, dim:0x9aa59d, lit:0x6c776f, wh:0x828d85, ring:0x56625a, tint:.42, ink:0x4f5a52, vcl:0x98a198},
+  blueprint:{name:"Blueprint", bg:"#dde5ee", top:"#eef3f8", gh:0x34445a, dim:0x96a3b4, lit:0x627287, wh:0x7a899d, ring:0x4f6178, tint:.42, ink:0x4a586b, vcl:0x96a0ae}};
 const LOOK0 = {accent:"white", bg:0, ghost:0, atlas:true, theme:"dark", custom:"#8a5cff", cw:{h:262, s:.78, l:.62}};
 const lookFresh = () => JSON.parse(JSON.stringify(LOOK0));
 let LOOK = Object.assign(lookFresh(), store.look || {});
@@ -6308,7 +6306,7 @@ const ACC = () => { const a = ACC0(); if (!LIGHT()) return Object.assign({text:a
   return Object.assign({}, a, {text:mixHex(a.hex, "#000000", l > .55 ? .45 : l > .35 ? .28 : .12), glow:a.glow.replace(/,\s*[\d.]+\)$/, ",.3)"), em:a.em.map(x => x * .55)}); };
 const GH = () => LIGHT() ? TH().gh : GHOST, DIMC = () => LIGHT() ? TH().dim : 0x4a525d;
 const stateColor = s => s === "locked" ? GH() : s === "dim" ? DIMC() : s === "lit" ? (LIGHT() ? TH().lit : IVORY) : (LIGHT() ? TH().wh : WHITE);
-const BDF = () => LOOK.theme === "paper" ? 3.2 : LOOK.theme !== "dark" ? 2 : 1;   // how much stronger the faint backdrop parts are on light themes
+const BDF = () => LOOK.theme !== "dark" ? 3.2 : 1;   // how much stronger the faint backdrop parts are on light themes
 const GHOST_OP = () => .16 + LOOK.ghost / 100 * .36;          // .16 (the reel) … .52
 const mixHex = (a, b, t) => { const p = h => [1,3,5].map(i => parseInt(h.slice(i, i+2), 16)), A = p(a), B = p(b);
   return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join(""); };
@@ -8209,7 +8207,7 @@ function colorOf(m, state){
     return TH().vcl || 0xffffff;
   }
   let at = LOOK.atlas && m.userData && m.userData.atlas != null ? m.userData.atlas : null; const L = LIGHT();
-  if (at != null && TH().tint) at = mixInt(at, 0x5e574e, TH().tint);
+  if (at != null && TH().tint) at = mixInt(at, TH().ink, TH().tint);
   if (state === "locked") return SOLID() ? (at != null ? mixInt(at, L ? 0x9aa4af : 0x2b3139, .6) : (L ? 0x9aa4af : 0x4a4f57)) : (at != null ? at : GH());
   if (state === "dim") return at != null ? mixInt(at, L ? 0x7f8995 : 0x1c2129, .5) : DIMC();
   if (at != null) return state === "lit" ? at : mixInt(at, 0xffffff, .12);
