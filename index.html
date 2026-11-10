@@ -253,6 +253,8 @@ button{font:inherit;color:inherit}
   #soundBtn{font-size:0;width:34px;height:30px;padding:0;text-align:center}
   #soundBtn::before{content:"\266A";font-size:14px;line-height:28px}
   #soundBtn[aria-pressed="false"]::before{opacity:.35}
+  #srcBtn{font-size:0;width:30px;height:30px;padding:0;border-radius:50%;text-align:center}
+  #srcBtn::before{content:"i";font-family:var(--f-display);font-style:italic;font-size:17px;line-height:28px}
 }
 /* home: two sets side by side, each card sits under its own figure */
 .app.home .play-only,.app.home .ex-only,.app.home .map-only,.app:not(.home) .home-only{display:none!important}
@@ -280,6 +282,48 @@ button{font:inherit;color:inherit}
 .hcont{border:0;background:none;color:var(--soft);font-family:var(--f-mono);font-size:11.5px;text-align:left;padding:2px 4px;cursor:pointer}
 .hcont:hover{color:#fff}
 .hnote{margin:0;font-size:13px;color:var(--mute);text-align:center}
+.hrev{color:var(--accent);text-align:center}.hrev:hover{color:#fff}
+.hrevall{border:1px solid var(--line2);background:#141b24;color:var(--accent);border-radius:999px;padding:6px 14px;font-family:var(--f-mono);font-size:12px;cursor:pointer}
+.hrevall:hover,.hrevall:focus-visible{border-color:#fff;color:#fff}
+.xlinks{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:8px auto 0;max-width:66ch}
+.xlinks .xlk{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-right:2px}
+.lchip{border:1px solid var(--line2);background:#141b24;color:var(--soft);border-radius:999px;padding:3px 10px;font-size:12.5px;cursor:pointer;white-space:nowrap;font-family:inherit}
+.lchip small{font-family:var(--f-mono);font-size:10px;color:var(--mute);margin-left:6px}
+.lchip:hover,.lchip:focus-visible{border-color:#fff;color:#fff}
+.panel,#explore{min-width:0}
+.app>*{min-width:0}
+@media (max-width:700px){.xlinks{width:100%;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;max-width:100%}.xlinks::-webkit-scrollbar{display:none}}
+.tipcard{position:fixed;left:50%;top:calc(58px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:58;width:min(460px,calc(100vw - 32px));background:rgba(17,22,30,.98);border:1px solid var(--line2);border-left:3px solid var(--accent);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.tipcard p{margin:0;font-size:13.5px;line-height:1.45;color:var(--soft);flex:1;min-width:0}.tipcard b{color:var(--ink)}
+.tipcard[hidden]{display:none!important}
+.src.drill h3{margin-top:18px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.dli{display:grid;gap:3px;text-align:left;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.015);color:var(--soft);cursor:pointer;font:inherit;position:relative;min-width:0}
+.dli b{color:var(--ink);font-weight:600;font-size:14px;padding-right:40px}
+.dli small{color:var(--mute);font-size:12px}
+.dli:hover,.dli:focus-visible{border-color:var(--mute)}
+.dtag{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.dok{position:absolute;top:9px;right:11px;font-family:var(--f-mono);font-size:11px;color:var(--ok)}
+.dback{display:block;background:none;border:0;color:var(--mute);font-family:var(--f-mono);font-size:12px;cursor:pointer;padding:0;margin:0 0 10px}
+.dback:hover{color:#fff}
+.dcase{font-size:15px;color:var(--ink);line-height:1.55;max-width:66ch;margin:6px 0 0}.dcase b{color:var(--ink)}
+.dsteps{margin:14px 0 0;padding-left:20px;display:grid;gap:14px}
+.dsteps li{display:grid;gap:5px}
+.dq{color:var(--ink);font-weight:500}
+.da{font-family:var(--f-mono);font-size:13px}
+.dsteps li.ok .da{color:var(--ok)}.dsteps li.no .da{color:var(--bad)}
+.dwhy{font-size:13px;color:var(--mute);line-height:1.45;max-width:66ch}
+.dsee{background:none;border:0;color:var(--accent);font-family:var(--f-mono);font-size:11.5px;cursor:pointer;padding:0 0 0 4px}
+.dsee:hover{text-decoration:underline}
+.din{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.din input{flex:1 1 200px;min-width:0;background:#0f141b;border:1px solid var(--line2);border-radius:10px;padding:9px 12px;color:var(--ink);font-family:inherit;font-size:16px}
+.din input:focus{outline:none;border-color:#fff}
+.dfb{min-height:1.2em;margin:4px 0 0;font-size:13px;color:var(--bad)}
+.pchain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px}
+.pnode{border:1px solid var(--line2);border-radius:999px;padding:4px 11px;font-size:13px;color:var(--soft);background:#141b24}
+.pnode.start{color:var(--ink)}.pnode.ok{color:var(--ok);border-color:rgba(143,220,170,.35)}.pnode.no{color:var(--bad);border-color:rgba(255,111,97,.35)}.pnode.q{color:var(--mute);border-style:dashed}
+.parr{color:var(--mute)}
+.dsum{margin:18px 0 10px;color:var(--soft);max-width:66ch}
 .top .tabs{max-width:min(52vw,720px)}
 .spread{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--mute);margin-top:6px}
 .spread input{width:min(220px,50vw);accent-color:#fff}
@@ -6155,7 +6199,7 @@ function makeSlot(targetId){
   let plane = null;
   if (V.clip){ plane = new THREE.Plane(); [ghost, faint, dimm, ...Object.values(mats).map(o => o.mat)].forEach(mt => mt.clippingPlanes = [plane]); }
   const c = (targetId && (LV.centerOn || R.centerOn) === "target") ? itemPos(targetId) : CLUSTER_C; inner.position.set(-c.x, -c.y, -c.z);
-  if (targetId) paint(mats[targetId].mat, "target");
+  if (targetId){ if (mode === "round" && round === 4) BONES.forEach(b => { if (mats[b.id]) paint(mats[b.id].mat, "lit"); }); else paint(mats[targetId].mat, "target"); }
   scene.add(g);
   return {g, inner, mats, ghost, faint, dimm, plane, target:targetId, phase:Math.random()*6, gone:false, jaw, jawT:0};
 }
@@ -6164,6 +6208,11 @@ function dropSlot(s){ scene.remove(s.g); s.ghost.dispose(); s.faint.dispose(); s
 let slots = {}, pos = 0, lessonSlot = null, palm = false, flip = 0, userX = 0, userY = 0, dragging = false, lastUp = 0;
 function curSlot(){ return (mode === "round" || mode === "lesson-wait") ? slots[idx] || slots[idx-1] : lessonSlot; }
 function ensureSlots(){
+  if (round === "m" && mode === "round"){
+    if (idx < queue.length && !slots[idx]) slots[idx] = makeSlot(queue[idx]);
+    for (const k of Object.keys(slots)){ if (k < idx - 1 || k > idx){ dropSlot(slots[k]); delete slots[k]; } }
+    return;
+  }
   for (let i = idx-1; i <= idx+2; i++){ if (i < 0 || i >= queue.length || slots[i]) continue; slots[i] = makeSlot(queue[i]); }
   for (const k of Object.keys(slots)){ if (k < idx-2 || k > idx+3){ dropSlot(slots[k]); delete slots[k]; } }
 }
@@ -6285,6 +6334,11 @@ canvas.addEventListener("pointerup", e => {
   if (!tap) return;
   if (mode === "explore"){ const id = exHit(e); if (id){ exSelect(id); tick(); } return; }
   if (mode === "map"){ const id = mapHit(e); if (id){ mapSelect(id); tick(); } return; }
+  if (mode === "round" && round === 4 && !wait && slots[idx]){
+    rayFrom(e);
+    const hits = ray.intersectObjects(slots[idx].inner.children, true), ids = hits.map(h => h.object.userData.bone).filter(b => b && b !== "other" && B[b]);
+    locatePick(ids[0] || (hits.length ? "other" : null), ids); return;
+  }
   if (curSlot()){
     rayFrom(e);
     const hits = ray.intersectObjects(curSlot().inner.children, true);
@@ -6297,7 +6351,7 @@ canvas.addEventListener("pointerup", e => {
 const lesson = $("#lesson"), play = $("#play"), word = $("#word"), fb = $("#fb");
 function toast(msg, ms=1800){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, ms); }
 function banner(msg, ms){ const b = $("#banner"); clearTimeout(banner.h); if (!msg){ b.hidden = true; return; } b.textContent = msg; b.hidden = false; if (ms) banner.h = setTimeout(() => b.hidden = true, ms); }
-function focusTyper(){ if (matchMedia("(pointer:coarse)").matches && (mode === "round" || mode === "lesson")) $("#typer").focus({preventScroll:true}); }
+function focusTyper(){ if (matchMedia("(pointer:coarse)").matches && (mode === "round" || mode === "lesson") && !(mode === "round" && round === 4) && !(document.querySelector("#drills") && !$("#drills").hidden)) $("#typer").focus({preventScroll:true}); }
 function hoverTip(html, e){
   const tip = $("#tip");
   if (!html || !e){ tip.hidden = true; canvas.style.cursor = ""; return; }
@@ -6416,22 +6470,24 @@ function onPick(id, near = []){
 
 /* ---------------- rounds ---------------- */
 let round = 0, queue = [], idx = 0, typed = "", wait = false, cur = null, autoT = null;
-let wrongIn = {1:new Set(),2:new Set(),3:new Set(),w:new Set()}, requeued = {};
-const roundName = n => ({1:"Round 1 · type it", 2:"Round 2 · first letter", 3:LV.r3Name, w:"Warm-up · from memory"}[n]);
-const roundTip = n => ({1:"Type the name. Wrong keys don't count here.", 2:"First letter and a clue. Enter to check.", 3:LV.r3Tip, w:`${cap(WD().many)} due for review today. Enter to check.`}[n]);
+let wrongIn = {1:new Set(),2:new Set(),3:new Set(),4:new Set(),w:new Set(),m:new Set()}, requeued = {};
+const roundName = n => ({1:"Round 1 · type it", 2:"Round 2 · first letter", 3:LV.r3Name, 4:"Round 4 · find it", w:"Warm-up · from memory", m:"Mixed review · from memory"}[n]);
+const roundTip = n => ({1:"Type the name. Wrong keys don't count here.", 2:"First letter and a clue. Enter to check.", 3:LV.r3Tip, w:`${cap(WD().many)} due for review today. Enter to check.`, 4:"Tap the named part on the model. Drag to turn it. Enter if you're stuck.", m:"Due items from across the app, mixed together. Enter to check."}[n]);
 function shuffle(a){ a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
 function startRound(n, ids){
-  stopWalk(); round = n; idx = 0; requeued = {}; wrongIn[n] = new Set(); stats.done = 0;
-  queue = n === 1 ? ORDER_R1.slice() : n === 2 ? shuffle(ORDER_R1) : n === 3 ? ORDER_R3.slice() : ids;
+  stopWalk(); round = n; idx = 0; requeued = {}; wrongIn[n] = new Set(); stats.done = 0; if (n === 1) wrongIn[4] = new Set();
+  queue = n === 1 ? ORDER_R1.slice() : n === 2 ? shuffle(ORDER_R1) : n === 3 ? ORDER_R3.slice() : n === 4 ? shuffle(ORDER_R1) : ids;
   mode = "round"; enterRoundScene(); setView(n === 3);
-  lesson.hidden = true; play.hidden = false; $("#kb").hidden = false; $("#win").hidden = true; drawStats();
+  lesson.hidden = true; play.hidden = false; $("#kb").hidden = n === 4; $("#win").hidden = true; drawStats();
+  if (n === 4){ try { $("#typer").blur(); } catch(_){} setTimeout(() => tipOnce("locate", `<b>New last round: find it.</b> The name is shown; tap that part on the model. Drag to turn it, and press Enter if you're stuck.`), 900); }
   banner(roundTip(n), 3600);
   nextItem();
 }
 function nextItem(){
   clearTimeout(autoT); wait = false; typed = "";
   if (idx >= queue.length){ return endRound(); }
+  if (round === "m") mixSwitch();
   cur = B[queue[idx]]; ensureSlots();
   fb.className = "fb"; fb.innerHTML = ""; $("#pAct").innerHTML = ""; word.className = "word" + sizeCls(cur.en);
   $("#pEye").innerHTML = `${roundName(round)} · <em>${Math.min(idx+1, queue.length)}</em> / ${queue.length}`;
@@ -6440,6 +6496,7 @@ function nextItem(){
 const sizeCls = t => t.length > 17 ? " xlong" : t.length > 11 ? " long" : "";
 function renderWord(){
   const t = cur.en;
+  if (round === 4){ kbHint(null); word.innerHTML = [...t].map(c => `<span>${esc(c)}</span>`).join(""); $("#sub").textContent = matchMedia("(pointer:coarse)").matches ? "tap it on the model · drag to turn" : "tap it on the model · drag to turn · Enter if stuck"; return; }
   if (round === 1){
     word.innerHTML = [...t].map((c,i) => `<span class="${i<typed.length?"t":""}${i===typed.length?" cur":""}">${c}</span>`).join("");
     $("#sub").textContent = frName(cur) + " · " + cur.mean; kbHint(keyOf(cur)[typed.length]);
@@ -6460,7 +6517,7 @@ function renderWord(){
 function shake(){ if (RM) return; word.classList.remove("shake"); void word.offsetWidth; word.classList.add("shake"); }
 
 function onChar(c){
-  if (mode !== "round" || wait) return;
+  if (mode !== "round" || wait || round === 4) return;
   stamp(); keySound(c === " " ? "space" : "key"); kbFlash(c);
   if (round === 1){
     stats.keys++;
@@ -6482,6 +6539,7 @@ function onEnter(){
   if (mode !== "round") return;
   keySound("enter");
   if (wait){ advance(); return; }
+  if (round === 4){ locateGiveUp(); return; }
   if (round !== 1 && typed.trim()) grade();
 }
 function advance(){ clearTimeout(autoT); idx++; nextItem(); }
@@ -6512,24 +6570,27 @@ function correct(){
 }
 function wrong(why){
   wait = true; streak = 0; badSound(); buzzPhone(50); shake();
-  wrongIn[round].add(cur.id);
+  wrongIn[round].add(cur.id); if (round === "m") mixMiss.add(R.id + "|" + cur.id);
   word.className = "word reveal" + sizeCls(cur.en); word.innerHTML = [...cur.en].map(c => `<span>${c}</span>`).join("");
   fb.className = "fb no"; fb.innerHTML = `<span class="why">${why}</span>`;
   $("#pAct").innerHTML = `<button class="btn" id="contBtn">Continue<kbd>enter</kbd></button>`; $("#contBtn").addEventListener("click", e => { e.currentTarget.blur(); audio(); if (wait) advance(); });
   $("#sub").textContent = WD().lang + ": " + frName(cur);
   requeued[cur.id] = (requeued[cur.id]||0) + 1;
-  if (requeued[cur.id] <= 2){ const at = Math.min(queue.length, idx + 3); queue.splice(at, 0, cur.id); Object.keys(slots).filter(k => +k >= at).forEach(k => { dropSlot(slots[k]); delete slots[k]; }); }
+  if (requeued[cur.id] <= 2){ const at = Math.min(queue.length, idx + 3); queue.splice(at, 0, cur.id); if (round === "m") MIXR.splice(at, 0, MIXR[idx]); Object.keys(slots).filter(k => +k >= at).forEach(k => { dropSlot(slots[k]); delete slots[k]; }); }
   drawStats();
 }
 
 function endRound(){
-  if (round === 1 || round === 2){ const n = round + 1; kbHint(null);
+  if (round === 1 || round === 2 || round === 3){ const n = round + 1; kbHint(null);
     word.className = "word"; word.innerHTML = ""; $("#sub").textContent = "";
     $("#pEye").innerHTML = `${roundName(round).split(" · ")[0]} done · <em>${queue.length}</em> / ${queue.length}`;
-    fb.className = "fb ok"; fb.innerHTML = `All ${N()} dissolved. <span class="why">${n===2 ? "Next, the names go away. You get a first letter and a clue." : LV.r3Intro}</span>`;
+    fb.className = "fb ok"; fb.innerHTML = `All ${N()} dissolved. <span class="why">${n===2 ? "Next, the names go away. You get a first letter and a clue." : n===3 ? LV.r3Intro : "Last round: the name is shown and you find it on the model. Tap it; drag to turn."}</span>`;
     lessonEnter = () => startRound(n); mode = "lesson-wait";
-    $("#pAct").innerHTML = `<button class="btn primary" id="nextRound">Start round ${n}<kbd>enter</kbd></button>`; $("#nextRound").addEventListener("click", e => { e.currentTarget.blur(); audio(); startRound(n); }); return; }
+    $("#pAct").innerHTML = `<button class="btn primary" id="nextRound">Start round ${n}<kbd>enter</kbd></button>`; $("#nextRound").addEventListener("click", e => { e.currentTarget.blur(); audio(); startRound(n); });
+    if (n === 4){ $("#pAct").insertAdjacentHTML("beforeend", `<button class="btn" id="skipR4">Skip to results</button>`); $("#skipR4").addEventListener("click", e => { e.currentTarget.blur(); audio(); finishLevel(); }); }
+    return; }
   if (round === "w") return finishWarm();
+  if (round === "m") return finishMixed();
   finishLevel();
 }
 
@@ -6542,12 +6603,12 @@ function schedule(id, ok, t){
 }
 function finishLevel(){
   const t = today(), clean = wrongIn[3].size === 0;
-  BONES.forEach(b => schedule(b.id, !wrongIn[3].has(b.id), t));
+  BONES.forEach(b => schedule(b.id, !wrongIn[3].has(b.id) && !wrongIn[4].has(b.id), t));
   if (!LS.clearedOn) LS.clearedOn = t;
   LS.stars[0] = true; if (clean) LS.stars[1] = true; save();
   const asked2 = N(), ft = 2*N() - wrongIn[2].size - wrongIn[3].size;
   showWin({title:LV.winTitle,
-    firstTry: Math.round(100*ft/(asked2*2)), list: BONES.map(b => ({b, miss: wrongIn[3].has(b.id), fixed: wrongIn[2].has(b.id) && !wrongIn[3].has(b.id)})), warm:false});
+    firstTry: Math.round(100*ft/(asked2*2)), list: BONES.map(b => ({b, miss: wrongIn[3].has(b.id), lost: wrongIn[4].has(b.id) && !wrongIn[3].has(b.id), fixed: wrongIn[2].has(b.id) && !wrongIn[3].has(b.id)})), warm:false});
 }
 function dueItemsOf(regId, t){ const r = store.regions[regId]; if (!r) return []; return Object.entries(r.items).filter(([id, it]) => it.due && dnum(it.due) <= dnum(t)).map(([id]) => id); }
 function dueItems(t){ return dueItemsOf(R.id, t).filter(id => B[id]); }
@@ -6597,7 +6658,7 @@ function showWin(r){
     </div>` : ""}
     <div class="sec" style="display:grid;gap:10px"><h3>${r.warm ? "What you recalled" : "What you solved"}</h3>
       <div class="solved">${r.list.map(x => `<div class="sv"><b>${x.b.en}</b><small>${esc(frName(x.b))} · ${x.b.mean}</small>
-        <span class="tag ${x.miss?"r":""}">${x.miss ? "missed in round 3, due tomorrow" : x.fixed ? "missed in round 2, fixed in round 3" : x.gap ? `recalled after ${x.gap} day${x.gap>1?"s":""}` : mastered(x.b.id) ? "mastered" : "first try"}</span></div>`).join("")}</div></div>
+        <span class="tag ${x.miss?"r":""}">${x.miss ? "missed in round 3, due tomorrow" : x.lost ? "not found on the model, due tomorrow" : x.fixed ? "missed in round 2, fixed in round 3" : x.gap ? `recalled after ${x.gap} day${x.gap>1?"s":""}` : mastered(x.b.id) ? "mastered" : "first try"}</span></div>`).join("")}</div></div>
     ${r.warm ? "" : `<div class="exam"><h3>Exam angle</h3>${LV.exam}</div>`}
     <div class="levels"><h3>${esc(R.levelsTitle)} · all levels</h3>${levelCards()}</div>
     <div class="actions" style="justify-content:flex-start">
@@ -6609,6 +6670,7 @@ function showWin(r){
   $("#win").hidden = false; $("#win").scrollTop = 0;
   $("#wReplay").addEventListener("click", replay); $("#wLesson").addEventListener("click", redoLesson); $("#wMap").addEventListener("click", () => enterMap());
   wireCards();
+  if (!r.warm) setTimeout(() => tipOnce("win", `<b>Stars:</b> one for clearing the level, one for a perfect round 3, and one for recalling it on a <b>later day</b>. Cleared parts come back for review after 1, 3, 7, 16, then 35 days; the home screen shows what's due.`), 900);
   if (nextLv){ $("#wNext").addEventListener("click", () => startLevel(LVI + 1)); lessonEnter = () => startLevel(LVI + 1); } else lessonEnter = replay;
 }
 let pickerPrev = null;
@@ -6620,7 +6682,7 @@ function showPicker(){
   $("#win").innerHTML = `<div class="win-in">
     <div class="eyebrow">${esc(R.name)} · levels</div>
     <h2>Pick a level. They're all open.</h2>
-    <p class="lesson-sub" style="text-align:left;margin:0">Each level starts with a two-minute lesson, then three rounds. Stars: clear it · round 3 with no mistakes · recall it on another day.</p>
+    <p class="lesson-sub" style="text-align:left;margin:0">Each level starts with a two-minute lesson, then four rounds: name shown, a clue, from memory, then find it on the model. Stars: clear it · round 3 with no mistakes · recall it on another day.</p>
     ${levelCards()}
     <div class="actions" style="justify-content:flex-start"><button class="btn" id="pkClose">Back<kbd>esc</kbd></button><button class="btn" id="pkMap">Body map</button></div></div>`;
   $("#win").hidden = false; $("#win").scrollTop = 0; wireCards();
@@ -6707,7 +6769,7 @@ function exSelect(id, quiet){
   $("#xName").textContent = a.name;
   $("#xWhere").textContent = a.where;
   $("#xFr").textContent = a.fr;
-  $("#xFact").innerHTML = a.fact;
+  $("#xFact").innerHTML = a.fact; drawLinks(id);
   const lvOf = R.levels.findIndex(l => l.items.includes(id));
   $("#xPractise").hidden = lvOf < 0; $("#xPractise").textContent = `Practice level ${lvOf+1}`; $("#xPractise").dataset.l = lvOf;
   $("#index").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.id === id));
@@ -6811,11 +6873,12 @@ function mapSelect(id){
   $("#mChips").innerHTML = BODY.map(x => `<button class="rchip ${unlocked(x.id) ? "" : "locked"} ${x.id === id ? "on" : ""}" data-r="${x.id}">${esc(x.name)}${isNewRegion(x) ? `<span class="new">NEW</span>` : ""}<small>${unlocked(x.id) ? REGIONS[x.game].levels.length + " levels" : "soon"}</small></button>`).join("");
   $("#mChips").querySelectorAll(".rchip").forEach(c => c.addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); mapSelect(c.dataset.r); }));
   $("#mAct").innerHTML = unlocked(id)
-    ? `<button class="btn primary" id="mPlay">Play the ${esc(b.name.toLowerCase())}<kbd>enter</kbd></button><button class="btn" id="mExplore">Explore it</button>`
+    ? `<button class="btn primary" id="mPlay">Play the ${esc(b.name.toLowerCase())}<kbd>enter</kbd></button><button class="btn" id="mExplore">Explore it</button><button class="btn" id="mDrills">Cases &amp; paths</button>`
     : `<p class="lesson-sub" style="margin:0">Not unlocked yet. More regions are on the way.</p>`;
   if (unlocked(id)){
     $("#mPlay").addEventListener("click", e => { audio(); e.currentTarget.blur(); playFromMap(b.game); });
     $("#mExplore").addEventListener("click", async e => { audio(); e.currentTarget.blur(); if (!R || R.id !== b.game) await switchRegion(b.game, false); if (R && R.id === b.game) enterExplore(); });
+    $("#mDrills").addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); openDrills(); });
   }
   mapPaint();
 }
@@ -6866,6 +6929,7 @@ function enterExplore(){
   exFit(); exC.copy(exGC); exDist = fitDist(exR, 0) * 1.6; drawTabs(); drawIndex(); exSelect(exSel, true);
   const on = $("#index").querySelector("button.on"); if (on) on.scrollIntoView({block:"center"});
   setNav();
+  setTimeout(() => { if (mode === "explore") tipOnce("explore", `<b>Explore:</b> tap any part for its facts. <b>Connected</b> links jump to the matching nerve, muscle, artery or bone in another figure. The tabs switch groups and the flip button turns the view.`); }, 700);
 }
 function enterMap(){
   if (mode === "map") return;
@@ -6987,7 +7051,7 @@ function homeStats(m){
     if (s && s.levels) stars += s.levels.reduce((n, l) => n + (l ? l.stars.filter(Boolean).length : 0), 0); });
   return `${regs.length} regions · ${stars}/${total} ★` + (due ? ` · <em>${due} due</em>` : "");
 }
-function drawHome(){
+function drawHome(){ setTimeout(drawReview, 0);
   $("#hBonesS").innerHTML = homeStats("bones"); $("#hNervesS").innerHTML = homeStats("nerves"); $("#hOrgansS").innerHTML = homeStats("organs"); $("#hMusclesS").innerHTML = homeStats("muscles"); $("#hVesselsS").innerHTML = homeStats("vessels");
   [["bones", "#hBonesC"], ["nerves", "#hNervesC"], ["organs", "#hOrgansC"], ["muscles", "#hMusclesC"], ["vessels", "#hVesselsC"]].forEach(([m, sel]) => { const id = (store.last || {})[m], r = REGIONS[id], el = $(sel);
     const lv = r && store.regions[id] ? (store.regions[id].level || 0) + 1 : 1;
@@ -7270,6 +7334,514 @@ window.__tour = tour;
   window.__src = {open, close};
 })();
 
+/* =====================================================================
+   LEARNING EXTRAS
+   · Round 4 "find it": the name is shown, you tap the part on the model
+   · Mixed review: everything due, interleaved across regions and figures
+   · Connected: cross-figure links in Explore (nerve ↔ muscle ↔ artery ↔ bone)
+   · Drills: clinical cases and trace-the-path, from the body map
+   · One-time tips at the moment they matter
+   ===================================================================== */
+const FIG_NAME = {bones:"Bones", nerves:"Nerves & brain", organs:"Organs", muscles:"Muscles", vessels:"Vessels"};
+const refItem = ref => { const [r, id] = ref.split(":"), reg = REGIONS[r]; return reg ? reg.catalog.find(x => x.id === id) : null; };
+const refName = ref => { const b = refItem(ref); return b ? b.en : null; };
+const refOK = ref => !!refItem(ref);
+
+/* ---------- one-time tips ---------- */
+function tipOnce(key, html){
+  store.tips = store.tips || {};
+  if (store.tips[key] || tourOn || navigator.webdriver) return;
+  store.tips[key] = 1; save();
+  let el = $("#tipcard");
+  if (!el){ el = document.createElement("div"); el.id = "tipcard"; el.className = "tipcard"; el.setAttribute("role", "status"); document.body.appendChild(el); }
+  el.innerHTML = `<p>${html}</p><button class="btn primary" id="tipOk">Got it</button>`; el.hidden = false;
+  $("#tipOk").addEventListener("click", e => { audio(); e.currentTarget.blur(); el.hidden = true; focusTyper(); });
+}
+
+/* ---------- round 4: find it on the model ---------- */
+function locatePick(id, near){
+  if (!cur || wait) return;
+  const s = slots[idx]; if (!s) return;
+  if (!id || id === "other" || !B[id]){ toast("Tap one of the highlighted parts."); return; }
+  if (id === cur.id || near.slice(0, 3).includes(cur.id)){ paint(s.mats[cur.id].mat, "target"); correct(); return; }
+  paint(s.mats[cur.id].mat, "target"); if (s.mats[id]) paint(s.mats[id].mat, "dim");
+  wrong(`That's the <b>${esc(B[id].en)}</b>. The <b>${esc(cur.en)}</b> is ${cur.loc}.`);
+}
+function locateGiveUp(){
+  const s = slots[idx]; if (s && s.mats[cur.id]) paint(s.mats[cur.id].mat, "target");
+  wrong(`Here it is: the <b>${esc(cur.en)}</b>, ${cur.loc}.`);
+}
+
+/* ---------- mixed review ---------- */
+let MIXR = [], mixMiss = new Set(), mixFig = null;
+const levelOfItem = (reg, id) => Math.max(0, reg.levels.findIndex(l => l.items.includes(id)));
+function dueAcross(fig){
+  const t = today(), out = [];
+  Object.values(REGIONS).forEach(r => {
+    if ((fig && r.mode !== fig) || !store.regions[r.id]) return;
+    const inLevels = new Set(r.levels.flatMap(l => l.items));
+    dueItemsOf(r.id, t).forEach(id => { if (inLevels.has(id)) out.push([r.id, id]); });
+  });
+  return out;
+}
+function interleave(pairs){
+  const by = {}; pairs.forEach(p => (by[p[0]] = by[p[0]] || []).push(p));
+  const out = []; let last = null;
+  while (out.length < pairs.length){
+    const ks = Object.keys(by).filter(k => by[k].length).sort((a, b) => by[b].length - by[a].length);
+    const k = ks.find(x => x !== last) || ks[0]; out.push(by[k].shift()); last = k;
+  }
+  return out;
+}
+async function startMixed(fig){
+  let pairs = dueAcross(fig);
+  if (!pairs.length){ toast("Nothing is due right now. Cleared parts come back on later days."); return; }
+  pairs = interleave(shuffle(pairs).slice(0, 24));
+  const need = [...new Set(pairs.flatMap(p => regFiles(REGIONS[p[0]])))].filter(f => !DATA[f]);
+  if (need.length){
+    banner("Loading your reviews…");
+    try { await loadFiles(need); } catch(e){ banner("Couldn't load the models. Check your connection and try again.", 4000); return; }
+    banner(null);
+  }
+  if (mode === "map" || mode === "explore" || mode === "home") leaveOverlay(); else hideGame();
+  stopWalk(); clearTimeout(autoT); clearSlots(); if (lessonSlot){ dropSlot(lessonSlot); lessonSlot = null; }
+  const first = REGIONS[pairs[0][0]];
+  if (first.mode !== MODE) setMode(first.mode);
+  useRegion(first.id); useLevel(levelOfItem(first, pairs[0][1]), true);
+  resetStats(); resume = null; $("#win").hidden = true;
+  MIXR = pairs.map(p => p[0]); mixMiss = new Set(); mixFig = fig;
+  startRound("m", pairs.map(p => p[1]));
+  setNav(); resize();
+}
+function mixSwitch(){
+  const rid = MIXR[idx], reg = REGIONS[rid];
+  if (!R || R.id !== rid){ if (reg.mode !== MODE) setMode(reg.mode); useRegion(rid); }
+  useLevel(levelOfItem(R, queue[idx]), true);
+}
+function finishMixed(){
+  const t = today(), seen = new Set(), pairs = [];
+  queue.forEach((id, i) => { const k = MIXR[i] + "|" + id; if (!seen.has(k)){ seen.add(k); pairs.push([MIXR[i], id]); } });
+  const byR = {}; pairs.forEach(p => (byR[p[0]] = byR[p[0]] || []).push(p[1]));
+  const rows = [];
+  Object.entries(byR).forEach(([rid, ids]) => {
+    useRegion(rid);
+    ids.forEach(id => { const it = st.items[id], gap = it && it.last ? dnum(t) - dnum(it.last) : 0, miss = mixMiss.has(rid + "|" + id);
+      schedule(id, !miss, t); rows.push({reg:REGIONS[rid], b:B[id], miss, gap}); });
+    R.levels.forEach((lv, i) => { const ls = st.levels[i], asked = lv.items.filter(id => ids.includes(id));
+      if (ls.clearedOn && dnum(t) > dnum(ls.clearedOn) && asked.length && asked.every(id => !mixMiss.has(rid + "|" + id))) ls.stars[2] = true; });
+  });
+  save();
+  const right = rows.filter(r => !r.miss).length, wpm = $("#sWpm").textContent, acc = $("#sAcc").textContent;
+  mode = "win"; banner(null); kbHint(null);
+  $("#win").innerHTML = `<div class="win-in">
+    <div class="eyebrow">Mixed review · ${mixFig ? esc(FIG_NAME[mixFig]) : "all figures"} · ${t}</div>
+    <h2>${right === rows.length ? "Everything due came back from memory." : "Most of it stuck. The misses come back tomorrow."}</h2>
+    <div class="big"><div><small>wpm</small><strong>${wpm}</strong></div><div><small>key accuracy</small><strong>${acc}%</strong></div><div><small>recalled</small><strong>${right}/${rows.length}</strong></div></div>
+    <div class="sec" style="display:grid;gap:10px"><h3>What you recalled</h3>
+      <div class="solved">${rows.map(x => `<div class="sv"><b>${esc(x.b.en)}</b><small>${esc(x.reg.name)} · ${esc(x.b.mean)}</small>
+        <span class="tag ${x.miss ? "r" : ""}">${x.miss ? "missed, due tomorrow" : x.gap ? `recalled after ${x.gap} day${x.gap > 1 ? "s" : ""}` : "recalled"}</span></div>`).join("")}</div></div>
+    <div class="actions" style="justify-content:flex-start">
+      <button class="btn primary" id="mxHome">Home<kbd>enter</kbd></button><button class="btn" id="mxMap">Body map</button></div></div>`;
+  $("#win").hidden = false; $("#win").scrollTop = 0;
+  $("#mxHome").addEventListener("click", () => { audio(); enterHome(); });
+  $("#mxMap").addEventListener("click", () => { audio(); enterMap(); });
+  lessonEnter = () => enterHome();
+}
+function drawReview(){
+  HOME_SETS.forEach(m => {
+    const card = document.querySelector(`.hcard[data-m="${m}"]`); if (!card) return;
+    let b = card.querySelector(".hrev");
+    if (!b){ b = document.createElement("button"); b.className = "hcont hrev";
+      b.addEventListener("click", e => { audio(); keySound("enter"); e.currentTarget.blur(); startMixed(m); }); card.appendChild(b); }
+    const n = dueAcross(m).length; b.hidden = !n; if (n) b.textContent = `Review ${n} due, mixed →`;
+  });
+  let all = $("#hRevAll");
+  if (!all){ all = document.createElement("button"); all.id = "hRevAll"; all.className = "hrevall";
+    all.addEventListener("click", e => { audio(); keySound("enter"); e.currentTarget.blur(); startMixed(null); }); $(".hnote").before(all); }
+  const tot = dueAcross(null), figs = new Set(tot.map(p => REGIONS[p[0]].mode)).size;
+  all.hidden = figs < 2; if (figs >= 2) all.textContent = `Review everything due · ${tot.length} across ${figs} figures`;
+  if (tot.length && mode === "home") tipOnce("due", `<b>Reviews are due.</b> Parts you've cleared come back on later days. <b>Review</b> on a card mixes everything due in that figure, so you practice recalling across regions.`);
+}
+
+/* ---------- connected: links between figures ---------- */
+const LINKS = [
+  ["narm:axillary", "mshoulder:deltoid", "mshoulder:teres_minor", "varm:post_circ_humeral", "shoulder:humerus"],
+  ["narm:radial", "mshoulder:triceps", "mshoulder:brachioradialis", "mforearm:ext_dig", "mforearm:ecrl", "mforearm:supinator", "varm:deep_brachial", "arm:humerus"],
+  ["narm:median", "mforearm:fcr", "mforearm:pronator_teres", "mforearm:fds", "mforearm:apb", "mforearm:opp_poll", "varm:brachial_a"],
+  ["narm:ulnar", "mforearm:fcu", "mforearm:add_poll", "mforearm:interossei_h", "mforearm:adm_h", "varm:ulnar_a", "arm:medial_epicondyle"],
+  ["narm:musculocutaneous", "mshoulder:biceps", "mshoulder:brachialis", "mshoulder:coracobrachialis", "narm:lateral_cord"],
+  ["narm:upper_trunk", "mshoulder:supraspinatus", "mshoulder:infraspinatus", "mshoulder:deltoid", "mshoulder:biceps"],
+  ["narm:posterior_cord", "narm:radial", "narm:axillary", "mshoulder:lat_dorsi", "mshoulder:subscapularis"],
+  ["nleg:femoral", "mhip:rectus_fem", "mhip:vastus_lat", "mhip:vastus_med", "mhip:sartorius", "mhip:iliacus", "vleg:femoral_a", "vleg:femoral_v"],
+  ["nleg:obturator", "mhip:add_longus", "mhip:add_brevis", "mhip:gracilis", "vleg:obturator_a", "pelvis:pubis"],
+  ["nleg:sciatic", "mhip:biceps_fem", "mhip:semitend", "mhip:semimemb", "mhip:piriformis", "vleg:inf_gluteal_a"],
+  ["nleg:tibial", "mleg:gastroc", "mleg:soleus", "mleg:tib_post", "mleg:fdl", "vleg:post_tibial_a", "vleg:popliteal_a"],
+  ["nleg:common_fibular", "nleg:deep_fibular", "nleg:superficial_fibular", "leg:fibula_head", "knee:biceps_tendon"],
+  ["nleg:deep_fibular", "mleg:tib_ant", "mleg:ehl", "mleg:edl", "vleg:ant_tibial_a", "vleg:dorsalis_pedis"],
+  ["nleg:superficial_fibular", "mleg:fib_longus", "mleg:fib_brevis"],
+  ["nleg:sural", "vleg:ssv"], ["nleg:saphenous", "vleg:gsv"],
+  ["cranial:facial", "mhead:occipitofrontalis", "mhead:orb_oculi", "mhead:orb_oris", "mhead:zyg_major", "mhead:buccinator", "mhead:platysma", "eye:lacrimal_gland"],
+  ["cranial:trigeminal", "mhead:masseter", "mhead:temporalis", "mhead:med_ptery", "mhead:lat_ptery", "eye:cornea"],
+  ["cranial:accessory", "mhead:scm", "mshoulder:trapezius"],
+  ["cranial:oculomotor", "eye:cn3", "eye:sup_rectus", "eye:inf_rectus", "eye:med_rectus", "eye:inf_oblique", "eye:levator", "eye:iris", "vhead:pcom"],
+  ["cranial:trochlear", "eye:cn4", "eye:sup_oblique"], ["cranial:abducens", "eye:cn6", "eye:lat_rectus"],
+  ["cranial:optic", "eye:optic_nerve", "eye:chiasm", "eye:optic_tract", "eye:retina", "brain:visual"],
+  ["cranial:vagus", "spinal:vagus2", "vhead:ijv", "vhead:cca"],
+  ["cranial:hypoglossal", "mhead:digastric"],
+  ["spinal:phrenic", "mtrunk:diaphragm", "chest:diaphragm", "mhead:ant_scalene"],
+  ["spinal:thoracic_nerves", "vtrunk:post_intercostal", "mtrunk:ext_intercostal", "mtrunk:int_intercostal", "thorax:true_ribs"],
+  ["spinal:lat_cst", "brain:precentral", "spinal:ventral_horn"], ["spinal:fasc_gracilis", "spinal:fasc_cuneatus", "brain:postcentral", "brain:thalamus"],
+  ["vhead:mca", "brain:broca", "brain:wernicke", "brain:precentral", "brain:postcentral", "brain:insula"],
+  ["vhead:aca", "brain:corpus_callosum", "brain:cingulate", "brain:frontal"],
+  ["vhead:pca", "brain:occipital", "brain:visual", "brain:thalamus"],
+  ["vhead:basilar", "brain:pons", "vhead:sca", "brain:cerebellum"], ["vhead:pica", "brain:medulla", "brain:cerebellum", "vhead:vertebral"],
+  ["vhead:vertebral", "spine:cervical", "spine:c1", "varm:subclavian_a"],
+  ["vhead:mid_meningeal", "brain:dura", "skull:temporal", "vhead:maxillary_a"],
+  ["vhead:sss", "brain:sss", "brain:falx", "brain:arachnoid"], ["vhead:transverse", "brain:tentorium", "vhead:sigmoid", "vhead:ijv"],
+  ["vhead:facial_a", "vhead:facial_v", "mhead:buccinator"], ["vhead:sup_temporal", "mhead:temporalis"],
+  ["vhead:cca", "vtrunk:l_cca", "vhead:ica", "vhead:eca", "vtrunk:brachiocephalic"], ["vhead:ica", "eye:ophthalmic_a", "vhead:aca", "vhead:mca", "vhead:pcom"],
+  ["eye:ophthalmic_a", "eye:central_retinal_a", "eye:retina"], ["eye:chiasm", "brain:pituitary", "brain:hypothalamus"],
+  ["varm:subclavian_a", "vtrunk:l_subclavian", "vtrunk:int_thoracic", "vtrunk:brachiocephalic"],
+  ["varm:axillary_a", "mshoulder:pec_minor", "narm:lateral_cord", "narm:medial_cord"], ["varm:thoracoacromial", "mshoulder:pec_major"],
+  ["varm:lat_thoracic", "mshoulder:serratus"], ["varm:subscapular_a", "mshoulder:lat_dorsi", "mshoulder:subscapularis"],
+  ["varm:radial_a", "mshoulder:brachioradialis", "varm:deep_palmar_arch", "arm:radius"], ["varm:ulnar_a", "varm:sup_palmar_arch", "hand:pisiform", "hand:hamate"],
+  ["varm:cephalic", "mshoulder:deltoid", "mshoulder:pec_major"], ["varm:median_cubital", "varm:cephalic", "varm:basilic", "mshoulder:biceps"],
+  ["heart:aorta", "vtrunk:asc_aorta", "vtrunk:aortic_arch", "heart:aortic_valve", "heart:lv"],
+  ["heart:svc", "vtrunk:svc", "heart:ra", "vtrunk:brachiocephalic_v"], ["heart:ivc", "vtrunk:ivc", "heart:ra", "vtrunk:hepatic_v"],
+  ["chest:esophagus", "vtrunk:thoracic_aorta", "abdomen:stomach"], ["chest:aorta", "vtrunk:aortic_arch", "vtrunk:thoracic_aorta"],
+  ["abdomen:celiac", "vtrunk:celiac", "abdomen:stomach", "abdomen:liver", "abdomen:spleen"],
+  ["abdomen:splenic_a", "vtrunk:splenic_a", "abdomen:spleen", "abdomen:pancreas", "vtrunk:splenic_v"],
+  ["abdomen:hepatic_a", "vtrunk:common_hepatic", "abdomen:liver", "abdomen:gallbladder"], ["abdomen:gastric_a", "vtrunk:l_gastric", "abdomen:stomach"],
+  ["abdomen:sma", "vtrunk:sma", "abdomen:jejunum", "abdomen:ileum", "abdomen:colon_asc", "vtrunk:smv", "abdomen:duodenum"],
+  ["abdomen:ima", "vtrunk:ima", "abdomen:colon_desc", "abdomen:colon_sig", "abdomen:rectum"], ["abdomen:aorta_abd", "vtrunk:abdominal_aorta"],
+  ["vtrunk:portal_v", "abdomen:liver", "vtrunk:smv", "vtrunk:splenic_v", "vtrunk:hepatic_v"],
+  ["urinary:renal_a", "vtrunk:renal_a", "urinary:kidneys", "urinary:renal_v", "vtrunk:renal_v"], ["urinary:ureters", "urinary:bladder", "vtrunk:common_iliac_a"],
+  ["vtrunk:internal_iliac_a", "vleg:sup_gluteal_a", "vleg:inf_gluteal_a", "vleg:obturator_a", "urinary:bladder"], ["vtrunk:common_iliac_a", "vleg:ext_iliac_a"],
+  ["vleg:sup_gluteal_a", "mhip:glut_med", "mhip:glut_min", "mhip:tfl"], ["vleg:inf_gluteal_a", "mhip:glut_max"],
+  ["vleg:med_circ_femoral", "leg:femur_head", "leg:femur_neck"], ["vleg:lat_circ_femoral", "mhip:vastus_lat", "mhip:rectus_fem"],
+  ["vleg:perforating", "mhip:add_magnus", "mhip:biceps_fem"], ["vleg:popliteal_a", "vleg:popliteal_v", "knee:oblique_popliteal", "vleg:genicular"],
+  ["vleg:femoral_a", "vleg:femoral_v", "mhip:sartorius", "mhip:add_longus"], ["vleg:gsv", "vleg:femoral_v", "leg:medial_malleolus"],
+  ["vleg:ssv", "vleg:popliteal_v", "leg:lateral_malleolus"], ["vleg:post_tibial_a", "leg:medial_malleolus", "mleg:tib_post", "mleg:fdl", "mleg:fhl"],
+  ["knee:acl", "knee:pcl", "leg:tibial_plateau", "leg:lateral_condyle", "leg:medial_condyle"], ["knee:mcl", "knee:med_meniscus", "leg:medial_condyle"],
+  ["knee:lcl", "leg:fibula_head", "leg:lateral_condyle"], ["knee:patellar_lig", "leg:patella", "leg:tibial_tuberosity", "knee:quad_tendon", "mhip:rectus_fem"],
+  ["knee:pes_anserinus", "mhip:sartorius", "mhip:gracilis", "mhip:semitend"], ["knee:it_band_k", "mhip:it_band", "mhip:tfl", "mhip:glut_max"],
+  ["knee:popliteus_k", "mleg:popliteus"], ["knee:gastroc_k", "mleg:gastroc"], ["knee:biceps_tendon", "mhip:biceps_fem"], ["knee:semimemb_k", "mhip:semimemb"],
+  ["mleg:achilles", "mleg:gastroc", "mleg:soleus", "foot:calcaneus"], ["mleg:plantar_fascia", "foot:calcaneus", "mleg:fdb"],
+  ["mshoulder:supraspinatus", "shoulder:scapula", "shoulder:humeral_head", "shoulder:acromion"], ["mshoulder:pec_minor", "shoulder:coracoid", "mshoulder:coracobrachialis", "mshoulder:biceps"],
+  ["mshoulder:triceps", "arm:olecranon"], ["mforearm:fcr", "mforearm:fcu", "mforearm:pronator_teres", "arm:medial_epicondyle"], ["mforearm:ecrb", "mforearm:ext_dig", "arm:lateral_epicondyle"],
+  ["mtrunk:linea_alba", "mtrunk:rectus_abd", "mtrunk:ext_obl"], ["mtrunk:quad_lumb", "thorax:rib12", "pelvis:iliac_crest"],
+  ["mhip:psoas", "spine:lumbar", "leg:lesser_trochanter", "abdomen:appendix"], ["mhip:glut_med", "leg:greater_trochanter"], ["mhip:rectus_fem", "pelvis:asis"],
+  ["mhead:masseter", "skull:mandible", "skull:zygomatic"], ["mhead:temporalis", "skull:temporal", "skull:mandible"], ["mhead:scm", "shoulder:clavicle", "thorax:manubrium"],
+  ["brain:pituitary", "skull:sphenoid"], ["brain:latvent", "brain:choroid", "brain:thirdvent"], ["brain:aqueduct", "brain:midbrain", "brain:fourthvent"],
+  ["skull:malleus", "skull:incus", "skull:stapes", "cranial:vestibulocochlear", "skull:cochlea"],
+];
+const LINKMAP = {};
+LINKS.forEach(g => { const ok = g.filter(refOK); ok.forEach(a => ok.forEach(b => { if (a !== b) (LINKMAP[a] = LINKMAP[a] || new Set()).add(b); })); });
+function drawLinks(id){
+  let el = $("#xLinks");
+  if (!el){ el = document.createElement("div"); el.id = "xLinks"; el.className = "xlinks"; $("#xFact").after(el); }
+  const L = [...(LINKMAP[R.id + ":" + id] || [])].slice(0, 7);
+  el.hidden = !L.length;
+  el.innerHTML = L.length ? `<span class="xlk">Connected</span>` + L.map(ref => { const r = REGIONS[ref.split(":")[0]];
+    return `<button class="lchip" data-ref="${ref}">${esc(refName(ref))}<small>${esc(FIG_NAME[r.mode] || "")}</small></button>`; }).join("") : "";
+  el.querySelectorAll(".lchip").forEach(b => b.addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); jumpTo(b.dataset.ref); }));
+}
+async function jumpTo(ref){
+  const [rid, id] = ref.split(":"), reg = REGIONS[rid]; if (!reg) return;
+  closeDrills(true);
+  if (mode === "explore" && R && R.id === rid){
+    const a = A[id]; if (a && a.group !== exGroup && GROUPS.some(g => g.id === a.group)) exSetGroup(a.group);
+    if (A[id]) exSelect(id); return;
+  }
+  if (mode === "explore"){ leaveOverlay(); mode = "map"; }
+  if (!R || R.id !== rid) await switchRegion(rid, false);
+  if (!R || R.id !== rid) return;
+  if (R.mode !== MODE) setMode(R.mode);
+  const a = A[id]; if (a){ if (GROUPS.some(g => g.id === a.group)) exGroup = a.group; exSel = id; }
+  if (mode === "explore"){ leaveOverlay(); mode = "map"; }
+  enterExplore();
+}
+
+/* ---------- drills: clinical cases and paths ---------- */
+const CASES = [
+  {id:"c_axillary", fig:"nerves", title:"The fall onto the shoulder",
+   text:`A 68-year-old falls onto her outstretched arm. The X-ray shows a fracture of the <b>surgical neck of the humerus</b>. She can't lift her arm out to the side, and a patch of skin over the outer shoulder is numb.`,
+   steps:[{q:"Which nerve is injured?", a:["axillary nerve"], show:"axillary nerve", ref:"narm:axillary", why:"It winds around the surgical neck and supplies the skin over the deltoid (the “regimental badge” patch)."},
+          {q:"Which muscle can no longer lift the arm past about 15°?", a:["deltoid"], show:"deltoid", ref:"mshoulder:deltoid", why:"Supraspinatus starts abduction; the deltoid carries it from about 15° to 90°."},
+          {q:"Which artery runs with that nerve around the humerus?", a:["posterior circumflex humeral artery", "posterior circumflex humeral", "pcha"], show:"posterior circumflex humeral artery", ref:"varm:post_circ_humeral", why:"Both pass through the quadrangular space, then wrap around the surgical neck."}]},
+  {id:"c_radial", fig:"nerves", title:"The broken mid-arm",
+   text:`A cyclist breaks his humerus <b>halfway down the shaft</b>. Now his wrist hangs limp and he can't straighten his fingers, but he can still straighten his elbow.`,
+   steps:[{q:"Which nerve is injured?", a:["radial nerve"], show:"radial nerve", ref:"narm:radial", why:"It lies in the spiral groove on the back of the humerus. Its branches to triceps usually leave above the break, so the elbow still straightens."},
+          {q:"Which artery runs with it in the spiral groove?", a:["deep brachial artery", "profunda brachii", "profunda brachii artery", "deep artery of the arm"], show:"deep brachial artery", ref:"varm:deep_brachial"},
+          {q:"What is this hanging wrist called?", a:["wrist drop"], show:"wrist drop", why:"All the wrist and finger extensors are radial-nerve muscles."}]},
+  {id:"c_supracondylar", fig:"vessels", title:"The child's elbow",
+   text:`A 6-year-old falls from the monkey bars onto an outstretched hand and breaks the humerus <b>just above the elbow</b>. His hand is pale and cool.`,
+   steps:[{q:"Which artery is kinked or torn?", a:["brachial artery"], show:"brachial artery", ref:"varm:brachial_a", why:"It runs right in front of a supracondylar fracture."},
+          {q:"He also can't make an “OK” sign with thumb and index. Which nerve runs with that artery?", a:["median nerve", "anterior interosseous nerve", "anterior interosseous"], show:"median nerve (its anterior interosseous branch)", ref:"narm:median"},
+          {q:"Untreated, the forearm flexors die and scar into a claw. Whose contracture is that?", a:["volkmann", "volkmanns", "volkmann contracture", "volkmanns contracture", "volkmann ischemic contracture", "volkmanns ischemic contracture", "volkmann ischaemic contracture"], show:"Volkmann ischemic contracture"}]},
+  {id:"c_carpal", fig:"nerves", title:"Tingling at night",
+   text:`A 45-year-old who types all day wakes at night with numb, tingling <b>thumb, index and middle fingers</b>. Shaking her hand helps.`,
+   steps:[{q:"Which nerve is squeezed?", a:["median nerve"], show:"median nerve", ref:"narm:median"},
+          {q:"Which muscle is first to waste, flattening the ball of the thumb?", a:["abductor pollicis brevis", "apb"], show:"abductor pollicis brevis", ref:"mforearm:apb"},
+          {q:"What forms the roof of the tunnel?", a:["flexor retinaculum", "transverse carpal ligament"], show:"flexor retinaculum", why:"Cutting it is carpal tunnel release."}]},
+  {id:"c_ulnar", fig:"nerves", title:"Leaning on the elbows",
+   text:`A man leans on his elbows for hours at his desk. His <b>ring and little fingers</b> tingle, and he struggles to grip paper between his thumb and index finger.`,
+   steps:[{q:"Which nerve is irritated?", a:["ulnar nerve"], show:"ulnar nerve", ref:"narm:ulnar", why:"It's the “funny bone” nerve."},
+          {q:"Behind which bony bump does it run at the elbow?", a:["medial epicondyle"], show:"medial epicondyle", ref:"arm:medial_epicondyle"},
+          {q:"Which thumb muscle is weak, giving a positive Froment sign?", a:["adductor pollicis"], show:"adductor pollicis", ref:"mforearm:add_poll"}]},
+  {id:"c_fibular", fig:"nerves", title:"The tackle",
+   text:`A football player takes a hit to the outside of the knee and breaks the <b>neck of the fibula</b>. Now his foot slaps the ground when he walks and the top of his foot is numb.`,
+   steps:[{q:"Which nerve is injured?", a:["common fibular nerve", "common peroneal nerve", "common fibular", "common peroneal", "peroneal nerve", "fibular nerve"], show:"common fibular nerve", ref:"nleg:common_fibular", why:"It wraps around the fibular neck just under the skin."},
+          {q:"Which muscle can no longer lift the foot?", a:["tibialis anterior", "tib ant"], show:"tibialis anterior", ref:"mleg:tib_ant"},
+          {q:"What's the walking sign called?", a:["foot drop", "drop foot", "steppage gait", "high steppage gait"], show:"foot drop (steppage gait)"}]},
+  {id:"c_mca", fig:"vessels", title:"Lost for words",
+   text:`A 70-year-old suddenly can't get his words out, and his <b>right face and arm</b> are weak. His leg is nearly normal. He understands what you say.`,
+   steps:[{q:"Which artery is blocked?", a:["left middle cerebral artery", "middle cerebral artery", "mca", "left mca"], show:"left middle cerebral artery", ref:"vhead:mca", why:"The MCA feeds the face and arm areas and, on the left, language."},
+          {q:"Which language area is hit?", a:["broca area", "brocas area", "broca", "brocas"], show:"Broca area", ref:"brain:broca", why:"Broca's area makes speech; Wernicke's area understands it."},
+          {q:"Which lobe holds it?", a:["frontal lobe"], show:"frontal lobe", ref:"brain:frontal"}]},
+  {id:"c_epidural", fig:"vessels", title:"The baseball",
+   text:`A teenager is hit on the side of the head by a baseball. He's dazed, then fine for an hour, then rapidly becomes drowsy with a <b>dilated pupil</b>.`,
+   steps:[{q:"Which thin spot of the skull was likely fractured?", a:["pterion"], show:"pterion", why:"Where the frontal, parietal, temporal and sphenoid meet: the thinnest part of the skull."},
+          {q:"Which artery runs under it?", a:["middle meningeal artery", "mma", "middle meningeal"], show:"middle meningeal artery", ref:"vhead:mid_meningeal"},
+          {q:"Where is the blood collecting?", a:["epidural", "epidural space", "epidural hematoma", "extradural", "between the skull and dura", "between skull and dura", "outside the dura", "above the dura"], show:"epidural (between skull and dura)", why:"Arterial blood strips the dura off the skull: a lens-shaped bleed on CT. The lucid interval is classic."}]},
+  {id:"c_appendix", fig:"organs", title:"The moving pain",
+   text:`A 19-year-old's pain started around her belly button and moved to the <b>lower right abdomen</b>. It hurts more when the doctor stretches her right hip backward.`,
+   steps:[{q:"Which organ is inflamed?", a:["appendix", "vermiform appendix"], show:"appendix", ref:"abdomen:appendix"},
+          {q:"Which muscle under it does stretching the hip irritate?", a:["psoas", "psoas major", "iliopsoas"], show:"psoas major", ref:"mhip:psoas", why:"The psoas sign."},
+          {q:"Which branch of the SMA gives the appendix its artery?", a:["ileocolic artery", "ileocolic"], show:"ileocolic artery", why:"The appendicular artery comes off the ileocolic."}]},
+  {id:"c_pituitary", fig:"organs", title:"Bumping into doors",
+   text:`A 40-year-old keeps bumping into door frames. Testing shows he has lost the <b>outer half of vision in both eyes</b>.`,
+   steps:[{q:"Where are the nerve fibers being pressed?", a:["optic chiasm", "chiasm"], show:"optic chiasm", ref:"eye:chiasm", why:"Fibers from the inner half of each retina, which see the outer fields, cross there."},
+          {q:"Which gland just below it is the usual cause?", a:["pituitary gland", "pituitary", "pituitary adenoma"], show:"pituitary gland", ref:"brain:pituitary"},
+          {q:"What's the field loss called?", a:["bitemporal hemianopia", "bitemporal hemianopsia", "bitemporal"], show:"bitemporal hemianopia"}]},
+  {id:"c_cn3", fig:"nerves", title:"The worst headache",
+   text:`A woman has the worst headache of her life. Her left eyelid droops, the left pupil is large, and the eye sits <b>down and out</b>.`,
+   steps:[{q:"Which cranial nerve is compressed?", a:["oculomotor nerve", "oculomotor", "cn iii", "cn3", "third nerve", "third cranial nerve"], show:"oculomotor nerve (CN III)", ref:"cranial:oculomotor"},
+          {q:"An aneurysm of which artery is the classic cause?", a:["posterior communicating artery", "posterior communicating", "pcom", "p com"], show:"posterior communicating artery", ref:"vhead:pcom"},
+          {q:"Which muscle normally holds the lid up?", a:["levator palpebrae superioris", "levator palpebrae", "levator"], show:"levator palpebrae superioris", ref:"eye:levator"}]},
+  {id:"c_achilles", fig:"muscles", title:"The kick at the ankle",
+   text:`A 45-year-old feels a “kick” at the back of his ankle playing tennis. Now he can't stand on tiptoe on that side.`,
+   steps:[{q:"What has ruptured?", a:["achilles tendon", "achilles", "calcaneal tendon"], show:"Achilles tendon", ref:"mleg:achilles"},
+          {q:"Which two-headed calf muscle pulls on it?", a:["gastrocnemius", "gastroc"], show:"gastrocnemius", ref:"mleg:gastroc"},
+          {q:"Which bone does it attach to?", a:["calcaneus", "heel bone"], show:"calcaneus", ref:"foot:calcaneus"},
+          {q:"Squeezing his calf doesn't move the foot. Whose test?", a:["thompson", "thompson test", "thompsons test", "simmonds", "simmonds test", "calf squeeze test"], show:"Thompson test"}]},
+  {id:"c_triad", fig:"bones", title:"The skier's knee",
+   text:`A skier's foot is planted when she's struck on the <b>outside of the knee</b>. She hears a pop, and the knee swells within hours.`,
+   steps:[{q:"Which ligament made the pop?", a:["anterior cruciate ligament", "acl", "anterior cruciate"], show:"anterior cruciate ligament", ref:"knee:acl"},
+          {q:"Which ligament on the inner side is stretched?", a:["medial collateral ligament", "mcl", "tibial collateral ligament"], show:"medial collateral ligament", ref:"knee:mcl"},
+          {q:"Which cartilage, attached to that ligament, often tears too?", a:["medial meniscus"], show:"medial meniscus", ref:"knee:med_meniscus", why:"Together: the “unhappy triad”."}]},
+  {id:"c_femneck", fig:"bones", title:"The fall at home",
+   text:`An 82-year-old trips and can't stand. Her right leg is short and turned out. The X-ray shows a displaced fracture of the <b>femoral neck</b>.`,
+   steps:[{q:"Which artery's branches to the femoral head are torn?", a:["medial circumflex femoral artery", "medial circumflex femoral", "mcfa"], show:"medial circumflex femoral artery", ref:"vleg:med_circ_femoral"},
+          {q:"Which part of the femur may die?", a:["head of femur", "femoral head", "femur head", "head of the femur"], show:"head of femur", ref:"leg:femur_head"},
+          {q:"What's that called?", a:["avascular necrosis", "osteonecrosis", "avn"], show:"avascular necrosis"}]},
+  {id:"c_inferior_mi", fig:"organs", title:"The slow heart",
+   text:`A 60-year-old has crushing chest pain. The ECG shows ST elevation in leads <b>II, III and aVF</b>, and his heart rate is slow.`,
+   steps:[{q:"Which wall of the heart is affected?", a:["inferior", "inferior wall"], show:"inferior wall"},
+          {q:"Which coronary artery usually supplies it?", a:["right coronary artery", "rca", "right coronary"], show:"right coronary artery", ref:"heart:rca", why:"In most people the RCA gives the posterior descending artery and also feeds the SA and AV nodes, hence the slow rate."}]},
+  {id:"c_varicocele", fig:"vessels", title:"The bag of worms",
+   text:`A 16-year-old has a soft “bag of worms” in his <b>left</b> scrotum that's worse when he stands.`,
+   steps:[{q:"Into which vein does the left testicular vein drain?", a:["left renal vein", "renal vein"], show:"left renal vein", ref:"vtrunk:renal_v", why:"It joins at a right angle, so pressure backs up."},
+          {q:"Which artery can pinch that vein against the aorta?", a:["superior mesenteric artery", "sma"], show:"superior mesenteric artery", ref:"vtrunk:sma", why:"The “nutcracker”: the left renal vein crosses between the SMA and the aorta."}]},
+  {id:"c_wallenberg", fig:"vessels", title:"Vertigo and hoarseness",
+   text:`A 55-year-old has sudden vertigo, hoarseness and trouble swallowing. He has lost pain and temperature on the <b>left face</b> and the <b>right body</b>.`,
+   steps:[{q:"Which artery is blocked?", a:["posterior inferior cerebellar artery", "pica", "vertebral artery", "vertebral"], show:"posterior inferior cerebellar artery (or the vertebral)", ref:"vhead:pica"},
+          {q:"Which part of the brainstem is damaged?", a:["medulla", "lateral medulla", "medulla oblongata"], show:"lateral medulla", ref:"brain:medulla"},
+          {q:"Which cranial nerve's nucleus loss causes the hoarseness?", a:["vagus", "vagus nerve", "cn x", "cn10", "tenth nerve", "nucleus ambiguus"], show:"vagus nerve (nucleus ambiguus)", ref:"cranial:vagus"}]},
+  {id:"c_phrenic", fig:"nerves", title:"The diving accident",
+   text:`After diving into shallow water, a patient with a high neck injury <b>can't breathe on his own</b>.`,
+   steps:[{q:"Which nerve no longer works?", a:["phrenic nerve"], show:"phrenic nerve", ref:"spinal:phrenic"},
+          {q:"Which muscle does it drive?", a:["diaphragm"], show:"diaphragm", ref:"mtrunk:diaphragm"},
+          {q:"Which spinal levels form that nerve?", a:["c3 c4 c5", "c3 c5", "c3 to c5", "c3 5", "c345", "c3 4 5", "c3 c4 and c5", "c3 c4 c5 keep the diaphragm alive"], show:"C3–C5", why:"“C3, 4, 5 keep the diaphragm alive.”"}]},
+];
+const PATHS = [
+  {id:"p_radial", fig:"vessels", title:"Heart to the wrist pulse", text:"Follow a drop of blood from the left ventricle to the radial pulse in the right wrist.",
+   start:{show:"left ventricle", ref:"heart:lv"},
+   steps:[{a:["aortic valve"], show:"aortic valve", ref:"heart:aortic_valve"}, {a:["ascending aorta"], show:"ascending aorta", ref:"vtrunk:asc_aorta"},
+          {a:["aortic arch", "arch of aorta", "arch of the aorta"], show:"aortic arch", ref:"vtrunk:aortic_arch"},
+          {a:["brachiocephalic trunk", "brachiocephalic artery", "innominate artery", "brachiocephalic"], show:"brachiocephalic trunk", ref:"vtrunk:brachiocephalic"},
+          {a:["subclavian artery", "right subclavian artery", "subclavian"], show:"right subclavian artery", ref:"varm:subclavian_a"},
+          {a:["axillary artery"], show:"axillary artery", ref:"varm:axillary_a"}, {a:["brachial artery"], show:"brachial artery", ref:"varm:brachial_a"},
+          {a:["radial artery"], show:"radial artery", ref:"varm:radial_a"}],
+   note:"On the left, the subclavian comes straight off the arch."},
+  {id:"p_dp", fig:"vessels", title:"Heart to the foot pulse", text:"From the left ventricle to the dorsalis pedis pulse on top of the right foot.",
+   start:{show:"left ventricle", ref:"heart:lv"},
+   steps:[{a:["ascending aorta"], show:"ascending aorta", ref:"vtrunk:asc_aorta"}, {a:["aortic arch", "arch of aorta"], show:"aortic arch", ref:"vtrunk:aortic_arch"},
+          {a:["thoracic aorta", "descending aorta", "descending thoracic aorta"], show:"thoracic aorta", ref:"vtrunk:thoracic_aorta"},
+          {a:["abdominal aorta"], show:"abdominal aorta", ref:"vtrunk:abdominal_aorta"}, {a:["common iliac artery", "common iliac"], show:"common iliac artery", ref:"vtrunk:common_iliac_a"},
+          {a:["external iliac artery", "external iliac"], show:"external iliac artery", ref:"vleg:ext_iliac_a"}, {a:["femoral artery", "common femoral artery"], show:"femoral artery", ref:"vleg:femoral_a"},
+          {a:["popliteal artery"], show:"popliteal artery", ref:"vleg:popliteal_a"}, {a:["anterior tibial artery"], show:"anterior tibial artery", ref:"vleg:ant_tibial_a"},
+          {a:["dorsalis pedis artery", "dorsalis pedis"], show:"dorsalis pedis artery", ref:"vleg:dorsalis_pedis"}]},
+  {id:"p_heart", fig:"organs", title:"Through the heart and lungs", text:"From the superior vena cava, all the way through the heart and lungs, out into the aorta.",
+   start:{show:"superior vena cava", ref:"heart:svc"},
+   steps:[{a:["right atrium"], show:"right atrium", ref:"heart:ra"}, {a:["tricuspid valve", "tricuspid"], show:"tricuspid valve", ref:"heart:tricuspid"},
+          {a:["right ventricle"], show:"right ventricle", ref:"heart:rv"}, {a:["pulmonary valve", "pulmonic valve"], show:"pulmonary valve", ref:"heart:pulm_valve"},
+          {a:["pulmonary trunk", "pulmonary artery", "pulmonary arteries"], show:"pulmonary trunk", ref:"heart:pulm_trunk"},
+          {a:["lungs", "lung", "pulmonary capillaries", "capillaries", "alveoli"], show:"lungs"},
+          {a:["pulmonary veins", "pulmonary vein"], show:"pulmonary veins", ref:"heart:pulm_veins"}, {a:["left atrium"], show:"left atrium", ref:"heart:la"},
+          {a:["mitral valve", "bicuspid valve", "mitral"], show:"mitral valve", ref:"heart:mitral"}, {a:["left ventricle"], show:"left ventricle", ref:"heart:lv"},
+          {a:["aortic valve"], show:"aortic valve", ref:"heart:aortic_valve"}, {a:["aorta", "ascending aorta"], show:"aorta", ref:"heart:aorta"}]},
+  {id:"p_csf", fig:"nerves", title:"CSF, made to absorbed", text:"Follow cerebrospinal fluid from where it's made to where it rejoins the blood.",
+   start:{show:"choroid plexus", ref:"brain:choroid"},
+   steps:[{a:["lateral ventricle", "lateral ventricles"], show:"lateral ventricle", ref:"brain:latvent"},
+          {a:["interventricular foramen", "interventricular foramina", "foramen of monro", "foramina of monro", "monro"], show:"interventricular foramen"},
+          {a:["third ventricle"], show:"third ventricle", ref:"brain:thirdvent"}, {a:["cerebral aqueduct", "aqueduct", "aqueduct of sylvius"], show:"cerebral aqueduct", ref:"brain:aqueduct"},
+          {a:["fourth ventricle"], show:"fourth ventricle", ref:"brain:fourthvent"}, {a:["subarachnoid space", "subarachnoid"], show:"subarachnoid space", ref:"brain:arachnoid"},
+          {a:["arachnoid granulations", "arachnoid granulation", "arachnoid villi"], show:"arachnoid granulations"},
+          {a:["superior sagittal sinus"], show:"superior sagittal sinus", ref:"brain:sss"}],
+   note:"Blocked at the aqueduct, the ventricles above it swell: obstructive hydrocephalus."},
+  {id:"p_vision", fig:"nerves", title:"Light to sight", text:"Follow a visual signal from the retina to the cortex.",
+   start:{show:"retina", ref:"eye:retina"},
+   steps:[{a:["optic nerve", "cn ii", "cn2"], show:"optic nerve", ref:"eye:optic_nerve"}, {a:["optic chiasm", "chiasm"], show:"optic chiasm", ref:"eye:chiasm"},
+          {a:["optic tract"], show:"optic tract", ref:"eye:optic_tract"}, {a:["lateral geniculate nucleus", "lateral geniculate body", "lgn", "lateral geniculate", "thalamus"], show:"lateral geniculate nucleus (thalamus)", ref:"brain:thalamus"},
+          {a:["optic radiation", "optic radiations", "geniculocalcarine tract", "meyer loop", "meyers loop"], show:"optic radiation"},
+          {a:["primary visual cortex", "visual cortex", "v1", "calcarine cortex", "striate cortex", "occipital lobe"], show:"primary visual cortex", ref:"brain:visual"}]},
+  {id:"p_cst", fig:"nerves", title:"Brain to muscle", text:"Follow a voluntary movement command down the corticospinal tract.",
+   start:{show:"precentral gyrus", ref:"brain:precentral"},
+   steps:[{a:["internal capsule", "posterior limb of the internal capsule", "posterior limb of internal capsule"], show:"internal capsule"},
+          {a:["cerebral peduncle", "cerebral peduncles", "crus cerebri", "midbrain"], show:"cerebral peduncle (midbrain)", ref:"brain:midbrain"},
+          {a:["pons", "basilar pons"], show:"pons", ref:"brain:pons"}, {a:["medullary pyramid", "pyramid", "pyramids", "medulla", "medulla oblongata"], show:"medullary pyramid", ref:"brain:medulla"},
+          {a:["pyramidal decussation", "decussation", "decussation of the pyramids", "motor decussation"], show:"pyramidal decussation"},
+          {a:["lateral corticospinal tract", "lateral corticospinal"], show:"lateral corticospinal tract", ref:"spinal:lat_cst"},
+          {a:["ventral horn", "anterior horn", "lower motor neuron", "anterior horn cell"], show:"ventral horn", ref:"spinal:ventral_horn"},
+          {a:["ventral root", "anterior root"], show:"ventral root", ref:"spinal:ventral_root"}],
+   note:"Above the decussation a lesion weakens the opposite side; below it, the same side."},
+  {id:"p_msc", fig:"nerves", title:"Brachial plexus: C5 to biceps", text:"Trace the musculocutaneous nerve from its root to the muscle it drives.",
+   start:{show:"C5 root", ref:"narm:roots"},
+   steps:[{a:["upper trunk", "superior trunk"], show:"upper trunk", ref:"narm:upper_trunk"}, {a:["anterior division", "anterior divisions"], show:"anterior division"},
+          {a:["lateral cord"], show:"lateral cord", ref:"narm:lateral_cord"}, {a:["musculocutaneous nerve"], show:"musculocutaneous nerve", ref:"narm:musculocutaneous"},
+          {a:["biceps brachii", "biceps"], show:"biceps brachii", ref:"mshoulder:biceps"}],
+   note:"Roots, trunks, divisions, cords, branches: “Randy Travis Drinks Cold Beer”."},
+  {id:"p_rad", fig:"nerves", title:"Brachial plexus: C7 to triceps", text:"Trace the radial nerve from its middle root to the muscle that straightens the elbow.",
+   start:{show:"C7 root", ref:"narm:roots"},
+   steps:[{a:["middle trunk"], show:"middle trunk", ref:"narm:middle_trunk"}, {a:["posterior division", "posterior divisions"], show:"posterior division"},
+          {a:["posterior cord"], show:"posterior cord", ref:"narm:posterior_cord"}, {a:["radial nerve"], show:"radial nerve", ref:"narm:radial"},
+          {a:["triceps brachii", "triceps"], show:"triceps brachii", ref:"mshoulder:triceps"}]},
+  {id:"p_portal", fig:"organs", title:"A meal to the heart", text:"Follow absorbed nutrients from the small intestine back to the heart.",
+   start:{show:"jejunum", ref:"abdomen:jejunum"},
+   steps:[{a:["superior mesenteric vein", "smv"], show:"superior mesenteric vein", ref:"vtrunk:smv"}, {a:["hepatic portal vein", "portal vein"], show:"hepatic portal vein", ref:"vtrunk:portal_v"},
+          {a:["liver"], show:"liver", ref:"abdomen:liver"}, {a:["hepatic veins", "hepatic vein"], show:"hepatic veins", ref:"vtrunk:hepatic_v"},
+          {a:["inferior vena cava", "ivc"], show:"inferior vena cava", ref:"vtrunk:ivc"}, {a:["right atrium"], show:"right atrium", ref:"heart:ra"}]},
+  {id:"p_food", fig:"organs", title:"Swallow to exit", text:"Follow food from the throat to the end of the gut.",
+   start:{show:"pharynx"},
+   steps:[{a:["esophagus", "oesophagus"], show:"esophagus", ref:"chest:esophagus"}, {a:["stomach"], show:"stomach", ref:"abdomen:stomach"},
+          {a:["duodenum"], show:"duodenum", ref:"abdomen:duodenum"}, {a:["jejunum"], show:"jejunum", ref:"abdomen:jejunum"}, {a:["ileum"], show:"ileum", ref:"abdomen:ileum"},
+          {a:["cecum", "caecum"], show:"cecum"}, {a:["ascending colon"], show:"ascending colon", ref:"abdomen:colon_asc"},
+          {a:["transverse colon"], show:"transverse colon", ref:"abdomen:colon_trans"}, {a:["descending colon"], show:"descending colon", ref:"abdomen:colon_desc"},
+          {a:["sigmoid colon", "sigmoid"], show:"sigmoid colon", ref:"abdomen:colon_sig"}, {a:["rectum"], show:"rectum", ref:"abdomen:rectum"},
+          {a:["anal canal", "anus"], show:"anal canal"}]},
+  {id:"p_air", fig:"organs", title:"Nose to alveoli", text:"Follow a breath of air down to where gas is exchanged.",
+   start:{show:"nasal cavity"},
+   steps:[{a:["pharynx"], show:"pharynx"}, {a:["larynx", "voice box"], show:"larynx"}, {a:["trachea", "windpipe"], show:"trachea", ref:"chest:trachea"},
+          {a:["main bronchus", "main bronchi", "primary bronchus", "primary bronchi", "bronchus", "bronchi"], show:"main bronchus", ref:"chest:bronchi"},
+          {a:["lobar bronchus", "lobar bronchi", "secondary bronchus", "secondary bronchi"], show:"lobar bronchus"},
+          {a:["segmental bronchus", "segmental bronchi", "tertiary bronchus", "tertiary bronchi"], show:"segmental bronchus"},
+          {a:["bronchioles", "bronchiole", "terminal bronchioles", "terminal bronchiole"], show:"bronchioles"},
+          {a:["alveoli", "alveolus", "alveolar sacs", "alveolar sac"], show:"alveoli"}]},
+  {id:"p_urine", fig:"organs", title:"Kidney to outside", text:"Follow urine from where it's made to where it leaves.",
+   start:{show:"kidney", ref:"urinary:kidneys"},
+   steps:[{a:["renal pelvis"], show:"renal pelvis"}, {a:["ureter", "ureters"], show:"ureter", ref:"urinary:ureters"},
+          {a:["urinary bladder", "bladder"], show:"urinary bladder", ref:"urinary:bladder"}, {a:["urethra"], show:"urethra", ref:"urinary:urethra"}]},
+  {id:"p_sperm", fig:"organs", title:"SEVEN UP", text:"Follow sperm from where they're made to the outside.",
+   start:{show:"seminiferous tubules", ref:"urinary:testes"},
+   steps:[{a:["epididymis"], show:"epididymis", ref:"urinary:epididymis"}, {a:["vas deferens", "ductus deferens", "deferent duct"], show:"vas deferens"},
+          {a:["ejaculatory duct", "ejaculatory ducts"], show:"ejaculatory duct"}, {a:["urethra"], show:"urethra", ref:"urinary:urethra"}],
+   note:"Seminiferous tubules, Epididymis, Vas deferens, Ejaculatory duct, (Nothing), Urethra, Penis."},
+  {id:"p_legveins", fig:"vessels", title:"Foot back to the heart", text:"Follow blood in the deep veins from the front of the leg back to the heart.",
+   start:{show:"anterior tibial veins", ref:"vleg:ant_tibial_v"},
+   steps:[{a:["popliteal vein"], show:"popliteal vein", ref:"vleg:popliteal_v"}, {a:["femoral vein"], show:"femoral vein", ref:"vleg:femoral_v"},
+          {a:["external iliac vein"], show:"external iliac vein", ref:"vleg:ext_iliac_v"}, {a:["common iliac vein"], show:"common iliac vein"},
+          {a:["inferior vena cava", "ivc"], show:"inferior vena cava", ref:"vtrunk:ivc"}, {a:["right atrium"], show:"right atrium", ref:"heart:ra"}],
+   note:"A clot anywhere along this deep route is a DVT; one that breaks free lodges in the lungs."},
+];
+const normA = s => s.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, " ").trim().replace(/^the /, "");
+const stripA = s => s.replace(/ (nerve|nerves|artery|arteries|vein|veins|muscle|muscles|gland|tendon|ligament|bone|lobe)$/, "");
+function ansOK(ans, acc){
+  const a = normA(ans); if (!a) return false;
+  for (const x of acc){
+    const n = normA(x);
+    if (a === n || stripA(a) === stripA(n)) return true;
+    const L = Math.max(a.length, n.length); if (L >= 6 && lev(a, n) <= (L >= 12 ? 2 : 1)) return true;
+  }
+  return false;
+}
+let DR = null;
+function openDrills(){ $("#look").hidden = true; $("#drills").hidden = false; drList(); }
+function closeDrills(quiet){ const w = $("#drills"); if (!w || w.hidden) return; w.hidden = true; DR = null; if (!quiet) focusTyper(); }
+const drTag = fig => `<span class="dtag">${esc(FIG_NAME[fig] || fig)}</span>`;
+const seeBtn = ref => ref && refOK(ref) ? ` <button class="dsee" data-ref="${ref}">see it →</button>` : "";
+function drList(){
+  DR = null; const done = store.drills || {};
+  const card = (d, kind, blurb) => `<button class="dli" data-k="${kind}" data-id="${d.id}">${drTag(d.fig)}<b>${esc(d.title)}</b>${done[d.id] ? `<span class="dok">${done[d.id]}</span>` : ""}<small>${blurb}</small></button>`;
+  $("#drBody").innerHTML = `<h2 id="drTitle">Drills</h2>
+    <p class="lead">Cases ask you to name what's injured, step by step. Paths make you type a route in order. Every answer links to its model.</p>
+    <h3>Clinical cases</h3><div class="dgrid">${CASES.map(c => card(c, "c", `${c.steps.length} questions`)).join("")}</div>
+    <h3>Trace the path</h3><div class="dgrid">${PATHS.map(p => card(p, "p", `from ${esc(p.start.show)} · ${p.steps.length} stops`)).join("")}</div>`;
+  $("#drBody").querySelectorAll(".dli").forEach(b => b.addEventListener("click", () => { audio(); keySound(); const k = b.dataset.k, id = b.dataset.id;
+    drRun(k === "c" ? CASES.find(c => c.id === id) : PATHS.find(p => p.id === id), k); }));
+  $("#drills").scrollTop = 0;
+}
+function drRun(d, kind){ DR = {d, kind, i:0, res:[], miss:false}; drDraw(); $("#drills").scrollTop = 0; }
+const drInput = () => `<div class="din"><input id="drIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your answer" placeholder="Type your answer"><button class="btn primary" id="drCheck">Check<kbd>enter</kbd></button><button class="btn" id="drShow">Show answer</button></div><p class="dfb" id="drFb" aria-live="polite"></p>`;
+function drDraw(){
+  const {d, kind, i, res} = DR, steps = d.steps, doneAll = i >= steps.length;
+  let html = `<button class="dback" id="drBack">‹ All drills</button>${drTag(d.fig)}<h2 id="drTitle">${esc(d.title)}</h2><p class="dcase">${d.text}</p>`;
+  if (kind === "c"){
+    html += `<ol class="dsteps">${steps.map((s, j) => j < i
+      ? `<li class="${res[j] ? "ok" : "no"}"><span class="dq">${esc(s.q)}</span><span class="da">${res[j] ? "✓" : "✗"} ${esc(s.show)}${seeBtn(s.ref)}</span>${s.why ? `<span class="dwhy">${s.why}</span>` : ""}</li>`
+      : j === i ? `<li class="cur"><span class="dq">${esc(s.q)}</span>${drInput()}</li>` : "").join("")}</ol>`;
+  } else {
+    const nodes = [`<span class="pnode start">${esc(d.start.show)}${seeBtn(d.start.ref)}</span>`]
+      .concat(steps.slice(0, i).map((s, j) => `<span class="parr" aria-hidden="true">→</span><span class="pnode ${res[j] ? "ok" : "no"}">${res[j] ? "" : "✗ "}${esc(s.show)}${seeBtn(s.ref)}</span>`));
+    html += `<div class="pchain">${nodes.join("")}${doneAll ? "" : `<span class="parr" aria-hidden="true">→</span><span class="pnode q">?</span>`}</div>`;
+    if (!doneAll) html += `<p class="dq" style="margin:12px 0 0">Stop ${i + 1} of ${steps.length}: what comes next?</p>${drInput()}`;
+  }
+  if (doneAll){
+    const n = res.filter(Boolean).length, list = kind === "c" ? CASES : PATHS, nx = list[(list.indexOf(d) + 1) % list.length];
+    (store.drills = store.drills || {})[d.id] = `${n}/${steps.length}`; save(); DR.next = nx;
+    html += `<div class="dsum"><b>${n} of ${steps.length} on the first try.</b> ${d.note || ""}</div>
+      <div class="actions" style="justify-content:flex-start"><button class="btn primary" id="drNext">Next: ${esc(nx.title)}<kbd>enter</kbd></button><button class="btn" id="drAgain">Try again</button><button class="btn" id="drAll">All drills</button></div>`;
+  }
+  $("#drBody").innerHTML = html;
+  $("#drBack").addEventListener("click", () => { audio(); keySound(); drList(); });
+  $("#drBody").querySelectorAll(".dsee").forEach(b => b.addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); jumpTo(b.dataset.ref); }));
+  if (doneAll){
+    $("#drNext").addEventListener("click", () => { audio(); keySound("enter"); drRun(DR.next, kind); });
+    $("#drAgain").addEventListener("click", () => { audio(); keySound(); drRun(d, kind); });
+    $("#drAll").addEventListener("click", () => { audio(); keySound(); drList(); });
+    setTimeout(() => $("#drNext") && $("#drNext").focus({preventScroll:true}), 30);
+  } else {
+    $("#drCheck").addEventListener("click", () => drSubmit(false));
+    $("#drShow").addEventListener("click", () => drSubmit(true));
+    const inp = $("#drIn"); if (inp){ inp.focus({preventScroll:true}); inp.scrollIntoView({block:"nearest"}); }
+  }
+}
+function drSubmit(give){
+  if (!DR) return; const s = DR.d.steps[DR.i]; if (!s) return;
+  const v = $("#drIn") ? $("#drIn").value : "";
+  if (!give){
+    if (!v.trim()) return;
+    if (!ansOK(v, s.a)){ DR.miss = true; badSound(); $("#drFb").textContent = "Not quite. Try again, or show the answer."; $("#drIn").select(); return; }
+  }
+  DR.res[DR.i] = !give && !DR.miss; DR.miss = false; DR.i++;
+  if (give) keySound(); else dissolveSound();
+  drDraw();
+}
+(function initDrills(){
+  const w = document.createElement("div"); w.className = "srcwrap"; w.id = "drills"; w.hidden = true;
+  w.setAttribute("role", "dialog"); w.setAttribute("aria-modal", "true"); w.setAttribute("aria-labelledby", "drTitle");
+  w.innerHTML = `<div class="src drill"><button class="x" id="drX" aria-label="Close drills">×</button><div id="drBody"></div></div>`;
+  const src = $("#src"); src.parentNode.insertBefore(w, src.nextSibling);
+  $("#drX").addEventListener("click", () => { audio(); closeDrills(); });
+  w.addEventListener("click", e => { if (e.target === w) closeDrills(); });
+  document.addEventListener("keydown", e => {
+    if (w.hidden) return; e.stopImmediatePropagation();
+    if (e.key === "Escape"){ e.preventDefault(); DR ? drList() : closeDrills(); return; }
+    if (e.key === "Enter" && !(e.target && e.target.tagName === "BUTTON")){ e.preventDefault();
+      if (DR && DR.i >= DR.d.steps.length) $("#drNext").click(); else if (e.target && e.target.id === "drIn") drSubmit(false); }
+  }, true);
+})();
+
 /* ---------------- input ---------------- */
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -7318,8 +7890,10 @@ window.__cur = () => (mode === "round" && cur && !wait) ? cur.en : null;
 window.__bt = { pos(id){ const s = curSlot(); const p = new THREE.Vector3(); s.mats[id].meshes[0].getWorldPosition(p); p.project(camera); const r = canvas.getBoundingClientRect(); return {x:r.left+(p.x+1)/2*r.width, y:r.top+(1-p.y)/2*r.height}; } };
 window.__ex = { enter: enterExplore, exit: () => backToPlay(), group: exSetGroup, select: exSelect, step: exStep, state: () => ({mode, region:R.id, group:exGroup, sel:exSel, zoom:exZoom, palm}),
   pos(id){ const p = new THREE.Vector3(); ex.mats[id].meshes[0].getWorldPosition(p); p.project(camera); const r = canvas.getBoundingClientRect(); return {x:r.left+(p.x+1)/2*r.width, y:r.top+(1-p.y)/2*r.height}; } };
+window.__regions = () => REGIONS;
 window.__app = { home: enterHome, setMode, mode: () => mode, modeSet: () => MODE, region: () => R && R.id, step: () => step, round: () => round, map: enterMap, play: backToPlay, switchRegion, mapSelect, playFromMap,
-  pick: id => onPick(id, [id]), queue: () => queue.slice(), idx: () => idx, stars: () => LS.stars.slice(), level: () => LVI, startLevel, picker: showPicker, store: () => JSON.parse(JSON.stringify(store)) };
+  pick: id => onPick(id, [id]), queue: () => queue.slice(), idx: () => idx, stars: () => LS.stars.slice(), level: () => LVI, startLevel, picker: showPicker, startRound, cur: () => cur && cur.id, wait: () => wait, locate: id => locatePick(id, [id]), enter: () => onEnter(), startMixed, openDrills, jumpTo, exSel: () => exSel,
+  forceDue: () => { Object.values(store.regions).forEach(r => Object.values(r.items || {}).forEach(it => { if (it.due) it.due = today(); })); save(); }, store: () => JSON.parse(JSON.stringify(store)) };
 
 /* ---------------- boot ---------------- */
 addEventListener("bt-cloud-newer", () => {
