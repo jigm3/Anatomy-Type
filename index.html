@@ -6347,7 +6347,10 @@ function fibHook(sh){
     .replace("#include <normal_fragment_maps>", `#include <normal_fragment_maps>
   if (uFOn > .5){ vec3 ox = dFdx(vOP), oy = dFdy(vOP);
     fibPX = max(length(ox), length(oy)) * uFib.w * (uApex.w > 0.0 ? 1.4 : 1.0);
-    float fv = fibH(vOP), sHere = fibS, ln = fibLine, hx = fibH(vOP + ox) - fv, hy = fibH(vOP + oy) - fv;
+    // home carousel and body map draw whole regions merged into one model: no per-muscle fibers or tendons there, just the color
+    bool full = uFOn < 1.5;
+    float fv = .5, sHere = 0.0, ln = .6, hx = 0.0, hy = 0.0;
+    if (full){ fv = fibH(vOP); sHere = fibS; ln = fibLine; hx = fibH(vOP + ox) - fv; hy = fibH(vOP + oy) - fv; }
     // tendon ends: white where the fibers run out, with a ragged edge that follows the fibers
     float t = (sHere - uRange.x) / max(uRange.y - uRange.x, 1e-4), jag = (fv - .5) * .05;
     float tw = max((1.0 - smoothstep(uRange.z - .045, uRange.z + .045, t + jag)) * step(.001, uRange.z), smoothstep(1.0 - uRange.w - .045, 1.0 - uRange.w + .045, t + jag) * step(.001, uRange.w));
@@ -6355,7 +6358,7 @@ function fibHook(sh){
     if (uApex.w == 0.0){ float q = clamp(t, 0.0, 1.0) * 23.0; int i0 = int(floor(q)); int i1 = min(i0 + 1, 23);
       float th = mix(uProf[i0], uProf[i1], fract(q));          // how thick the muscle is here vs its belly
       tw = max(tw, 1.0 - smoothstep(.2, .5, th + jag * .8)); }
-    tw *= uRed;
+    tw *= uRed * (full ? 1.0 : 0.0);
     vec3 sx = dFdx(-vViewPosition), sy = dFdy(-vViewPosition); vec3 r1 = cross(sy, normal), r2 = cross(normal, sx);
     float det = dot(sx, r1) * faceDirection; vec3 g = sign(det) * (hx * r1 + hy * r2) * mix(.06, .03, tw);
     float gl2 = length(g), lim = abs(det) * .45; if (gl2 > lim) g *= lim / gl2;
@@ -6374,7 +6377,9 @@ function makeMat(){ const m = new THREE.MeshStandardMaterial({color:sRGB(GH()), 
   m.onBeforeCompile = fibHook; m.extensions = {derivatives:true}; return m; }
 // fan-shaped muscles: fibers converge on an insertion point (direction to look for it, in body axes; "lat" = away from midline)
 const RING = {orb_oculi:1, orb_oris:1};
-const TEND = {masseter:[0, .12]};   // [start, end] tendon share along the fibers, where the default is wrong
+const TEND = {masseter:[0, .12], zyg_major:[0, 0], buccinator:[0, 0], platysma:[0, 0], levator_labii:[0, 0], depressor_ao:[0, 0]};
+// face muscles pull on skin, not tendons: no thin-means-tendon guess for them
+const NO_THIN = {zyg_major:1, buccinator:1, platysma:1, levator_labii:1, depressor_ao:1};   // [start, end] tendon share along the fibers, where the default is wrong
 const AXIS = {masseter:[0, 1, .3]};
 const FAN = {temporalis:[0,-1,0], pec_major:["lat",.4,0], deltoid:[0,-1,0], glut_med:["lat",-1,0], glut_min:["lat",-1,0], latissimus:["lat",.6,0], trapezius:["lat",.2,0]};
 function fibAxis(geo, mesh){
@@ -6391,7 +6396,7 @@ function fibAxis(geo, mesh){
   const F = 30 / width, out = {cross:b.clone(), a, F, apex:new THREE.Vector4(0, 0, 0, 0), range:new THREE.Vector4(0, 1, .07, .07)};
   const id = mesh.userData && mesh.userData.bone, fan = FAN[id];
   if (RING[id]){ const nrm = new THREE.Vector3().crossVectors(a, b).normalize(); const l1r = Math.sqrt(Math.max(mul(a).dot(a) / m, 1e-9));
-    return {a:nrm, F:28 / (2 * l1r), apex:new THREE.Vector4(cx, cy, cz, -1.6 * l1r), range:new THREE.Vector4(0, 1, 0, 0)}; }
+    return {a:nrm, F:28 / (2 * l1r), apex:new THREE.Vector4(cx, cy, cz, -1.6 * l1r), range:new THREE.Vector4(0, 1, 0, 0), prof:new Float32Array(24).fill(1)}; }
   if (fan){
     const side = Math.sign((mesh.position.x || 0) + cx) || 1, d = new THREE.Vector3(fan[0] === "lat" ? side : fan[0], fan[1], fan[2]).normalize();
     const pts = []; for (let i = 0; i < n; i += st) pts.push([P.getX(i)*d.x + P.getY(i)*d.y + P.getZ(i)*d.z, i]);
@@ -6411,7 +6416,7 @@ function fibAxis(geo, mesh){
   const NB = 24, sx = new Float64Array(NB), sy = new Float64Array(NB), sz = new Float64Array(NB), cnt = new Float64Array(NB), rr = new Float64Array(NB);
   const bin = v => Math.min(NB - 1, Math.max(0, Math.floor((v - lo) / Math.max(hi - lo, 1e-9) * NB)));
   out.prof = new Float32Array(NB).fill(1);
-  if (ap.w === 0){
+  if (ap.w === 0 && !NO_THIN[id]){
     for (let i = 0; i < n; i += st){ const x = P.getX(i), y = P.getY(i), z = P.getZ(i), k = bin(x * a.x + y * a.y + z * a.z); sx[k] += x; sy[k] += y; sz[k] += z; cnt[k]++; }
     for (let i = 0; i < n; i += st){ const x = P.getX(i), y = P.getY(i), z = P.getZ(i), k = bin(x * a.x + y * a.y + z * a.z), c = cnt[k];
       const dx = x - sx[k] / c, dy = y - sy[k] / c, dz = z - sz[k] / c, al = dx * a.x + dy * a.y + dz * a.z;
@@ -6427,7 +6432,7 @@ THREE.Mesh.prototype.onBeforeRender = function(r, s, c, geo, mat){
   const real = LOOK.atlas && LOOK.fibers !== false, musc = real && MODE === "muscles" && mode !== "map" && mode !== "home";
   const on = real && mat.userData.atlas === 0xb24a42 && mat.opacity > .5;   // every muscle, wherever it is drawn (levels, body map, home carousel)
   fu.uFOn.value = on ? (mode === "home" || mode === "map" ? 2 : 1) : 0; fu.uRed.value = mat.userState === "target" ? 0 : 1; fu.uXr.value = musc && mat.opacity < .5 ? 1 : 0;
-  if (on){ if (!geo.userData.fib) geo.userData.fib = fibAxis(geo, this); const f = geo.userData.fib; fu.uFib.value.set(f.a.x, f.a.y, f.a.z, f.F); fu.uApex.value.copy(f.apex); fu.uRange.value.copy(f.range); fu.uProf.value = f.prof; if (f.cross) fu.uCross.value.copy(f.cross); }
+  if (on && fu.uFOn.value === 1){ if (!geo.userData.fib) geo.userData.fib = fibAxis(geo, this); const f = geo.userData.fib; fu.uFib.value.set(f.a.x, f.a.y, f.a.z, f.F); fu.uApex.value.copy(f.apex); fu.uRange.value.copy(f.range); if (f.prof) fu.uProf.value = f.prof; if (f.cross) fu.uCross.value.copy(f.cross); }
 };
 /* ---------- Look: accent colour for the target + typed letters, background darkness, other bones' visibility ---------- */
 function accFrom(id, name, hex){ const [r, g, b] = [1, 3, 5].map(k => parseInt(hex.slice(k, k + 2), 16)), n = parseInt(hex.slice(1), 16);
