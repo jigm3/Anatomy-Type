@@ -2985,7 +2985,7 @@ const LEGB_L1 = {
   },
 };
 const LEGB_L2 = {
-  title:"Femur landmarks", short:"femur", views:LEGB_VIEWS, frame:{hy:31, hx:12},
+  title:"Femur landmarks", short:"femur", views:LEGB_VIEWS, clusterIds:["femur"], frame:{hy:31, hx:12},
   items:["femur_head","femur_neck","greater_trochanter","lesser_trochanter","medial_condyle","lateral_condyle"],
   order3:["lesser_trochanter","medial_condyle","femur_head","greater_trochanter","lateral_condyle","femur_neck"],
   r3Name:"Round 3 · from memory, from behind", r3Tip:"No hints. The leg turns around.",
@@ -3016,7 +3016,7 @@ const LEGB_L2 = {
   },
 };
 const LEGB_L3 = {
-  title:"Knee and ankle landmarks", short:"knee & ankle", views:LEGB_VIEWS, frame:{hy:22, hx:10},
+  title:"Knee and ankle landmarks", short:"knee & ankle", views:LEGB_VIEWS, clusterIds:["tibia","fibula"], frame:{hy:22, hx:10},
   items:["tibial_plateau","tibial_tuberosity","fibula_head","medial_malleolus","lateral_malleolus"],
   order3:["lateral_malleolus","tibial_plateau","fibula_head","medial_malleolus","tibial_tuberosity"],
   r3Name:"Round 3 · from memory, from behind", r3Tip:"No hints. The leg turns around.",
@@ -4545,7 +4545,7 @@ const HP_FRONT = ["sartorius","rectus_fem","vastus_lat","vastus_med","vastus_int
 const HP_INNER = ["pectineus","add_longus","add_brevis","add_magnus","gracilis","biceps_fem","semitend","semimemb"];
 const HP_BONES = ["bo_pelvis","bo_leg","bo_spine"];
 const HP_L1 = mLevel({
-  title:"Gluteal region", short:"gluteal", only:[...HP_GLUT, "obt_ext", ...HP_BONES], faint:HP_BONES, frame:{hy:13, hx:12},
+  title:"Gluteal region", short:"gluteal", only:[...HP_GLUT, "obt_ext", ...HP_BONES], faint:HP_BONES, clusterIds:HP_GLUT.filter(k => k !== "tfl" && k !== "it_band"), frame:{hy:13, hx:12},
   views:[{label:"Right hip · from behind", rx:.05, ry:2.7}, {label:"Right hip · from the side", rx:.05, ry:1.57}],
   items:HP_GLUT, order3:["quad_fem","tfl","gemelli","glut_med","it_band","piriformis","glut_min","obt_int","glut_max"], r3:"from the side", r3tip:"Seen from the side.",
   winTitle:"You can name the glutes and the deep hip rotators.",
@@ -6416,6 +6416,18 @@ function updateCut(inner, plane, cut){   // default: keep the right half (x < 0)
   else { cutN.set(-1, 0, 0).applyQuaternion(cutQ); cutP.set(.03, 0, 0).applyMatrix4(inner.matrixWorld); }
   plane.setFromNormalAndCoplanarPoint(cutN, cutP);
 }
+let lastHits = [];
+function reachFrac(s, id, n = 48){   // share of a part's surface points you can tap directly from here (top 3 hits)
+  const r = canvas.getBoundingClientRect(), v = new THREE.Vector3(), ms = []; let on = 0, ok = 0;
+  s.inner.traverse(o => { if (o.isMesh && o.visible && o.userData.bone === id) ms.push(o); });
+  for (const m of ms){ const P = m.geometry.attributes.position, step = Math.max(1, Math.floor(P.count / (n / ms.length)));
+    for (let i = 0; i < P.count; i += step){ v.fromBufferAttribute(P, i).applyMatrix4(m.matrixWorld);
+      if (s.plane && s.plane.distanceToPoint(v) < 0) continue; v.project(camera); if (Math.abs(v.x) > 1 || Math.abs(v.y) > 1) continue; on++;
+      mv.set(v.x, v.y); ray.setFromCamera(mv, camera);
+      const ids = cutHits(s, ray.intersectObjects(s.inner.children, true)).map(h => h.object.userData.bone).filter(b => b && b !== "other" && B[b]);
+      if (ids.slice(0, 3).includes(id)) ok++; } }
+  return on ? ok / on : 0;
+}
 function cutCenter(c){   // the middle of a named part (e.g. the lens), else the cluster's middle
   const b = c.at && B[c.at], box = new THREE.Box3(), tmp = new THREE.Box3();
   if (b) b.meshes.forEach(k => { const d = base[k]; if (!d) return; if (!d.geo.boundingBox) d.geo.computeBoundingBox(); tmp.copy(d.geo.boundingBox).translate(d.pos); box.union(tmp); });
@@ -6581,12 +6593,15 @@ canvas.addEventListener("pointerup", e => {
   if (mode === "round" && round === 4 && !wait && slots[idx]){
     rayFrom(e);
     const hits = cutHits(slots[idx], ray.intersectObjects(slots[idx].inner.children, true)), ids = hits.map(h => h.object.userData.bone).filter(b => b && b !== "other" && B[b]);
-    locatePick(ids[0] || (hits.length ? "other" : null), ids); return;
+    let pid = ids[0] || (hits.length ? "other" : null);
+    if (cur && ids.includes(cur.id) && !ids.slice(0, 3).includes(cur.id) && reachFrac(slots[idx], cur.id) < .25) pid = cur.id;   // buried target, aimed at through what covers it
+    locatePick(pid, ids); return;
   }
   if (curSlot()){
     rayFrom(e);
     const hits = cutHits(curSlot(), ray.intersectObjects(curSlot().inner.children, true));
     const near = hits.filter(h => h.distance < (hits[0] ? hits[0].distance + .8 : 0)).map(h => h.object.userData.bone);
+    lastHits = hits.map(h => h.object.userData.bone).filter(b => b && b !== "other" && B[b]);
     onPick(hits[0] ? hits[0].object.userData.bone : null, near);
   }
   focusTyper(); });
@@ -6721,6 +6736,7 @@ function onPick(id, near = []){
   if (mode !== "lesson" || !id) return;
   if (step === 1){
     if (!LV.lesson.find || found.size >= N()) return;
+    if (inLv(id) && found.has(id)){ const under = lastHits.find(k => inLv(k) && !found.has(k)); if (under) id = under; }   // peel: the next unfound part under this one
     if (inLv(id)){ if(!found.has(id)){ found.add(id); setBone(id,"lit"); tick(); $("#foundTxt").textContent = `${found.size} of ${N()} found`; if(found.size===N()) foundDone(); } }
     else toast(LV.lesson.find.other(id));
   } else if (step === 2) oddPick(id, near);
@@ -7563,11 +7579,12 @@ const tour = (function(){
       sel:() => ["#streak", "#hRevAll", "#hWeak", ".hcard.sel .hrev"],
       enter(){ if (mode !== "home") enterHome(); } },
     { title:"Make it yours",
-      text:() => `<p>Pick a theme, realistic or plain colors, a highlight color and your name. <b>Sync devices</b> links your phone and laptop with one code. <b>Sources</b> lists where every model comes from.</p>`,
+      text:() => `<p>Pick a theme (Dark, Paper, Sage or Blueprint), realistic or plain colors, a highlight color and your name. <b>Sync devices</b> links your phone and laptop with one code. <b>Sources</b> lists where every model comes from.</p>`,
       sel:() => ["#lookBtn", "#look", "#srcBtn"],
-      enter(){ window.__look.open(); keepAccent = LOOK.accent; const seq = ["rose", "sapphire", "crimson", keepAccent]; let n = 0;
-        const cyc = () => { if (!tourOn || i !== 6 || n >= seq.length) return; window.__look.set({accent:seq[n++]}); later(cyc, 1000); }; later(cyc, 900); },
-      leave(){ if (keepAccent) window.__look.set({accent:keepAccent}); keepAccent = null; window.__look.close(); } },
+      enter(){ window.__look.open(); keepAccent = LOOK.theme; const all = ["dark", "paper", "sage", "blueprint"], k = Math.max(0, all.indexOf(keepAccent));
+        const seq = [1, 2, 3, 4].map(d => all[(k + d) % 4]); let n = 0;   // every other theme, then back to yours
+        const cyc = () => { if (!tourOn || i !== 6 || n >= seq.length) return; window.__look.set({theme:seq[n++]}); later(cyc, 1300); }; later(cyc, 900); },
+      leave(){ if (keepAccent && LOOK.theme !== keepAccent) window.__look.set({theme:keepAccent}); keepAccent = null; window.__look.close(); } },
   ];
 
   function place(){
@@ -8495,7 +8512,18 @@ window.__bt = { pos(id){ const s = curSlot(); const p = new THREE.Vector3(); s.m
 window.__ex = { enter: enterExplore, exit: () => backToPlay(), group: exSetGroup, select: exSelect, step: exStep, state: () => ({mode, region:R.id, group:exGroup, sel:exSel, zoom:exZoom, palm}),
   pos(id){ const p = new THREE.Vector3(); ex.mats[id].meshes[0].getWorldPosition(p); p.project(camera); const r = canvas.getBoundingClientRect(); return {x:r.left+(p.x+1)/2*r.width, y:r.top+(1-p.y)/2*r.height}; } };
 window.__regions = () => REGIONS;
-window.__app = { hitIds: (x, y) => { const s = curSlot(); if (!s) return []; rayFrom({clientX:x, clientY:y}); return cutHits(s, ray.intersectObjects(s.inner.children, true)).map(h => h.object.userData.bone); }, slotInfo: () => { const s = curSlot(); return {clip: LV && LV.clip, plane: !!(s && s.plane), cut: !!(s && s.cut), n: s && s.plane && s.plane.normal.toArray()}; }, home: enterHome, setMode, mode: () => mode, modeSet: () => MODE, region: () => R && R.id, step: () => step, round: () => round, map: enterMap, play: backToPlay, switchRegion, mapSelect, playFromMap,
+window.__app = { probe: (id, n = 60) => {   // tap-test points on the part itself: how many are on screen, how many reach it (top 3 hits)
+    const s = curSlot(); if (!s) return null; const r = canvas.getBoundingClientRect(), v = new THREE.Vector3(); let meshes = [];
+    s.inner.traverse(o => { if (o.isMesh && o.userData.bone === id) meshes.push(o); });
+    if (!meshes.length) return {nomesh:true};
+    let on = 0, ok = 0, tried = 0;
+    for (const m of meshes){ const P = m.geometry.attributes.position, step = Math.max(1, Math.floor(P.count / (n / meshes.length)));
+      for (let i = 0; i < P.count; i += step){ v.fromBufferAttribute(P, i).applyMatrix4(m.matrixWorld);
+        if (s.plane && s.plane.distanceToPoint(v) < 0) continue; tried++; v.project(camera);
+        if (Math.abs(v.x) > .98 || Math.abs(v.y) > .98) continue; on++;
+        const x = r.left + (v.x + 1) / 2 * r.width, y = r.top + (1 - v.y) / 2 * r.height;
+        const ids = window.__app.hitIds(x, y).filter(b => b && b !== "other" && B[b]); if (ids.slice(0, 3).includes(id)) ok++; } }
+    return {tried, on, ok}; }, regionList: () => Object.keys(REGIONS).map(k => [k, (REGIONS[k].levels || []).length]), setTurn: y => { userY = y; userX = 0; lastUp = performance.now() + 1e9; }, hitIds: (x, y) => { const s = curSlot(); if (!s) return []; rayFrom({clientX:x, clientY:y}); return cutHits(s, ray.intersectObjects(s.inner.children, true)).map(h => h.object.userData.bone); }, slotInfo: () => { const s = curSlot(); return {clip: LV && LV.clip, plane: !!(s && s.plane), cut: !!(s && s.cut), n: s && s.plane && s.plane.normal.toArray()}; }, home: enterHome, setMode, mode: () => mode, modeSet: () => MODE, region: () => R && R.id, step: () => step, round: () => round, map: enterMap, play: backToPlay, switchRegion, mapSelect, playFromMap,
   pick: id => onPick(id, [id]), queue: () => queue.slice(), idx: () => idx, stars: () => LS.stars.slice(), level: () => LVI, startLevel, picker: showPicker, startRound, cur: () => cur && cur.id, wait: () => wait, locate: id => locatePick(id, [id]), enter: () => onEnter(), startMixed, openDrills, jumpTo, exSel: () => exSel,
   forceDue: () => { Object.values(store.regions).forEach(r => Object.values(r.items || {}).forEach(it => { if (it.due) it.due = today(); })); save(); }, store: () => JSON.parse(JSON.stringify(store)) };
 
