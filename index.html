@@ -447,7 +447,6 @@ body.kbopen .app{height:calc(var(--vvh,100vh) - env(safe-area-inset-top,0px));wi
 </style>
 
 <style id="lightcss">/* generated: light mode versions of the hard-coded dark colors */
-html.light body{background:var(--ink);color:#ffffff}
 html.light .pill{background:rgba(255,255,255,0.82)}
 html.light .pill:hover{border-color:#8e99a6}
 html.light .corner{color:#69727e}
@@ -6130,7 +6129,7 @@ const EY_SK = ["frontal","sphenoid","ethmoid","zygomatic_r","maxilla_r","lacrima
 const EY_BONES = EY_SK.map(k => "sk_" + k);
 const EY_ORBIT = ["sphenoid","ethmoid","zygomatic_r","maxilla_r","lacrimal_r","palatine_r"].map(k => "sk_" + k);
 const EY_L1 = kLevel({
-  title:"The eyeball", short:"eyeball", only:[...EY_BALL, "tarsi"], faint:["tarsi"], frame:{hy:2.2, hx:2.2},
+  title:"The eyeball", short:"eyeball", clip:{n:[1, 0, 0], at:"lens"}, only:[...EY_BALL, "tarsi"], faint:["tarsi"], frame:{hy:2.2, hx:2.2},
   views:[{label:"Right eye · from the side", rx:.05, ry:1.35}, {label:"Right eye · front", rx:.05, ry:.15}],
   items:EY_BALL, order3:["zonules","optic_nerve","cornea","vitreous","ciliary_body","iris","retina","lens","sclera"], r3:"from the front", r3tip:"Seen from the front.",
   winTitle:"You can name the parts of the eyeball.",
@@ -6138,12 +6137,12 @@ const EY_L1 = kLevel({
       <p>Near focus: <b>ciliary muscle contracts → zonules slacken → lens rounds</b> (CN III). Marfan → zonules fail → lens slips up and out.</p>`,
   lesson:{
     start:{text:`The eye is a camera: a clear window at the front, an adjustable opening, a focusing lens, and light-sensitive film at the back.`,
-           sub:`Right eye from the side. Use the spread slider in Explore to pull the layers apart.`},
+           sub:`Right eye from the side, cut in half so you can see and tap the parts inside.`},
     find:{text:`Tap the 9: the window and the white coat, the colored ring, the lens and what holds it, the film, the gel, and the cable out the back.`,
           done:`Cornea and sclera; iris; lens with the ciliary body and zonules; retina; vitreous; optic nerve.`,
           other:() => "That's an eyelid plate. Look at the eyeball."},
     odd:{text:`One ring of muscle behind the iris tightens to let you read up close. Find it.`,
-         sub:`Look just behind the root of the iris, around the lens.`, target:"ciliary_body", hide:true, btn:["Show me","win"], effect:"burst",
+         sub:`Look just behind the root of the iris, around the lens.`, target:"ciliary_body", hide:true, near:true, btn:["Show me","win"], effect:"burst",
          win:`That's the <b>ciliary body</b>. Contracting slackens the zonules so the lens rounds up for near vision.`,
          wrongItem:"Not that one. Look for the ring around the lens's edge.", wrongOther:"Look around the lens."},
     names:{text:`Outside in, front to back.`,
@@ -6401,14 +6400,22 @@ const inLv = id => INLV.has(id);
 function levelVis(){
   const spread = LV.spread && !(mode === "round" && round === 3) ? LV.spread : 0;
   const hide = LV.only ? new Set(CLUSTER.filter(k => !LV.only.includes(k))) : new Set(LV.hide || R.hideDefault || []);
-  return {hide, faint:new Set(LV.faint || []), dim:new Set(LV.dim || []), spread, clip:!!LV.clip};
+  const clip = LV.clip && typeof LV.clip === "object" ? ((mode === "round" && round !== 4) ? false : LV.clip) : !!LV.clip;   // object cuts open only where you tap
+  return {hide, faint:new Set(LV.faint || []), dim:new Set(LV.dim || []), spread, clip};
 }
 const cutQ = new THREE.Quaternion(), cutN = new THREE.Vector3(), cutP = new THREE.Vector3();
-function updateCut(inner, plane){   // keep the right half (x < 0): the cut follows the model as it turns
+function updateCut(inner, plane, cut){   // default: keep the right half (x < 0); a level can give its own normal and point. The cut follows the model as it turns
   inner.updateMatrixWorld(true); inner.getWorldQuaternion(cutQ);
-  cutN.set(-1, 0, 0).applyQuaternion(cutQ); cutP.set(.03, 0, 0).applyMatrix4(inner.matrixWorld);
+  if (cut && cut.n){ cutN.set(cut.n[0], cut.n[1], cut.n[2]).applyQuaternion(cutQ); cutP.copy(cut.at).applyMatrix4(inner.matrixWorld); }
+  else { cutN.set(-1, 0, 0).applyQuaternion(cutQ); cutP.set(.03, 0, 0).applyMatrix4(inner.matrixWorld); }
   plane.setFromNormalAndCoplanarPoint(cutN, cutP);
 }
+function cutCenter(c){   // the middle of a named part (e.g. the lens), else the cluster's middle
+  const b = c.at && B[c.at], box = new THREE.Box3(), tmp = new THREE.Box3();
+  if (b) b.meshes.forEach(k => { const d = base[k]; if (!d) return; if (!d.geo.boundingBox) d.geo.computeBoundingBox(); tmp.copy(d.geo.boundingBox).translate(d.pos); box.union(tmp); });
+  return box.isEmpty() ? CLUSTER_C.clone() : box.getCenter(new THREE.Vector3());
+}
+function cutHits(s, hits){ if (!s || !s.plane) return hits; updateCut(s.inner, s.plane, s.cut); return hits.filter(h => s.plane.distanceToPoint(h.point) >= -1e-4); }
 function makeSlot(targetId){
   const g = new THREE.Group(), inner = new THREE.Group(); g.add(inner);
   const ghost = makeMat(), faint = makeMat(), dimm = makeMat(), mats = {}, V = levelVis(); faint.opacity = .05; paint(dimm, "dim");
@@ -6425,13 +6432,14 @@ function makeSlot(targetId){
     if (onJaw){ m.position.copy(base[k].pos).sub(JAW_PIVOT); jaw.add(m); } else { m.position.copy(p); inner.add(m); }
     if (owner) mats[owner].meshes.push(m);
   }
-  let plane = null;
+  let plane = null, cut = null;
+  if (V.clip && V.clip.n){ cut = {n:V.clip.n, at:cutCenter(V.clip)}; }
   if (V.clip){ plane = new THREE.Plane(); [ghost, faint, dimm, ...Object.values(mats).map(o => o.mat)].forEach(mt => mt.clippingPlanes = [plane]); }
   const c = (targetId && (LV.centerOn || R.centerOn) === "target") ? itemPos(targetId) : CLUSTER_C; inner.position.set(-c.x, -c.y, -c.z);
   Object.values(mats).forEach(o => { if (o.meshes.length) paint(o.mat, "locked"); });
   if (targetId){ if (mode === "round" && round === 4) BONES.forEach(b => { if (mats[b.id]) paint(mats[b.id].mat, "lit"); }); else paint(mats[targetId].mat, "target"); }
   scene.add(g);
-  return {g, inner, mats, ghost, faint, dimm, plane, target:targetId, phase:Math.random()*6, gone:false, jaw, jawT:0};
+  return {g, inner, mats, ghost, faint, dimm, plane, cut, target:targetId, phase:Math.random()*6, gone:false, jaw, jawT:0};
 }
 function dropSlot(s){ scene.remove(s.g); s.ghost.dispose(); s.faint.dispose(); s.dimm.dispose(); Object.values(s.mats).forEach(o => o.mat.dispose()); }
 
@@ -6513,7 +6521,7 @@ function frame(now){
       const isCur = Math.abs(off) < .5;
       s.g.rotation.set(rx + (isCur ? userX : 0), ry + sway + (isCur ? userY : 0), 0);
       s.ghost.opacity = GHOST_OP() * .7 * (R.sceneryOp || 1) * (1 - a * .35);
-      if (s.plane) updateCut(s.inner, s.plane);
+      if (s.plane) updateCut(s.inner, s.plane, s.cut);
       Object.values(s.mats).forEach(o => {
         if (o.mat.userState === "locked") o.mat.opacity = GHOST_OP() * (1 - a*.45);
         if (o.melt !== undefined){ o.melt -= dt * 3.2; const k = Math.max(0, o.melt);
@@ -6566,12 +6574,12 @@ canvas.addEventListener("pointerup", e => {
   if (mode === "map"){ const id = mapHit(e); if (id){ mapSelect(id); tick(); } return; }
   if (mode === "round" && round === 4 && !wait && slots[idx]){
     rayFrom(e);
-    const hits = ray.intersectObjects(slots[idx].inner.children, true), ids = hits.map(h => h.object.userData.bone).filter(b => b && b !== "other" && B[b]);
+    const hits = cutHits(slots[idx], ray.intersectObjects(slots[idx].inner.children, true)), ids = hits.map(h => h.object.userData.bone).filter(b => b && b !== "other" && B[b]);
     locatePick(ids[0] || (hits.length ? "other" : null), ids); return;
   }
   if (curSlot()){
     rayFrom(e);
-    const hits = ray.intersectObjects(curSlot().inner.children, true);
+    const hits = cutHits(curSlot(), ray.intersectObjects(curSlot().inner.children, true));
     const near = hits.filter(h => h.distance < (hits[0] ? hits[0].distance + .8 : 0)).map(h => h.object.userData.bone);
     onPick(hits[0] ? hits[0].object.userData.bone : null, near);
   }
@@ -8481,7 +8489,7 @@ window.__bt = { pos(id){ const s = curSlot(); const p = new THREE.Vector3(); s.m
 window.__ex = { enter: enterExplore, exit: () => backToPlay(), group: exSetGroup, select: exSelect, step: exStep, state: () => ({mode, region:R.id, group:exGroup, sel:exSel, zoom:exZoom, palm}),
   pos(id){ const p = new THREE.Vector3(); ex.mats[id].meshes[0].getWorldPosition(p); p.project(camera); const r = canvas.getBoundingClientRect(); return {x:r.left+(p.x+1)/2*r.width, y:r.top+(1-p.y)/2*r.height}; } };
 window.__regions = () => REGIONS;
-window.__app = { home: enterHome, setMode, mode: () => mode, modeSet: () => MODE, region: () => R && R.id, step: () => step, round: () => round, map: enterMap, play: backToPlay, switchRegion, mapSelect, playFromMap,
+window.__app = { hitIds: (x, y) => { const s = curSlot(); if (!s) return []; rayFrom({clientX:x, clientY:y}); return cutHits(s, ray.intersectObjects(s.inner.children, true)).map(h => h.object.userData.bone); }, slotInfo: () => { const s = curSlot(); return {clip: LV && LV.clip, plane: !!(s && s.plane), cut: !!(s && s.cut), n: s && s.plane && s.plane.normal.toArray()}; }, home: enterHome, setMode, mode: () => mode, modeSet: () => MODE, region: () => R && R.id, step: () => step, round: () => round, map: enterMap, play: backToPlay, switchRegion, mapSelect, playFromMap,
   pick: id => onPick(id, [id]), queue: () => queue.slice(), idx: () => idx, stars: () => LS.stars.slice(), level: () => LVI, startLevel, picker: showPicker, startRound, cur: () => cur && cur.id, wait: () => wait, locate: id => locatePick(id, [id]), enter: () => onEnter(), startMixed, openDrills, jumpTo, exSel: () => exSel,
   forceDue: () => { Object.values(store.regions).forEach(r => Object.values(r.items || {}).forEach(it => { if (it.due) it.due = today(); })); save(); }, store: () => JSON.parse(JSON.stringify(store)) };
 
