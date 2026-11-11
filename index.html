@@ -6300,7 +6300,7 @@ const FIB_V = "varying vec3 vOP;\n";
 const FIB_F = `
 uniform vec4 uFib; uniform vec4 uApex; uniform float uFOn; uniform float uXr; uniform float uRed; uniform vec4 uRange; uniform float uProf[24]; uniform vec3 uCross;
 varying vec3 vOP;
-float fibAA = 1.0, fibPX = 0.0;
+float fibAA = 1.0, fibPX = 0.0, fibWhite = 0.0;
 float fh3(vec3 p){ p = fract(p * .3183099 + .1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
 float fn3(vec3 x){ vec3 i = floor(x), f = fract(x); f = f*f*(3.0-2.0*f);
   return mix(mix(mix(fh3(i), fh3(i+vec3(1,0,0)), f.x), mix(fh3(i+vec3(0,1,0)), fh3(i+vec3(1,1,0)), f.x), f.y),
@@ -6365,9 +6365,18 @@ function fibHook(sh){
     normal = normalize(abs(det) * normal - g);
     float redness = smoothstep(.04, .16, diffuseColor.r - .5 * (diffuseColor.g + diffuseColor.b));   // baked colors: deepen the red parts, leave white tendon alone
     vec3 musc = diffuseColor.rgb * mix(vec3(1.0), vec3(.47, .1, .11), uRed * redness) * mix(1.0, .4 + .62 * fv, redness);
+    float red2 = 1.0;
+    if (!full){ // merged figures: one even muscle red over every reddish part, whatever its built-in tint; tendon white stays
+      red2 = smoothstep(.07, .16, diffuseColor.r - .5 * (diffuseColor.g + diffuseColor.b)) * uRed;
+      musc = mix(diffuseColor.rgb, vec3(.149, .0049, .0042), red2);
+      #ifdef FIB_DEPTH
+      fibWhite = 1.0 - red2;
+      #endif
+    }
     vec3 tend = vec3(.86, .83, .76) * (.86 + .2 * ln);
-    diffuseColor.rgb = mix(musc, tend, tw); roughnessFactor = mix(.56, .32, tw); }`)
+    diffuseColor.rgb = mix(musc, tend, tw); roughnessFactor = full ? mix(.56, .32, tw) : mix(.32, .58, red2); }`)
     .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n  if (uFOn > 1.5) totalEmissiveRadiance *= mix(1.0, .3, uRed);")
+    .replace("#include <tonemapping_fragment>", "#ifdef FIB_DEPTH\n  gl_FragDepth = gl_FragCoord.z - fibWhite * (fwidth(gl_FragCoord.z) * 6.0 + 4e-6);\n  #endif\n  #include <tonemapping_fragment>")
     .replace("#include <tonemapping_fragment>", `if (uXr > .5){ float fr = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition)));
     gl_FragColor.a = clamp(gl_FragColor.a * mix(.3, 3.2, fr * fr), 0.0, 1.0); gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(.92,.94,.96), .35 * fr); }
   #include <tonemapping_fragment>`);
@@ -6431,7 +6440,11 @@ THREE.Mesh.prototype.onBeforeRender = function(r, s, c, geo, mat){
   const fu = mat && mat.userData && mat.userData.fu; if (!fu) return;
   const real = LOOK.atlas && LOOK.fibers !== false, musc = real && MODE === "muscles" && mode !== "map" && mode !== "home";
   const on = real && mat.userData.atlas === 0xb24a42 && mat.opacity > .5;   // every muscle, wherever it is drawn (levels, body map, home carousel)
-  fu.uFOn.value = on ? (mode === "home" || mode === "map" ? 2 : 1) : 0; fu.uRed.value = mat.userState === "target" ? 0 : 1; fu.uXr.value = musc && mat.opacity < .5 ? 1 : 0;
+  fu.uFOn.value = on ? (mode === "home" || mode === "map" ? 2 : 1) : 0;
+  // body map / home: the faint see-through layer must sit behind the solid muscles it overlaps, not tint them in patches
+  const flat = mode === "home" || mode === "map", back = flat && mat.transparent && mat.opacity < .5;
+  if (mat.polygonOffset !== back){ mat.polygonOffset = back; mat.polygonOffsetFactor = back ? 4 : 0; mat.polygonOffsetUnits = back ? 16 : 0; }
+  if (fu.uFOn.value === 2 && !mat.userData.fd){ mat.userData.fd = 1; mat.defines = Object.assign({}, mat.defines, {FIB_DEPTH:""}); mat.customProgramCacheKey = () => "fibdepth"; mat.needsUpdate = true; } fu.uRed.value = mat.userState === "target" ? 0 : 1; fu.uXr.value = musc && mat.opacity < .5 ? 1 : 0;
   if (on && fu.uFOn.value === 1){ if (!geo.userData.fib) geo.userData.fib = fibAxis(geo, this); const f = geo.userData.fib; fu.uFib.value.set(f.a.x, f.a.y, f.a.z, f.F); fu.uApex.value.copy(f.apex); fu.uRange.value.copy(f.range); if (f.prof) fu.uProf.value = f.prof; if (f.cross) fu.uCross.value.copy(f.cross); }
 };
 /* ---------- Look: accent colour for the target + typed letters, background darkness, other bones' visibility ---------- */
