@@ -6347,7 +6347,7 @@ function fibHook(sh){
     .replace("#include <normal_fragment_maps>", `#include <normal_fragment_maps>
   if (uFOn > .5){ vec3 ox = dFdx(vOP), oy = dFdy(vOP);
     fibPX = max(length(ox), length(oy)) * uFib.w * (uApex.w > 0.0 ? 1.4 : 1.0);
-    float fv = fibH(vOP), sHere = fibS, ln = fibLine, hx = dFdx(fv), hy = dFdy(fv);
+    float fv = fibH(vOP), sHere = fibS, ln = fibLine, hx = fibH(vOP + ox) - fv, hy = fibH(vOP + oy) - fv;
     // tendon ends: white where the fibers run out, with a ragged edge that follows the fibers
     float t = (sHere - uRange.x) / max(uRange.y - uRange.x, 1e-4), jag = (fv - .5) * .05;
     float tw = max((1.0 - smoothstep(uRange.z - .045, uRange.z + .045, t + jag)) * step(.001, uRange.z), smoothstep(1.0 - uRange.w - .045, 1.0 - uRange.w + .045, t + jag) * step(.001, uRange.w));
@@ -6360,9 +6360,11 @@ function fibHook(sh){
     float det = dot(sx, r1) * faceDirection; vec3 g = sign(det) * (hx * r1 + hy * r2) * mix(.06, .03, tw);
     float gl2 = length(g), lim = abs(det) * .45; if (gl2 > lim) g *= lim / gl2;
     normal = normalize(abs(det) * normal - g);
-    vec3 musc = diffuseColor.rgb * mix(vec3(1.0), vec3(.47, .1, .11), uRed) * (.4 + .62 * fv);
+    float redness = smoothstep(.04, .16, diffuseColor.r - .5 * (diffuseColor.g + diffuseColor.b));   // baked colors: deepen the red parts, leave white tendon alone
+    vec3 musc = diffuseColor.rgb * mix(vec3(1.0), vec3(.47, .1, .11), uRed * redness) * mix(1.0, .4 + .62 * fv, redness);
     vec3 tend = vec3(.86, .83, .76) * (.86 + .2 * ln);
     diffuseColor.rgb = mix(musc, tend, tw); roughnessFactor = mix(.56, .32, tw); }`)
+    .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n  if (uFOn > 1.5) totalEmissiveRadiance *= mix(1.0, .3, uRed);")
     .replace("#include <tonemapping_fragment>", `if (uXr > .5){ float fr = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition)));
     gl_FragColor.a = clamp(gl_FragColor.a * mix(.3, 3.2, fr * fr), 0.0, 1.0); gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(.92,.94,.96), .35 * fr); }
   #include <tonemapping_fragment>`);
@@ -6422,9 +6424,9 @@ function fibAxis(geo, mesh){
 }
 THREE.Mesh.prototype.onBeforeRender = function(r, s, c, geo, mat){
   const fu = mat && mat.userData && mat.userData.fu; if (!fu) return;
-  const musc = MODE === "muscles" && LOOK.atlas && LOOK.fibers !== false && mode !== "map";
-  const on = musc && mat.userData.atlas === 0xb24a42 && mat.opacity > .5;
-  fu.uFOn.value = on ? 1 : 0; fu.uRed.value = mat.userState === "target" ? 0 : 1; fu.uXr.value = musc && mat.opacity < .5 ? 1 : 0;
+  const real = LOOK.atlas && LOOK.fibers !== false, musc = real && MODE === "muscles" && mode !== "map" && mode !== "home";
+  const on = real && mat.userData.atlas === 0xb24a42 && mat.opacity > .5;   // every muscle, wherever it is drawn (levels, body map, home carousel)
+  fu.uFOn.value = on ? (mode === "home" || mode === "map" ? 2 : 1) : 0; fu.uRed.value = mat.userState === "target" ? 0 : 1; fu.uXr.value = musc && mat.opacity < .5 ? 1 : 0;
   if (on){ if (!geo.userData.fib) geo.userData.fib = fibAxis(geo, this); const f = geo.userData.fib; fu.uFib.value.set(f.a.x, f.a.y, f.a.z, f.F); fu.uApex.value.copy(f.apex); fu.uRange.value.copy(f.range); fu.uProf.value = f.prof; if (f.cross) fu.uCross.value.copy(f.cross); }
 };
 /* ---------- Look: accent colour for the target + typed letters, background darkness, other bones' visibility ---------- */
