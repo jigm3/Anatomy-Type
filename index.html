@@ -574,6 +574,8 @@ html.light .srcwrap{background:rgba(26,33,43,.35)}html.light .tspot{box-shadow:0
         <div class="row2"><span>deeper</span><span>brighter</span></div>
       </div>
       <div class="seg lkseg" role="group" aria-label="Colors"><button id="lkAtlas" aria-pressed="true">Realistic</button><button id="lkPlain" aria-pressed="false">Plain</button></div>
+      <div><h5>Muscles</h5></div>
+      <div class="seg lkseg" role="group" aria-label="Muscle texture"><button id="lkFibOn" aria-pressed="true">Fibers</button><button id="lkFibOff" aria-pressed="false">Smooth</button></div>
       <div><h5>Background <span id="lkBgV"></span></h5></div>
       <input type="range" id="lkBg" min="0" max="100" step="1" aria-label="Background darkness">
       <div class="row2"><span>as reel</span><span>darker</span></div>
@@ -6294,7 +6296,137 @@ function buildBase(reg){
 }
 
 const WHITE = 0xffffff, IVORY = 0xebe4d6, GHOST = 0xc3cad4;
-function makeMat(){ return new THREE.MeshStandardMaterial({color:sRGB(GH()), roughness:.55, metalness:0, transparent:true, opacity:.16, depthWrite:false, side:THREE.DoubleSide}); }
+const FIB_V = "varying vec3 vOP;\n";
+const FIB_F = `
+uniform vec4 uFib; uniform vec4 uApex; uniform float uFOn; uniform float uXr; uniform float uRed; uniform vec4 uRange; uniform float uProf[24]; uniform vec3 uCross;
+varying vec3 vOP;
+float fibAA = 1.0, fibPX = 0.0;
+float fh3(vec3 p){ p = fract(p * .3183099 + .1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+float fn3(vec3 x){ vec3 i = floor(x), f = fract(x); f = f*f*(3.0-2.0*f);
+  return mix(mix(mix(fh3(i), fh3(i+vec3(1,0,0)), f.x), mix(fh3(i+vec3(0,1,0)), fh3(i+vec3(1,1,0)), f.x), f.y),
+             mix(mix(fh3(i+vec3(0,0,1)), fh3(i+vec3(1,0,1)), f.x), mix(fh3(i+vec3(0,1,1)), fh3(i+vec3(1,1,1)), f.x), f.y), f.z); }
+float fibS = 0.0;
+vec3 fibC(vec3 p){
+  vec3 a = uFib.xyz; vec3 u = normalize(cross(a, abs(a.y) < .9 ? vec3(0,1,0) : vec3(1,0,0))); vec3 v = cross(a, u);
+  if (uApex.w < 0.0){ vec3 d = p - uApex.xyz; float al = dot(d, a); vec3 pl = d - a * al; float rr = length(pl);
+    float ang = atan(dot(pl, v), dot(pl, u)); fibS = ang; return vec3(rr * uFib.w, al * uFib.w * .25, ang * -uApex.w * uFib.w * .012); }
+  if (uApex.w > 0.0){ vec3 d = p - uApex.xyz; float r = length(d); vec3 dir = d / max(r, 1e-4); fibS = r;
+    // fan: uFib.xyz is the sheet's normal. Fibers are spread by their angle within the sheet; tilt out of the sheet barely matters
+    float th = atan(dot(dir, v), dot(dir, u));
+    return vec3(th * uApex.w * uFib.w, dot(dir, a) * uApex.w * uFib.w * .25, r * uFib.w * .012); }
+  // straight muscles: uCross runs across the muscle within its sheet; through the sheet's thickness barely matters
+  vec3 cu = uCross, cv = cross(a, cu);
+  fibS = dot(p, a);
+  return vec3(dot(p,cu) * uFib.w, dot(p,cv) * uFib.w * .3, dot(p,a) * uFib.w * .012);
+}
+float fibLine = 0.0;
+vec2 vh2(vec2 p){ vec3 q = fract(vec3(p.xyx) * vec3(.1031, .1030, .0973)); q += dot(q, q.yzx + 33.33); return fract((q.xx + q.yz) * q.zy); }
+vec2 vor(vec2 x){ vec2 n = floor(x), f = fract(x); float d1 = 8.0, d2 = 8.0;
+  for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++){ vec2 g = vec2(float(i), float(j)); vec2 r = g + vh2(n + g) * .85 - f; float d = dot(r, r);
+    if (d < d1){ d2 = d1; d1 = d; } else if (d < d2) d2 = d; }
+  return vec2(sqrt(d1), sqrt(d2)); }
+float fibH(vec3 p){
+  vec3 c = fibC(p);
+  float px = fibPX * 1.6;                    // strands per pixel: fade detail out before it shimmers
+  float aF = 1.0 - smoothstep(.16, .34, px), aB = 1.0 - smoothstep(.3, .7, fibPX);
+  fibAA = aF;
+  // each fiber is a cell of the cross-section, extruded along the muscle: long strands with dark seams between them
+  vec2 w = vec2(fn3(vec3(c.z * 2.0, 1.7, 3.1)), fn3(vec3(c.z * 2.0, 8.3, 5.2))) - .5;   // gentle waviness
+  vec2 v = vor(c.xy * 1.6 + w * .9);
+  float seam = smoothstep(.0, .2, v.y - v.x);
+  float core = 1.0 - v.x * v.x * .9;
+  float ln = seam * (.55 + .45 * core);
+  float b = fn3(vec3(c.xy * .35, c.z * .25));                    // fascicle tone variation
+  fibLine = mix(.6, ln, aF);
+  return .5 + (b - .5) * .3 * aB + (ln - .65) * .9 * aF;
+}`;
+function fibHook(sh){
+  const u = this.userData.fu; Object.assign(sh.uniforms, u);
+  sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\n" + FIB_V).replace("#include <begin_vertex>", "#include <begin_vertex>\nvOP = position;");
+  sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\n" + FIB_F)
+    .replace("#include <normal_fragment_maps>", `#include <normal_fragment_maps>
+  if (uFOn > .5){ vec3 ox = dFdx(vOP), oy = dFdy(vOP);
+    fibPX = max(length(ox), length(oy)) * uFib.w * (uApex.w > 0.0 ? 1.4 : 1.0);
+    float fv = fibH(vOP), sHere = fibS, ln = fibLine, hx = dFdx(fv), hy = dFdy(fv);
+    // tendon ends: white where the fibers run out, with a ragged edge that follows the fibers
+    float t = (sHere - uRange.x) / max(uRange.y - uRange.x, 1e-4), jag = (fv - .5) * .05;
+    float tw = max((1.0 - smoothstep(uRange.z - .045, uRange.z + .045, t + jag)) * step(.001, uRange.z), smoothstep(1.0 - uRange.w - .045, 1.0 - uRange.w + .045, t + jag) * step(.001, uRange.w));
+    tw *= step(.0001, uRange.z + uRange.w);
+    if (uApex.w == 0.0){ float q = clamp(t, 0.0, 1.0) * 23.0; int i0 = int(floor(q)); int i1 = min(i0 + 1, 23);
+      float th = mix(uProf[i0], uProf[i1], fract(q));          // how thick the muscle is here vs its belly
+      tw = max(tw, 1.0 - smoothstep(.2, .5, th + jag * .8)); }
+    tw *= uRed;
+    vec3 sx = dFdx(-vViewPosition), sy = dFdy(-vViewPosition); vec3 r1 = cross(sy, normal), r2 = cross(normal, sx);
+    float det = dot(sx, r1) * faceDirection; vec3 g = sign(det) * (hx * r1 + hy * r2) * mix(.06, .03, tw);
+    float gl2 = length(g), lim = abs(det) * .45; if (gl2 > lim) g *= lim / gl2;
+    normal = normalize(abs(det) * normal - g);
+    vec3 musc = diffuseColor.rgb * mix(vec3(1.0), vec3(.47, .1, .11), uRed) * (.4 + .62 * fv);
+    vec3 tend = vec3(.86, .83, .76) * (.86 + .2 * ln);
+    diffuseColor.rgb = mix(musc, tend, tw); roughnessFactor = mix(.56, .32, tw); }`)
+    .replace("#include <tonemapping_fragment>", `if (uXr > .5){ float fr = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition)));
+    gl_FragColor.a = clamp(gl_FragColor.a * mix(.3, 3.2, fr * fr), 0.0, 1.0); gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(.92,.94,.96), .35 * fr); }
+  #include <tonemapping_fragment>`);
+}
+function makeMat(){ const m = new THREE.MeshStandardMaterial({color:sRGB(GH()), roughness:.55, metalness:0, transparent:true, opacity:.16, depthWrite:false, side:THREE.DoubleSide});
+  m.userData.fu = {uFib:{value:new THREE.Vector4(0,1,0,1)}, uApex:{value:new THREE.Vector4(0, 0, 0, 0)}, uFOn:{value:0}, uXr:{value:0}, uRed:{value:0}, uRange:{value:new THREE.Vector4(0, 1, 0, 0)}, uProf:{value:new Float32Array(24).fill(1)}, uCross:{value:new THREE.Vector3(1, 0, 0)}};
+  m.onBeforeCompile = fibHook; m.extensions = {derivatives:true}; return m; }
+// fan-shaped muscles: fibers converge on an insertion point (direction to look for it, in body axes; "lat" = away from midline)
+const RING = {orb_oculi:1, orb_oris:1};
+const TEND = {masseter:[0, .12]};   // [start, end] tendon share along the fibers, where the default is wrong
+const AXIS = {masseter:[0, 1, .3]};
+const FAN = {temporalis:[0,-1,0], pec_major:["lat",.4,0], deltoid:[0,-1,0], glut_med:["lat",-1,0], glut_min:["lat",-1,0], latissimus:["lat",.6,0], trapezius:["lat",.2,0]};
+function fibAxis(geo, mesh){
+  const P = geo.attributes.position, n = P.count, st = Math.max(1, Math.floor(n / 4000)); let cx = 0, cy = 0, cz = 0, m = 0;
+  for (let i = 0; i < n; i += st){ cx += P.getX(i); cy += P.getY(i); cz += P.getZ(i); m++; } cx /= m; cy /= m; cz /= m;
+  const C = [0,0,0,0,0,0];
+  for (let i = 0; i < n; i += st){ const x = P.getX(i)-cx, y = P.getY(i)-cy, z = P.getZ(i)-cz; C[0]+=x*x; C[1]+=x*y; C[2]+=x*z; C[3]+=y*y; C[4]+=y*z; C[5]+=z*z; }
+  const mul = v => new THREE.Vector3(C[0]*v.x + C[1]*v.y + C[2]*v.z, C[1]*v.x + C[3]*v.y + C[4]*v.z, C[2]*v.x + C[4]*v.y + C[5]*v.z);
+  let a = new THREE.Vector3(.3, 1, .2).normalize(); for (let k = 0; k < 40; k++) a = mul(a).normalize();
+  const ax = AXIS[mesh.userData && mesh.userData.bone]; if (ax) a = new THREE.Vector3(...ax).normalize();
+  const l1 = mul(a).dot(a) / m; let b = new THREE.Vector3().crossVectors(a, new THREE.Vector3(1, 0, 0)); if (b.lengthSq() < 1e-6) b.set(0, 0, 1); b.normalize();
+  for (let k = 0; k < 40; k++){ b = mul(b); b.addScaledVector(a, -b.dot(a)).normalize(); }
+  const l2 = mul(b).dot(b) / m, width = 4 * Math.sqrt(Math.max(l2, 1e-9));
+  const F = 30 / width, out = {cross:b.clone(), a, F, apex:new THREE.Vector4(0, 0, 0, 0), range:new THREE.Vector4(0, 1, .07, .07)};
+  const id = mesh.userData && mesh.userData.bone, fan = FAN[id];
+  if (RING[id]){ const nrm = new THREE.Vector3().crossVectors(a, b).normalize(); const l1r = Math.sqrt(Math.max(mul(a).dot(a) / m, 1e-9));
+    return {a:nrm, F:28 / (2 * l1r), apex:new THREE.Vector4(cx, cy, cz, -1.6 * l1r), range:new THREE.Vector4(0, 1, 0, 0)}; }
+  if (fan){
+    const side = Math.sign((mesh.position.x || 0) + cx) || 1, d = new THREE.Vector3(fan[0] === "lat" ? side : fan[0], fan[1], fan[2]).normalize();
+    const pts = []; for (let i = 0; i < n; i += st) pts.push([P.getX(i)*d.x + P.getY(i)*d.y + P.getZ(i)*d.z, i]);
+    pts.sort((u, v) => v[0] - u[0]); const top = pts.slice(0, Math.max(3, Math.floor(pts.length * .03)));
+    const ap = new THREE.Vector3(); for (const [, i] of top) ap.add(new THREE.Vector3(P.getX(i), P.getY(i), P.getZ(i))); ap.divideScalar(top.length);
+    const reach = Math.sqrt(Math.max(mul(a).dot(a) / m, 1e-9)) * 3;
+    out.apex.set(ap.x, ap.y, ap.z, reach);
+    out.a = new THREE.Vector3().crossVectors(a, b).normalize();
+  }
+  // how far the part runs along its fibers (or out from a fan's apex), for the white tendon ends
+  let lo = Infinity, hi = -Infinity; const ap = out.apex;
+  for (let i = 0; i < n; i += st){ const x = P.getX(i), y = P.getY(i), z = P.getZ(i);
+    const v = ap.w > 0 ? Math.hypot(x - ap.x, y - ap.y, z - ap.z) : x * a.x + y * a.y + z * a.z; if (v < lo) lo = v; if (v > hi) hi = v; }
+  const te = TEND[id] || (ap.w > 0 ? [.13, 0] : [.07, .07]);
+  out.range.set(lo, hi, te[0], te[1]);
+  // thickness profile along the fibers: slices much thinner than the belly are tendon
+  const NB = 24, sx = new Float64Array(NB), sy = new Float64Array(NB), sz = new Float64Array(NB), cnt = new Float64Array(NB), rr = new Float64Array(NB);
+  const bin = v => Math.min(NB - 1, Math.max(0, Math.floor((v - lo) / Math.max(hi - lo, 1e-9) * NB)));
+  out.prof = new Float32Array(NB).fill(1);
+  if (ap.w === 0){
+    for (let i = 0; i < n; i += st){ const x = P.getX(i), y = P.getY(i), z = P.getZ(i), k = bin(x * a.x + y * a.y + z * a.z); sx[k] += x; sy[k] += y; sz[k] += z; cnt[k]++; }
+    for (let i = 0; i < n; i += st){ const x = P.getX(i), y = P.getY(i), z = P.getZ(i), k = bin(x * a.x + y * a.y + z * a.z), c = cnt[k];
+      const dx = x - sx[k] / c, dy = y - sy[k] / c, dz = z - sz[k] / c, al = dx * a.x + dy * a.y + dz * a.z;
+      rr[k] += dx * dx + dy * dy + dz * dz - al * al; }
+    const r = Array.from(rr, (v, k) => cnt[k] ? Math.sqrt(v / cnt[k]) : 0);
+    const sm = r.map((v, k) => (r[Math.max(0, k - 1)] + 2 * v + r[Math.min(NB - 1, k + 1)]) / 4), mx = Math.max(...sm) || 1;
+    sm.forEach((v, k) => out.prof[k] = v / mx);
+  }
+  return out;
+}
+THREE.Mesh.prototype.onBeforeRender = function(r, s, c, geo, mat){
+  const fu = mat && mat.userData && mat.userData.fu; if (!fu) return;
+  const musc = MODE === "muscles" && LOOK.atlas && LOOK.fibers !== false && mode !== "map";
+  const on = musc && mat.userData.atlas === 0xb24a42 && mat.opacity > .5;
+  fu.uFOn.value = on ? 1 : 0; fu.uRed.value = mat.userState === "target" ? 0 : 1; fu.uXr.value = musc && mat.opacity < .5 ? 1 : 0;
+  if (on){ if (!geo.userData.fib) geo.userData.fib = fibAxis(geo, this); const f = geo.userData.fib; fu.uFib.value.set(f.a.x, f.a.y, f.a.z, f.F); fu.uApex.value.copy(f.apex); fu.uRange.value.copy(f.range); fu.uProf.value = f.prof; if (f.cross) fu.uCross.value.copy(f.cross); }
+};
 /* ---------- Look: accent colour for the target + typed letters, background darkness, other bones' visibility ---------- */
 function accFrom(id, name, hex){ const [r, g, b] = [1, 3, 5].map(k => parseInt(hex.slice(k, k + 2), 16)), n = parseInt(hex.slice(1), 16);
   return {id, name, hex, bone:n, glow:`rgba(${r},${g},${b},.55)`, dust:n, em:[r / 255 * .36, g / 255 * .36, b / 255 * .36]}; }
@@ -8454,9 +8586,13 @@ function closeSync(){ $("#syncw").hidden = true; }
 /* ---------- Look panel extras: atlas colors, sound on phones ---------- */
 (function lookExtras(){
   const sync2 = () => { $("#lkPlain").setAttribute("aria-pressed", !LOOK.atlas); $("#lkAtlas").setAttribute("aria-pressed", !!LOOK.atlas);
+    $("#lkFibOn").setAttribute("aria-pressed", LOOK.fibers !== false); $("#lkFibOff").setAttribute("aria-pressed", LOOK.fibers === false);
+    $("#lkFibOn").disabled = $("#lkFibOff").disabled = !LOOK.atlas; $("#lkFibOn").parentElement.style.opacity = LOOK.atlas ? "" : ".45";
     const on = $("#soundBtn").getAttribute("aria-pressed") !== "false"; $("#lkSndOn").setAttribute("aria-pressed", on); $("#lkSndOff").setAttribute("aria-pressed", !on); };
   $("#lkPlain").addEventListener("click", () => { audio(); tick(); LOOK.atlas = false; sync2(); applyLook(); });
   $("#lkAtlas").addEventListener("click", () => { audio(); tick(); LOOK.atlas = true; sync2(); applyLook(); });
+  $("#lkFibOn").addEventListener("click", () => { audio(); tick(); LOOK.fibers = true; sync2(); applyLook(); });
+  $("#lkFibOff").addEventListener("click", () => { audio(); tick(); LOOK.fibers = false; sync2(); applyLook(); });
   $("#lkSndOn").addEventListener("click", () => { if ($("#soundBtn").getAttribute("aria-pressed") === "false") $("#soundBtn").click(); sync2(); });
   $("#lkSndOff").addEventListener("click", () => { if ($("#soundBtn").getAttribute("aria-pressed") !== "false") $("#soundBtn").click(); sync2(); });
   $("#lookBtn").addEventListener("click", sync2);
