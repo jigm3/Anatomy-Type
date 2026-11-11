@@ -452,6 +452,20 @@ html[data-theme2="sage"]{--ghost:#5a685e}
 html[data-theme2="blueprint"]{--ghost:#56677c}
 html.light .word span.ph{color:#8a8479}
 </style>
+<style id="v6css">
+@media (max-width:560px){
+  .app.map .rchips{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:none;box-sizing:border-box;width:calc(100% + 32px);margin:6px -16px 0;padding:2px 16px 4px;
+    scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 16px,#000 calc(100% - 28px),transparent 100%)}
+  .app.map .rchips::-webkit-scrollbar{display:none}
+  .app.map .rchip{flex:0 0 auto;white-space:nowrap;scroll-snap-align:center;padding:7px 12px}
+  .app.map #mAct{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-top:10px}
+  .app.map #mAct .btn{width:100%;justify-content:center;text-align:center}
+  .app.map #mAct #mPlay{grid-column:1/-1}
+  .app.map #mAct .lesson-sub{grid-column:1/-1}
+  .app.map #mapPanel{padding-bottom:max(10px,env(safe-area-inset-bottom,0px))}
+}
+</style>
 <style id="lightcss">/* generated: light mode versions of the hard-coded dark colors */
 html.light .pill{background:rgba(255,255,255,0.82)}
 html.light .pill:hover{border-color:#8e99a6}
@@ -7071,6 +7085,12 @@ function exHover(id, e){
 }
 function exHoverAt(e){ exHover(exHit(e), e); }
 function indexWidth(){ const el = $("#index"); return el && getComputedStyle(el).display !== "none" && !el.classList.contains("open") ? el.offsetWidth + 24 : 0; }
+function mapFit(){
+  if (!map) return 380;
+  if (!map.box){ const b = new THREE.Box3(), sv = map.g.rotation.clone(); map.g.rotation.set(0, 0, 0); map.g.updateMatrixWorld(true); b.setFromObject(map.g); map.g.rotation.copy(sv); const sz = b.getSize(new THREE.Vector3()); map.box = {h: sz.y / 2, w: Math.max(sz.x, sz.z) / 2}; }
+  const vh = Math.tan(THREE.MathUtils.degToRad(15)), aspect = Math.max(.3, W / H);
+  return Math.max(map.box.h / vh, map.box.w / (vh * aspect)) * 1.1;
+}
 function fitDist(r, iw){
   const vh = Math.tan(THREE.MathUtils.degToRad(15)), aspect = Math.max(.3, (W - iw) / H);
   return Math.max(r / vh, r / (vh * aspect)) * 1.12;
@@ -7148,8 +7168,12 @@ function mapSelect(id){
   $("#mName").textContent = b.name.toLowerCase();
   $("#mWhere").innerHTML = esc(regionLine(b)) + (isNewRegion(b) ? `<span class="new">NEW</span>` : "");
   $("#mFr").textContent = b.fr;
+  const chipSL = $("#mChips").scrollLeft;
   $("#mChips").innerHTML = BODY.map(x => `<button class="rchip ${unlocked(x.id) ? "" : "locked"} ${x.id === id ? "on" : ""}" data-r="${x.id}">${esc(x.name)}${isNewRegion(x) ? `<span class="new">NEW</span>` : ""}<small>${unlocked(x.id) ? REGIONS[x.game].levels.length + " levels" : "soon"}</small></button>`).join("");
   $("#mChips").querySelectorAll(".rchip").forEach(c => c.addEventListener("click", e => { audio(); keySound(); e.currentTarget.blur(); mapSelect(c.dataset.r); }));
+  { const row = $("#mChips"), on = row.querySelector(".rchip.on"); row.scrollLeft = chipSL;
+    if (on && row.scrollWidth > row.clientWidth + 2){ const want = on.offsetLeft - (row.clientWidth - on.offsetWidth) / 2;
+      requestAnimationFrame(() => row.scrollTo({left: Math.max(0, want), behavior: chipSL || mapSel ? "smooth" : "auto"})); } }
   $("#mAct").innerHTML = unlocked(id)
     ? `<button class="btn primary" id="mPlay">Play the ${esc(b.name.toLowerCase())}<kbd>enter</kbd></button><button class="btn" id="mExplore">Explore it</button><button class="btn" id="mDrills">Cases &amp; paths</button>`
     : `<p class="lesson-sub" style="margin:0">Not unlocked yet. More regions are on the way.</p>`;
@@ -7176,7 +7200,7 @@ function mapFrame(now, dt){
   const idle = RM || dragging ? 0 : Math.sin(now / 2600) * .35;
   const pull = Math.max(0, Math.min(1, (mapZoom - 1) / 1.6));
   map.g.rotation.set(.04 + userX, idle * (1 - pull) + userY, 0);
-  mapDist += (fitDist(map.r, 0) / mapZoom - mapDist) * k;
+  mapDist += (mapFit() / mapZoom - mapDist) * k;
   const sp = map.parts[mapSel];
   if (sp){ const g = sp.mesh.geometry; if (!g.boundingBox) g.computeBoundingBox(); g.boundingBox.getCenter(mapAim).applyMatrix4(sp.mesh.matrixWorld); mapAim.z = 0; mapAim.multiplyScalar(pull); }
   else mapAim.set(0, 0, 0);
@@ -7223,7 +7247,7 @@ function enterMap(){
   if (mode === "map") return;
   if (mode === "explore" || mode === "home") leaveOverlay(); else hideGame();
   $("#win").hidden = true;
-  mode = "map"; app.classList.add("map"); buildMap(); map.g.visible = true; userX = userY = 0; mapDist = fitDist(map.r, 0) * 1.4;
+  mode = "map"; app.classList.add("map"); buildMap(); map.g.visible = true; userX = userY = 0; mapDist = mapFit() * 1.4;
   $("#viewLabel").textContent = MAP_LABEL[MODE];
   store.seenMap = true; save();
   mapSelect(mapSel); setNav();
