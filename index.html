@@ -6453,6 +6453,7 @@ const THEMES = {
 const LOOK0 = {accent:"white", bg:0, ghost:0, atlas:true, theme:"dark", custom:"#8a5cff", cw:{h:262, s:.78, l:.62}};
 const lookFresh = () => JSON.parse(JSON.stringify(LOOK0));
 let LOOK = Object.assign(lookFresh(), store.look || {});
+if (!LOOK.fib1){ LOOK.atlas = true; LOOK.fibers = true; LOOK.fib1 = 1; }
 if (!LOOK.cw || typeof LOOK.cw.h !== "number") LOOK.cw = lookFresh().cw;
 if (!THEMES[LOOK.theme]) LOOK.theme = LOOK.theme === "light" ? "blueprint" : "dark";
 if (typeof LOOK.atlas !== "boolean" || !LOOK.v4){ LOOK.atlas = true; LOOK.v4 = 1; }
